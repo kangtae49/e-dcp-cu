@@ -13,7 +13,7 @@ function TerminalView({lines}: Props) {
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
   const [curLines, setCurLines] = useState<string[]>([])
-  console.log("curLines:", curLines.length, "lines:", lines.length)
+  // console.log("curLines:", curLines.length, "lines:", lines.length)
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -47,7 +47,7 @@ function TerminalView({lines}: Props) {
         term.open(containerRef.current);
         termRef.current = term;
         fitAddonRef.current = fitAddon;
-        curLines.forEach((line) => term.writeln(line))
+        curLines.forEach((line) => term.write(line))
       } catch (e) {
         console.log(e);
       }
@@ -65,7 +65,7 @@ function TerminalView({lines}: Props) {
       setCurLines([])
     } else {
       lines.slice(curLines.length).forEach((line) => {
-        termRef?.current?.writeln(line)
+        termRef?.current?.write(line)
       })
       setCurLines(lines)
     }

@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {JobData, JobEvent, JobStatus} from "./types";
+import {ConfigTable, JobData, JobEvent, JobStatus} from "./types";
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
 export function getAppResourcePath() {
@@ -29,14 +29,29 @@ export function getScriptSubPath(subpath: string) {
 }
 
 
-export function readDataExcel(subpath: string) {
+export function readDataExcel(subpath: string): ConfigTable {
   const fileBuffer = fs.readFileSync(getScriptSubPath(subpath));
   const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
-  return XLSX.utils.sheet_to_json(workbook.Sheets[sheetNames[0]], {
+  const sheet = workbook.Sheets[sheetNames[0]]
+
+
+  const data = XLSX.utils.sheet_to_json(sheet, {
     raw: true,
     defval: null,
   }) as Record<string, string | number | boolean | null> [];
+
+  const rows = XLSX.utils.sheet_to_json<any[]>(sheet, {
+    header: 1,
+    raw: true,
+    defval: null
+  });
+
+  return {
+    key: subpath,
+    header: rows[0],
+    data
+  }
 }
 
 export function startDataFile(subpath: string) {

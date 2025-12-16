@@ -11,14 +11,14 @@ import JustToolBar from "@/app/tool-bar/JustToolBar";
 import SideMenu from "@/app/side-menu/ui/SideMenu";
 import DemoView from "@/app/demo/DemoView";
 import Jdenticon from "react-jdenticon";
-import PyJobListener from "@/app/listeners/PyJobListener";
-import PyWatchListener from "@/app/listeners/PyWatchListener";
+import JobListener from "@/app/listeners/JobListener";
+import WatchListener from "@/app/listeners/WatchListener";
 import {useDynamicSlice} from "@/store/hooks";
 import {
   CONFIG_ID,
   CONFIG_KEYS,
   type ConfigsActions,
-  type ConfigsSlice, type ConfigTable,
+  type ConfigsSlice,
   createConfigsSlice
 } from "@/app/config/configsSlice";
 import {useEffect, useState} from "react";
@@ -149,33 +149,32 @@ export function fromWinId(winId: string): WinObjId {
 }
 
 function App() {
-  const [isPywebviewReady, setIsPywebviewReady] = useState(false);
+  // const [isPywebviewReady, setIsPywebviewReady] = useState(false);
   const {
     actions: configsActions, dispatch
   } = useDynamicSlice<ConfigsSlice, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
+  // useEffect(() => {
+  //
+  //   window.addEventListener("pywebviewready", handleReady);
+  //
+  //   return () => {
+  //     window.removeEventListener("pywebviewready", handleReady);
+  //   };
+  // }, []);
+
+  // function handleReady() {
+  //   console.log("pywebview is ready!");
+  //   // setIsPywebviewReady(true);
+  // }
+
   useEffect(() => {
-
-    window.addEventListener("pywebviewready", handleReady);
-
-    return () => {
-      window.removeEventListener("pywebviewready", handleReady);
-    };
-  }, []);
-
-  function handleReady() {
-    console.log("pywebview is ready!");
-    setIsPywebviewReady(true);
-  }
-
-  useEffect(() => {
-    if(!isPywebviewReady) return;
-    console.log("api", window.pywebview.api)
+    // if(!isPywebviewReady) return;
+    // console.log("api", window.pywebview.api)
 
     CONFIG_KEYS.forEach((winObjId: WinObjId) => {
       const file: string = winObjId.params?.['file'];
-      window.pywebview.api.read_data_excel(file)
-        .then(res => JSON.parse(res) as ConfigTable)
+      window.api.readDataExcel(file)
         .then(res => {
           dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
         })
@@ -195,14 +194,15 @@ function App() {
     // window.pywebview.api.read_config("설정2.xlsx").then(res => {
     //   dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
     // })
-  }, [isPywebviewReady])
+  // }, [isPywebviewReady])
+  }, [])
 
 
 
   return (
     <>
-      <PyJobListener />
-      <PyWatchListener />
+      <JobListener />
+      <WatchListener />
       <div className="just-app">
         {/*<TopMenuBar />*/}
         <div className="just-container">

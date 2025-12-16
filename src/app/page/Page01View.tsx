@@ -16,13 +16,13 @@ import {
   type JobMonitorState
 } from "@/app/job/jobMonitorSlice";
 import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks";
-import type {JobDataStream, JobStatus, PyJobEvent} from "@/types/models";
 // import TerminalView from "@/app/terminal/TerminalView";
 import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice";
 import classNames from "classnames";
 import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
+import {JobEvent, JobStatus, JobStreamData} from "@/types";
 
 interface Props {
   winObjId: WinObjId
@@ -31,7 +31,7 @@ interface Props {
 
 
 function Page01View({winObjId}: Props) {
-  const configKey = "data\\업체명.xlsx";
+  const configKey = "data\\company.xlsx";
   // const jobId = `job-${new Date().getTime()}`
   // chart-line.svg
   // terminal.svg
@@ -80,9 +80,9 @@ function Page01View({winObjId}: Props) {
       dispatch(pageActions.setJobInfo({...pageState.jobInfo, status}))
     }
 
-    const events: PyJobEvent [] = dispatch(jobMonitorThunks.getJobEvents({jobId: pageState.jobInfo?.jobId}))
-    const streamEvents = events.filter((event) => event.action === 'PY_JOB_STREAM')
-    const logs = streamEvents.map((event) => (event.data as JobDataStream).message ?? '')
+    const events: JobEvent [] = dispatch(jobMonitorThunks.getJobEvents({jobId: pageState.jobInfo?.jobId}))
+    const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
+    const logs = streamEvents.map((event) => (event.data as JobStreamData).message ?? '')
     dispatch(pageActions.setLogs(logs))
   }, [jobMonitorState, pageState?.jobInfo]);
 
@@ -98,7 +98,7 @@ function Page01View({winObjId}: Props) {
   }, [pageState?.jobInfo])
 
 
-  const toOptions = (data: Record<string, string | number | null>[]): Option[] => {
+  const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
     return data.map(d => {
       return {value: d.cdVlId, label: d.cdVlNm ? d.cdVlNm.toString() : ''}
     })
@@ -131,10 +131,10 @@ function Page01View({winObjId}: Props) {
       dispatch(jobMonitorActions.clearEvents({jobId: pageState.jobInfo?.jobId}))
     }
     const jobId = `job-${new Date().getTime()}`
-    const script_path = "page01.py"
+    const scriptPath = "page01.py"
     const args = [jobId, winObjId.viewId, companyVal?.toString() ?? '', startYm, endYm];
-    dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: script_path, args}))
-    window.pywebview.api.start_script(jobId, script_path, args).then()
+    dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args}))
+    window.api.startScript(jobId, scriptPath, args).then()
   }
 
   return (

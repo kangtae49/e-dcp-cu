@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer} from 'electron'
-import {JobEvent, WatchEvent} from "./types";
+import {ConfigTable, JobEvent, WatchEvent} from "./types";
 import * as Electron from "electron";
 
 export interface Api {
@@ -9,7 +9,7 @@ export interface Api {
   getResourcePath(): Promise<string>,
   // getResourceSubPath(subpath: string): Promise<string>,
 
-  readDataExcel(subpath: string): Promise<Record<string, string | number | boolean | null> []>,
+  readDataExcel(subpath: string): Promise<ConfigTable>,
   startDataFile(subpath: string): Promise<void>,
   startScript(jobId: string, subpath: string, args: string[]): Promise<void>,
   stopScript(jobId: string): Promise<void>,
@@ -33,7 +33,7 @@ const api: Api = {
   getResourcePath: (): Promise<string> => {
     return ipcRenderer.invoke('get-app-resource-path');
   },
-  readDataExcel(subpath: string): Promise<Record<string, string | number | boolean | null>[]> {
+  readDataExcel(subpath: string): Promise<ConfigTable> {
     return ipcRenderer.invoke('read-data-excel', subpath);
   },
   startDataFile(subpath: string) {

@@ -42,3 +42,10 @@ export interface WatchEvent {
   action: Action
   data: WatchFileData
 }
+
+
+export interface ConfigTable {
+  key: string,
+  header: string [],
+  data: Record<string, string | number | boolean | null> []
+}

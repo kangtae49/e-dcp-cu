@@ -1,13 +1,10 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {type WinObjId} from "@/App";
+import {ConfigTable} from "@/types";
 
 export const CONFIG_ID = "CONFIGS"
 
-export interface ConfigTable {
-  key: string,
-  header: string [],
-  data: Record<string, string | number | null> []
-}
+
 
 export interface ConfigsState {
   configs: Record<string, ConfigTable>
@@ -15,7 +12,7 @@ export interface ConfigsState {
 }
 
 export const CONFIG_KEYS: WinObjId[] = [
-  { viewId: "setting-config", params: {"title": "업체명", "file": "data\\업체명.xlsx"}}
+  { viewId: "setting-config", params: {"title": "업체명", "file": "data\\company.xlsx"}}
 ]
 
 const initialState: ConfigsState = {

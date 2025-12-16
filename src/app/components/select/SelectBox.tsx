@@ -5,13 +5,13 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
 
 export interface Option {
-  value: string | number | null,
+  value: string | number | boolean | null,
   label: string,
 }
 
 interface Props {
   options: Option[],
-  value?: string | number | null,
+  value?: string | number | boolean | null,
   onChange?: (option: Option) => void
 }
 
