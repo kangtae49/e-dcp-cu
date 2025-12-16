@@ -1,4 +1,10 @@
-import {configureStore, combineReducers, type Slice} from "@reduxjs/toolkit"
+import {
+  configureStore,
+  combineReducers,
+  type Slice,
+  ActionCreatorsMapObject,
+  CaseReducerActions, SliceCaseReducers
+} from "@reduxjs/toolkit"
 import {devToolsEnhancer} from "@redux-devtools/remote";
 
 // const staticReducers = {} as Record<string, Reducer>
@@ -50,8 +56,8 @@ export function getSlice (key: string): Slice  {
   return asyncSlices[key]
 }
 
-export function getActions<T>(key: string) {
-  return asyncSlices[key].actions as T
+export function getActions<T>(key: string): T {
+  return asyncSlices[key].actions as unknown as T
 }
 
 export function removeReducer(key: string) {

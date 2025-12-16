@@ -1,15 +1,15 @@
 import "./ConfigGrid.css"
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
-import {useDynamicSlice} from "@/store/hooks.ts";
+import {useDynamicSlice} from "@/store/hooks";
 import {
   CONFIG_ID,
   type ConfigsActions,
   type ConfigsState,
-  type ConfigTable,
   createConfigsSlice
-} from "@/app/config/configsSlice.ts";
+} from "@/app/config/configsSlice";
 import throttle from "lodash/throttle";
+import {ConfigTable} from "@/types";
 
 interface Props {
   configKey: string
@@ -55,11 +55,11 @@ function ConfigGrid({configKey}: Props) {
   }
 
   const getTableBody = (table: ConfigTable): Row [] => {
-    return table.data.map<Row>((row, idx) => ({
+    return table.data.map<Row>((row: any, idx: number) => ({
       rowId: idx,
       cells: [
         { type: "number", value: idx+2, nonEditable: true},
-        ...table.header.map<DefaultCellTypes>(h => {
+        ...table.header.map<DefaultCellTypes>((h: any) => {
           if (row[h] === null || typeof row[h] === 'string') {
             return ({type: "text", text: row[h] ?? '', nonEditable: true})
           } else {

@@ -6,13 +6,13 @@ import {
   type JustPos,
   type JustStack, LAYOUT_ID,
   type WinInfo
-} from "@/app/just-layout/justLayoutSlice.ts";
+} from "@/app/just-layout/justLayoutSlice";
 import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classnames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons"
-import {useDynamicSlice} from "@/store/hooks.ts";
+import {useDynamicSlice} from "@/store/hooks";
 
 export interface DragItem {
   justBranch: JustBranch

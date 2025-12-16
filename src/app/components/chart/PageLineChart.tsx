@@ -1,14 +1,14 @@
 import "./chart.css"
 import {Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
-import {useDynamicSlice} from "@/store/hooks.ts";
+import {useDynamicSlice} from "@/store/hooks";
 import {
   CONFIG_ID,
   type ConfigsActions,
   type ConfigsState,
-  type ConfigTable,
   createConfigsSlice
-} from "@/app/config/configsSlice.ts";
+} from "@/app/config/configsSlice";
 import {useEffect, useState} from "react";
+import {ConfigTable} from "@/types";
 
 interface DataKey {
   id: string

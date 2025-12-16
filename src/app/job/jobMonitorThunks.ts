@@ -1,5 +1,5 @@
-import {createSliceThunk} from "@/store/hooks.ts";
-import type {JobStatus, PyJobEvent} from "@/types/models";
+import {createSliceThunk} from "@/store/hooks";
+import {JobEvent, JobStatus} from "@/types";
 
 export function createJobMonitorThunks(sliceId: string) {
   return {
@@ -7,7 +7,7 @@ export function createJobMonitorThunks(sliceId: string) {
       // const jobMonitorActions = getActions<JobMonitorActions>(sliceId);
       return sliceState.status[jobId] ?? null
     }),
-    getJobEvents: createSliceThunk(sliceId, ({jobId}, {sliceState}): PyJobEvent [] => {
+    getJobEvents: createSliceThunk(sliceId, ({jobId}, {sliceState}): JobEvent [] => {
       return sliceState.events[jobId] ?? []
     }),
   }
