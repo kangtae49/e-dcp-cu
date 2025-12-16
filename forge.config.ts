@@ -7,17 +7,23 @@ import { MakerRpm } from '@electron-forge/maker-rpm';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import path from "path";
 
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
+    // icon: 'src/assets/dcp-cu',
+    icon: path.join(__dirname,'src/assets/dcp-cu'),
     extraResource: [
       'src-py',
     ]
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      // setupIcon: 'src/assets/dcp-cu.ico',
+      setupIcon: path.join(__dirname, 'src/assets/dcp-cu.ico'),
+    }),
     // new MakerWix({
     //   // language: 1252,
     //   // cultures: 'ko-KR'
