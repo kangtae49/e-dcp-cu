@@ -1,6 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron';
 import chokidar, { FSWatcher } from 'chokidar';
-import {WatchFileData, WatchStatus} from "./types";
+import {WatchEvent, WatchFileData, WatchStatus} from "./types";
 import path from "node:path";
 import * as fs from "node:fs";
 
@@ -33,7 +33,7 @@ export class FileWatcher {
           if (!['.xlsx'].includes(path.extname(fileName))) {
             return true;
           }
-          if(fileName.startsWith('~')) {
+          if (fileName.startsWith('~')) {
             return true;
           }
 
@@ -46,12 +46,12 @@ export class FileWatcher {
     });
 
     this.watcher
-      .on('add', (path, stats) => this.sendFileEvent('CREATED', path, stats?.mtimeMs))
-      .on('change', (path, stats) => this.sendFileEvent('MODIFIED', path, stats?.mtimeMs))
-      .on('unlink', (path) => this.sendFileEvent('DELETED', path))
+      .on('add', (path, stats) => this.sendWatchEvent('CREATED', path, stats?.mtimeMs))
+      .on('change', (path, stats) => this.sendWatchEvent('MODIFIED', path, stats?.mtimeMs))
+      .on('unlink', (path) => this.sendWatchEvent('DELETED', path))
       .on('ready', () => {
         console.log('Initial scan complete. Ready for changes.');
-        // this.sendFileEvent('READY', this.watchPath);
+        // this.sendWatchEvent('READY', this.watchPath);
       })
       .on('error', error => console.error(`Watcher error: ${error}`));
   }
@@ -64,7 +64,7 @@ export class FileWatcher {
     }
   }
 
-  private sendFileEvent(status: WatchStatus, filePath: string, mtime?: number) {
+  private sendWatchEvent(status: WatchStatus, filePath: string, mtime?: number) {
     const key = path.relative(this.watchPath, filePath);
     const eventData: WatchFileData = {
       status,
@@ -73,7 +73,11 @@ export class FileWatcher {
       mtime: mtime || Date.now()
     };
 
-    this.window.webContents.send("watch-event", eventData);
+    const watchEvent: WatchEvent = {
+      action: "WATCH_FILE",
+      data: eventData
+    }
+    this.window.webContents.send("watch-event", watchEvent);
     console.log(`[FileEvent] ${status}: ${filePath}`);
   }
 }

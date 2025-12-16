@@ -35,21 +35,32 @@ export function readDataExcel(subpath: string): ConfigTable {
   const sheetNames = workbook.SheetNames;
   const sheet = workbook.Sheets[sheetNames[0]]
 
-
-  const data = XLSX.utils.sheet_to_json(sheet, {
-    raw: true,
-    defval: null,
-  }) as Record<string, string | number | boolean | null> [];
-
   const rows = XLSX.utils.sheet_to_json<any[]>(sheet, {
     header: 1,
     raw: true,
     defval: null
   });
 
+  const [headerRow, ...dataRows] = rows;
+  const header = (headerRow as string[]) || [];
+  const data = dataRows.map((row) => {
+    const obj: Record<string, string | number | boolean | null> = {};
+    header.forEach((key, index) => {
+      obj[key] = row[index] ?? null;
+    });
+    return obj;
+  });
+
+  // const data = XLSX.utils.sheet_to_json(sheet, {
+  //   raw: true,
+  //   defval: null,
+  // }) as Record<string, string | number | boolean | null> [];
+
+
+
   return {
     key: subpath,
-    header: rows[0],
+    header,
     data
   }
 }
