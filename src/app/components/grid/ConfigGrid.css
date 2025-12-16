@@ -1,0 +1,10 @@
+
+
+.just-grid {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    font-family: 'JetBrains Mono', monospace;
+}

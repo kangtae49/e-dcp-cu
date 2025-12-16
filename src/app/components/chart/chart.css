@@ -1,0 +1,10 @@
+.recharts-wrapper,
+.recharts-surface {
+    outline: none !important;
+}
+.recharts-wrapper :focus,
+.recharts-wrapper *:focus,
+.recharts-surface :focus,
+.recharts-surface *:focus {
+    outline: none !important;
+}

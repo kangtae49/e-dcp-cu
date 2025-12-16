@@ -1,0 +1,118 @@
+
+
+
+.just-tool-bar {
+    --icon-font-size: 17px;
+    --icon-color: white;
+    padding: 5px 0 5px 0;
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.82);;
+    flex: 0 0 40px;
+    row-gap: 5px;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.just-tool-bar .just-tool-center {
+    flex: 1;
+}
+
+
+.just-tool-bar .just-app-icon {
+    padding: 3px;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.just-tool-bar .just-app-icon.on {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+
+.just-tool-bar .just-app-icon svg { width: 100%; height: 100%; color: var(--icon-color);}
+
+.just-tool-bar .just-app-icon:hover { background-color: rgba(255, 255, 255, 0.22);}
+
+.just-tool-center {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    row-gap: 5px;
+}
+
+
+.just-tool-center-menu {
+    display: flex;
+    align-items: center;
+    z-index: 999;
+    flex: 0 0 30px;
+}
+.just-tool-center .just-tool-center-menu:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.just-tool-center .just-icon {
+    width: 30px;
+    height: 30px;
+    padding: 4px 3px 3px 3px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.just-tool-center .just-icon.on {
+    background-color: rgba(255, 255, 255, 0.22);
+}
+.just-tool-center .just-icon svg { width: 100%; height: 100%; color: var(--icon-color);}
+
+.just-tool-center .just-icon:hover { background-color: rgba(255, 255, 255, 0.22);}
+
+
+
+.just-tool-menu {
+    flex: 0 0 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.just-tool-menu:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.just-tool-menu svg {
+    color: white;
+}
+
+.just-tool-menus .szh-menu-container {
+    display: flex;
+    background-color: #2b2d30;
+    z-index: 999;
+}
+.just-tool-menus .szh-menu {
+    background-color: #2b2d30;
+    color: white;
+    padding: 5px;
+    border: 1px solid #393b40;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    outline: none;
+}
+
+.just-tool-menus .szh-menu__item {
+    background-color: #2b2d30;
+    flex: 0 0 26px;
+    display: flex;
+    font-size: 12px;
+    border-radius: 3px;
+    padding: 0;
+    outline: none;
+}
+.just-tool-menus .szh-menu__item:hover {
+    background-color: rgba(53, 116, 240, 0.4);
+}
+
