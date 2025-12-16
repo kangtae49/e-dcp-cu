@@ -21,7 +21,7 @@ import {
   type ConfigsSlice,
   createConfigsSlice
 } from "@/app/config/configsSlice";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import DemoGridView from "@/app/demo/DemoGridView";
 import ConfigView from "@/app/config/ui/ConfigView";
 import DemoLineChartView from "@/app/demo/DemoLineChartView";

@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import chokidar, { FSWatcher } from 'chokidar';
 import {WatchEvent, WatchFileData, WatchStatus} from "./types";
 import path from "node:path";

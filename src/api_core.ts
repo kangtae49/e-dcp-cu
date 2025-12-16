@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {ConfigTable, JobData, JobEvent, JobStatus} from "./types";
+import {ConfigTable, JobEvent, JobStatus} from "./types";
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
 export function getAppResourcePath() {

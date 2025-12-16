@@ -2,8 +2,6 @@ import {
   configureStore,
   combineReducers,
   type Slice,
-  ActionCreatorsMapObject,
-  CaseReducerActions, SliceCaseReducers
 } from "@reduxjs/toolkit"
 import {devToolsEnhancer} from "@redux-devtools/remote";
 
