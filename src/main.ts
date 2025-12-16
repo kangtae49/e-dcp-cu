@@ -1,7 +1,8 @@
 import { app, BrowserWindow, ipcMain  } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import {getAppResourcePath, readDataExcel, startDataFile, startScript, stopScript} from "./api_core";
+import {getAppResourcePath, getScriptPath, readDataExcel, startDataFile, startScript, stopScript} from "./api_core";
+import {FileWatcher} from "./file_watcher";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -47,6 +48,15 @@ app.on('ready', () => {
   ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
+
+  const watchPath = getScriptPath();
+  const watcher = new FileWatcher(mainWindow, watchPath);
+  watcher.startWatching();
+
+  app.on('before-quit', () => {
+    watcher?.stopWatching();
+  });
+
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

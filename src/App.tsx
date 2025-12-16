@@ -12,6 +12,10 @@ function App() {
       console.log(jobEvent)
     })
 
+    window.api.onWatchEvent((event, watchEvent) => {
+      console.log(watchEvent)
+    })
+
     const jobId = `${new Date().getTime()}`
     window.api.startScript(jobId, "hello_world.py", [])
 

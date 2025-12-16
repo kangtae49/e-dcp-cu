@@ -32,7 +32,7 @@ export interface JobEvent {
 export type WatchStatus = 'CREATED' | 'MODIFIED' | 'DELETED';
 
 export interface WatchFileData {
-  statue: WatchStatus
+  status: WatchStatus
   path: string
   key: string
   mtime: number

@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer} from 'electron'
-import {JobEvent} from "./types";
+import {JobEvent, WatchEvent} from "./types";
 import * as Electron from "electron";
 
 export interface Api {
@@ -14,7 +14,7 @@ export interface Api {
   startScript(jobId: string, subpath: string, args: string[]): Promise<void>,
   stopScript(jobId: string): Promise<void>,
   onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void): void,
-
+  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void): void,
 
   // write_file(fullpath: string, content: string): Promise<void>,
   // start_script(job_id: string, subpath: string, args: string[]): Promise<void>,
@@ -48,7 +48,11 @@ const api: Api = {
   onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void) {
     ipcRenderer.removeAllListeners('job-event');
     ipcRenderer.on('job-event', callback)
-  }
+  },
+  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void) {
+    ipcRenderer.removeAllListeners('watch-event');
+    ipcRenderer.on('watch-event', callback)
+  },
 }
 
 contextBridge.exposeInMainWorld('api', api);
