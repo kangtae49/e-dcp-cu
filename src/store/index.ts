@@ -10,7 +10,7 @@ import {devToolsEnhancer} from "@redux-devtools/remote";
 // const staticSlices = {} as Record<string, Slice>
 const asyncSlices = {} as Record<string, Slice>
 
-function slicesToReducers(slices: Record<string, any>) {
+function slicesToReducers(slices: Record<string, Slice>) {
   return Object.fromEntries(
     Object.entries(slices).map(([key, slice]) => [key, slice.reducer])
   );

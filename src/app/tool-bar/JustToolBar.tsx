@@ -12,7 +12,6 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import {useCallback, useEffect, useState} from "react";
 import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/ui/SideMenu";
 import {fromWinId, fromWinObjId} from "@/App";
 import {CONFIG_KEYS} from "@/app/config/configsSlice";
@@ -25,26 +24,19 @@ function JustToolBar() {
     dispatch,
     thunks: justLayoutTrunks
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
-  const [size, setSize] = useState(INIT_SIDE_MENU_SIZE);
+  // const [size, setSize] = useState(INIT_SIDE_MENU_SIZE);
 
-  const toggleSideMenu = useCallback(() => {
+  const toggleSideMenu = () => {
     dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
-  }, [size])
+  }
 
   const openWin = (winId: string) => {
     dispatch(justLayoutTrunks.openWin({winId}))
   }
 
-  useEffect(() => {
-    if (!justLayoutState?.layout) {
-      return;
-    }
-    if (justLayoutState.layout.type === "split-percentage" || justLayoutState.layout.type === "split-pixels") {
-      console.log("set size", justLayoutState.layout.size)
-      setSize(justLayoutState.layout.size)
-    }
-  }, [justLayoutState?.layout]);
-
+  const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
+    ? justLayoutState.layout.size
+    : INIT_SIDE_MENU_SIZE;
 
   return (
     <div className="just-tool-bar">
