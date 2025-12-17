@@ -1,6 +1,5 @@
 import './AboutView.css'
 import useOnload from "../../hooks/useOnload";
-// eslint-disable-next-line import/no-unresolved
 import IconLogo from "../../assets/icon.svg?react"
 
 export default function AboutView() {
