@@ -1,11 +1,10 @@
-import * as React from "react";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import type {
   JustBranch,
   JustSplitDirection,
   JustSplitType,
   JustSplitTypeUnit
-} from "@/app/just-layout/justLayoutSlice";
+} from "@/app/just-layout/justLayoutSlice.ts";
 import classNames from "classnames";
 import throttle from 'lodash/throttle';
 import clamp from "lodash/clamp";
@@ -36,7 +35,7 @@ interface Props {
 
 function JustSplit({ node, containerRef, onChange, onRelease }: Props) {
   const refSplit = useRef<HTMLDivElement>(null);
-  const [listenersBound, setListenersBound] = React.useState(false);
+  const [listenersBound, setListenersBound] = useState(false);
 
   const bindListeners = () => {
     if (!listenersBound) {

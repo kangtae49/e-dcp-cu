@@ -1,6 +1,5 @@
-// import type {JobStatus, PyJobEvent} from "@/types/models";
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import {JobEvent, JobStatus} from "@/types";
+import {JobEvent, JobStatus} from "@/types.ts";
 
 export const JOB_MONITOR_ID = "JOB-MONITOR"
 

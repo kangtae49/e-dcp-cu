@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import chokidar, { FSWatcher } from 'chokidar';
-import {WatchEvent, WatchFileData, WatchStatus} from "./types";
+import {WatchEvent, WatchFileData, WatchStatus} from "./types.ts";
 import path from "node:path";
 import * as fs from "node:fs";
 

@@ -1,28 +1,17 @@
 import "./SideMenu.css"
 import Jdenticon from "react-jdenticon";
 import IconMinimize from "@/assets/minimize.svg?react"
-import {useDynamicSlice} from "@/store/hooks";
+import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
   type JustLayoutState, LAYOUT_ID
-} from "@/app/just-layout/justLayoutSlice";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks";
-import {fromWinId, fromWinObjId} from "@/App";
+} from "@/app/just-layout/justLayoutSlice.ts";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {fromWinId, INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
 
 
-export const INIT_SIDE_MENU_SIZE = 200;
 
-export interface SideMenuItem {
-  menuId: string,
-  menuName: string
-}
-export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
-  {menuId: fromWinObjId({viewId: 'page01'}), menuName: "자산통계정보"},
-  {menuId: fromWinObjId({viewId: 'demo'}), menuName: "Demo"},
-  {menuId: fromWinObjId({viewId: 'demo-grid'}), menuName: "Demo Grid"},
-  {menuId: fromWinObjId({viewId: 'demo-line-chart'}), menuName: "Demo Line Chart"},
-]
 
 function SideMenu() {
   const {

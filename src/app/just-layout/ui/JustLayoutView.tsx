@@ -1,15 +1,15 @@
 import "./JustLayoutView.css"
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
+import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice, type GetWinInfoFn,
   type JustLayoutActions,
   type JustLayoutState,
   type JustNode, LAYOUT_ID,
-} from "../justLayoutSlice";
-import useOnload from "@/hooks/useOnload";
-import {JustNodeView} from "@/app/just-layout/ui/JustNodeView";
+} from "../justLayoutSlice.ts";
+import useOnload from "@/hooks/useOnload.ts";
+import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
 import classNames from "classnames";
 
 interface Props {

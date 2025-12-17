@@ -1,8 +1,8 @@
-import {getActiveWinIds, getBranchByWinId, getBranchRightTop, hasWinId} from "@/app/just-layout/layoutUtil";
-import {createSliceThunk} from "@/store/hooks";
+import {getActiveWinIds, getBranchByWinId, getBranchRightTop, hasWinId} from "@/app/just-layout/layoutUtil.ts";
+import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
-import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice";
-import {fromWinObjId} from "@/App";
+import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice.ts";
+import {fromWinObjId} from "@/utils/layout-util.ts";
 
 export function createJustLayoutThunks(sliceId: string) {
   return {

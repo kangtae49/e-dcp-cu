@@ -1,7 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer} from 'electron'
-import {ConfigTable, JobEvent, WatchEvent} from "./types";
+import {ConfigTable, JobEvent, WatchEvent} from "./types.ts";
 import * as Electron from "electron";
 
 export interface Api {

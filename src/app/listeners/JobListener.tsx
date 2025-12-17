@@ -1,7 +1,7 @@
 import {useEffect} from "react";
-import {useDynamicSlice} from "@/store/hooks";
-import {createJobMonitorSlice, JOB_MONITOR_ID, JobMonitorActions, JobMonitorState} from "@/app/job/jobMonitorSlice";
-import {JobStatusData} from "@/types";
+import {useDynamicSlice} from "@/store/hooks.ts";
+import {createJobMonitorSlice, JOB_MONITOR_ID, JobMonitorActions, JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
+import {JobStatusData} from "@/types.ts";
 
 function JobListener(): null {
   const {

@@ -1,11 +1,11 @@
 import {useEffect} from "react";
-import {useDynamicSlice} from "@/store/hooks";
+import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   CONFIG_ID,
   ConfigsActions,
   ConfigsState,
   createConfigsSlice
-} from "@/app/config/configsSlice";
+} from "@/app/config/configsSlice.ts";
 
 function WatchListener(): null {
   const {

@@ -1,20 +1,24 @@
 import "./ConfigGrid.css"
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
-import {useDynamicSlice} from "@/store/hooks";
+import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   CONFIG_ID,
   type ConfigsActions,
   type ConfigsState,
   createConfigsSlice
-} from "@/app/config/configsSlice";
+} from "@/app/config/configsSlice.ts";
 import throttle from "lodash/throttle";
-import {ConfigTable} from "@/types";
+import {ConfigTable} from "@/types.ts";
 
 interface Props {
   configKey: string
 }
 
+const getColumns = (header: string[]): Column[] => [
+  { columnId: " ", width: 50, resizable: true, },
+  ...header.map(h => ({ columnId: h, width: 100, resizable: true, })),
+]
 function ConfigGrid({configKey}: Props) {
   const {
     state: configsState,
@@ -24,18 +28,10 @@ function ConfigGrid({configKey}: Props) {
 
   const ref = useRef<ReactGrid>(null)
 
-
   const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
 
-  const [configTable, setConfigTable] = useState<ConfigTable>(defaultConfigTable);
-
-
-  const getColumns = (header: string[]): Column[] => [
-    { columnId: " ", width: 50, resizable: true, },
-    ...header.map(h => ({ columnId: h, width: 100, resizable: true, })),
-  ]
-
-  const [columns, setColumns] = useState<Column[]>(getColumns([]));
+  const configTable = configsState?.configs[configKey] ?? defaultConfigTable;
+  const [columns, setColumns] = useState(()=> getColumns(configTable.header));
 
   const getTableRows = (table: ConfigTable): Row[] => {
     return [
@@ -71,16 +67,10 @@ function ConfigGrid({configKey}: Props) {
   }
 
   useEffect(() => {
-    if (configsState === undefined) return;
-    const newTable = configsState.configs[configKey] ?? defaultConfigTable;
-    setColumns(getColumns(newTable.header))
-    setConfigTable(configsState.configs[configKey] ?? defaultConfigTable)
-  }, [configsState, configKey])
-
-  useEffect(() => {
     // if (ref.current == null) return null;
     ref?.current?.forceUpdate();
   }, [configTable]);
+
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumns((prevColumns) => {
@@ -95,11 +85,13 @@ function ConfigGrid({configKey}: Props) {
     throttledUpdateScroll()
   }
 
-  const throttledUpdateScroll = throttle(() => {
+  const updateScroll = () => {
     if (ref.current == null) return null;
     console.log('scroll')
     ref?.current?.forceUpdate();
-  }, 1000 / 2)
+  }
+
+  const throttledUpdateScroll = throttle(()=> updateScroll, 1000 / 2)
 
   return (
     // <AutoSizer>

@@ -1,5 +1,5 @@
 import './AboutView.css'
-import useOnload from "../../hooks/useOnload";
+import useOnload from "../../hooks/useOnload.ts";
 import IconLogo from "../../assets/icon.svg?react"
 
 export default function AboutView() {

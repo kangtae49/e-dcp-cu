@@ -1,8 +1,8 @@
 import './App.css'
 
-import JustLayoutView from "@/app/just-layout/ui/JustLayoutView";
-import AboutView from "@/app/about/AboutView";
-import type {GetWinInfoFn, JustNode, WinInfo} from "@/app/just-layout/justLayoutSlice";
+import JustLayoutView from "@/app/just-layout/ui/JustLayoutView.tsx";
+import AboutView from "@/app/about/AboutView.tsx";
+import type {GetWinInfoFn, JustNode, WinInfo} from "@/app/just-layout/justLayoutSlice.ts";
 
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
@@ -25,16 +25,10 @@ import {useEffect} from "react";
 import DemoGridView from "@/app/demo/DemoGridView";
 import ConfigView from "@/app/config/ui/ConfigView";
 import DemoLineChartView from "@/app/demo/DemoLineChartView";
-import {stableStringify} from "@/utils/json-util";
 import Page01View from "@/app/page/Page01View";
+import {fromWinId, fromWinObjId, ViewId, WinObjId} from "@/utils/layout-util.ts";
 
-export type ViewId = "side-menu"
-  | "page01"
-  | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
-export interface WinObjId {
-  viewId: ViewId
-  params?: Record<string, any>
-}
+
 
 const viewMap = {
   "side-menu": (winId: string) => ({
@@ -87,7 +81,7 @@ const viewMap = {
 
 CONFIG_KEYS.forEach((winObjId: WinObjId) => {
 
-  viewMap[winObjId.viewId] = (_winId) => ({
+  viewMap[winObjId.viewId] = () => ({
     title: winObjId.params?.['title'],
     icon: <Jdenticon size="30" value={"setting-config"} />,
     view: <ConfigView winObjId={winObjId} />
@@ -132,21 +126,21 @@ const initialValue: JustNode = {
   },
 }
 
-export function getWinInfo(winId: string): WinInfo {
+function getWinInfo(winId: string): WinInfo {
   const viewId = JSON.parse(winId).viewId as ViewId;
   return viewMap[viewId](winId)
 }
-
-
-export function fromWinObjId(winObjId: WinObjId): string {
-  const winId = stableStringify(winObjId)
-  if (winId == undefined) throw new Error("buildWinId: stringify error")
-  return winId
-}
-
-export function fromWinId(winId: string): WinObjId {
-  return JSON.parse(winId) as WinObjId
-}
+//
+//
+// export function fromWinObjId(winObjId: WinObjId): string {
+//   const winId = stableStringify(winObjId)
+//   if (winId == undefined) throw new Error("buildWinId: stringify error")
+//   return winId
+// }
+//
+// export function fromWinId(winId: string): WinObjId {
+//   return JSON.parse(winId) as WinObjId
+// }
 
 function App() {
   // const [isPywebviewReady, setIsPywebviewReady] = useState(false);

@@ -1,10 +1,10 @@
 import {app, BrowserWindow, shell} from 'electron'
 import path from 'node:path';
 import * as XLSX from 'xlsx';
-import {SCRIPT_DIR} from "./constants";
+import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {ConfigTable, JobEvent, JobStatus} from "./types";
+import {ConfigTable, JobEvent, JobStatus} from "./types.ts";
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
 export function getAppResourcePath() {
@@ -113,7 +113,8 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
   });
 
   child.stdout.on('data', (data) => {
-    console.log(data.toString());
+    // console.log(data.toString());
+    process.stdout.write(data.toString())
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
@@ -123,7 +124,8 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
   });
 
   child.stderr.on('data', (data) => {
-    console.log(data.toString());
+    // console.log(data.toString());
+    process.stderr.write(data.toString())
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,

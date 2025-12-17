@@ -1,7 +1,7 @@
-import JustWinTitleView from "@/app/just-layout/ui/JustWinTitleView";
-import JustWinBodyView from "@/app/just-layout/ui/JustWinBodyView";
-import type {GetWinInfoFn, JustBranch, JustStack} from "@/app/just-layout/justLayoutSlice";
-import {useEffect, useState} from "react";
+import JustWinTitleView from "@/app/just-layout/ui/JustWinTitleView.tsx";
+import JustWinBodyView from "@/app/just-layout/ui/JustWinBodyView.tsx";
+import type {GetWinInfoFn, JustBranch, JustStack} from "@/app/just-layout/justLayoutSlice.ts";
+// import {useEffect, useState} from "react";
 
 interface Prop {
   justBranch: JustBranch
@@ -11,15 +11,8 @@ interface Prop {
 }
 
 function JustWinView ({justBranch, justStack, getWinInfo}: Prop) {
-  const [showTitle, setShowTitle] = useState(true)
-  useEffect(() => {
-    if (justStack.active === null) {
-      return;
-    }
-    const winInfo = getWinInfo(justStack.active);
-    setShowTitle(winInfo.showTitle ?? true)
-
-  }, [justStack])
+  const winInfo = getWinInfo(justStack?.active ?? '');
+  const showTitle = winInfo.showTitle ?? true
   return (
     <div className="just-win">
       {showTitle &&

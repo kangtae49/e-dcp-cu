@@ -1,5 +1,5 @@
-import {createSliceThunk} from "@/store/hooks";
-import {JobEvent, JobStatus} from "@/types";
+import {createSliceThunk} from "@/store/hooks.ts";
+import {JobEvent, JobStatus} from "@/types.ts";
 
 export function createJobMonitorThunks(sliceId: string) {
   return {

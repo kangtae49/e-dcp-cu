@@ -1,5 +1,5 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {Option} from "@/app/components/select/SelectBox";
+import type {Option} from "@/app/components/select/SelectBox.tsx";
 import {format} from "date-fns";
 import {JobStatus} from "@/types.ts";
 

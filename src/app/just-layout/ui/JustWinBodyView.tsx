@@ -7,10 +7,10 @@ import {
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack, LAYOUT_ID,
-} from "@/app/just-layout/justLayoutSlice";
-import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
-import {Activity, useRef} from "react";
+} from "@/app/just-layout/justLayoutSlice.ts";
+import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
+import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
+import {Activity, useLayoutEffect, useRef} from "react";
 
 interface Prop {
   justBranch: JustBranch
@@ -103,8 +103,13 @@ function JustWinBodyView (props: Prop) {
       }
     }), [justStack]
   )
-  // console.log("JustWinBodyView", justStack)
-  drop(ref)
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      drop(ref);
+    }
+  }, [drop]);
+
   return (
     <div
       className={classnames("just-win-body", {"isOver": isOver})}

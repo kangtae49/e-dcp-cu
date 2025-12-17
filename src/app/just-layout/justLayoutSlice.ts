@@ -6,7 +6,7 @@ import {
   moveWinId, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
-} from "@/app/just-layout/layoutUtil";
+} from "@/app/just-layout/layoutUtil.ts";
 
 export const LAYOUT_ID = "JUST-LAYOUT"
 

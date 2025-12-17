@@ -1,13 +1,12 @@
 import "./PageView.css"
-import {type WinObjId} from "@/App";
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
-import SelectBox, {type Option} from "@/app/components/select/SelectBox";
-import MonthPicker from "@/app/components/date/MonthPicker";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
-import {CONFIG_ID, type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice";
-import {Activity, useEffect, useState} from "react";
+import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
+import MonthPicker from "@/app/components/date/MonthPicker.tsx";
+import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
+import {CONFIG_ID, type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {Activity, useEffect} from "react";
 import { format } from "date-fns";
 import {
   createJobMonitorSlice,
@@ -23,6 +22,7 @@ import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
+import {WinObjId} from "@/utils/layout-util.ts";
 
 interface Props {
   winObjId: WinObjId
@@ -36,7 +36,7 @@ function Page01View({winObjId}: Props) {
   // chart-line.svg
   // terminal.svg
   // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
-  const [companyList, setCompanyList] = useState<Option[]>([])
+  // const [companyList, setCompanyList] = useState<Option[]>([])
 
   const dispatch = useAppDispatch();
   const {
@@ -57,19 +57,28 @@ function Page01View({winObjId}: Props) {
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
-  const [outFile, setOutFile] = useState<string | null>(null);
+  // const [outFile, setOutFile] = useState<string | null>(null);
 
+  const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
+    return data.map(d => {
+      return {value: d.cdVlId, label: d.cdVlNm ? d.cdVlNm.toString() : ''}
+    })
+  }
+
+  const config = configsState?.configs?.[configKey];
+  const companyList = toOptions(config?.data ?? []);
+
+  const jobInfo = pageState?.jobInfo;
+  const outFile = jobInfo?.status === 'DONE'
+    ? `${jobInfo.args.join('_')}.xlsx`
+    : null;
 
   useEffect(() => {
-    if (!configsState?.configs) return;
-    const config = configsState?.configs?.[configKey];
-    console.log('config:', config)
-    const options = toOptions(config?.data ?? []);
-    setCompanyList(options)
-    if (options.length > 0 && !pageState?.company) {
-      dispatch(pageActions.setCompany(options[0]))
+    if (companyList.length > 0 && !pageState?.company) {
+      dispatch(pageActions.setCompany(companyList[0]));
     }
-  }, [configsState?.configs]);
+  }, [companyList, dispatch, pageActions, pageState?.company]);
+
 
   useEffect(() => {
     if (!pageState?.jobInfo) return;
@@ -84,25 +93,11 @@ function Page01View({winObjId}: Props) {
     const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
     const logs = streamEvents.map((event) => (event.data as JobStreamData).message ?? '')
     dispatch(pageActions.setLogs(logs))
-  }, [jobMonitorState, pageState?.jobInfo]);
-
-  useEffect(() => {
-    if (!pageState?.jobInfo) return;
-    if (pageState.jobInfo.status === 'DONE') {
-      const outFile = `${pageState.jobInfo.args.join('_')}.xlsx`
-      setOutFile(outFile);
-      // window.pywebview.api.read_data_excel(outFile).then(JSON.parse).then(data => {
-      //   console.log('data:', data)
-      // })
-    }
-  }, [pageState?.jobInfo])
+  }, [dispatch, jobMonitorState, jobMonitorThunks, pageActions, pageState?.jobInfo]);
 
 
-  const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
-    return data.map(d => {
-      return {value: d.cdVlId, label: d.cdVlNm ? d.cdVlNm.toString() : ''}
-    })
-  }
+
+
 
   const onChangeStartDate = (date: string | null) => {
     console.log('onChangeStartDate:', date)
@@ -136,6 +131,8 @@ function Page01View({winObjId}: Props) {
     dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args}))
     window.api.startScript(jobId, scriptPath, args).then()
   }
+
+
 
   return (
     <div className="win-page">

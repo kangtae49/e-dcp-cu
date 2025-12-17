@@ -1,14 +1,13 @@
 import "./chart.css"
 import {Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
-import {useDynamicSlice} from "@/store/hooks";
+import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   CONFIG_ID,
   type ConfigsActions,
   type ConfigsState,
   createConfigsSlice
-} from "@/app/config/configsSlice";
-import {useEffect, useState} from "react";
-import {ConfigTable} from "@/types";
+} from "@/app/config/configsSlice.ts";
+import {ConfigTable} from "@/types.ts";
 
 interface DataKey {
   id: string
@@ -30,16 +29,16 @@ function PageLineChart({title, outFile, legend}: Props) {
   } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
   const defaultConfigTable: ConfigTable = {key: outFile, header: [], data: []}
 
-  const [configTable, setConfigTable] = useState<ConfigTable>(defaultConfigTable);
+  // const [configTable, setConfigTable] = useState<ConfigTable>(defaultConfigTable);
+  const configTable = configsState?.configs[outFile] ?? defaultConfigTable;
+  // useEffect(() => {
+  //   if (configsState === undefined) return;
+  //   setConfigTable(configsState.configs[outFile] ?? defaultConfigTable)
+  // }, [configsState, outFile])
 
-  useEffect(() => {
-    if (configsState === undefined) return;
-    setConfigTable(configsState.configs[outFile] ?? defaultConfigTable)
-  }, [configsState, outFile])
-
-  useEffect(() => {
-    console.log('configTable:', configTable)
-  }, [configTable]);
+  // useEffect(() => {
+  //   console.log('configTable:', configTable)
+  // }, [configTable]);
 
   // const getData(data: Record<string, string | number | null>, id: string) = {
   //   return data.map(d => ({

@@ -1,7 +1,7 @@
 import "@silevis/reactgrid/styles.css";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons"
-import ConfigGrid from "@/app/components/grid/ConfigGrid";
+import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 
 function DemoGridView() {
 

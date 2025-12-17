@@ -1,20 +1,19 @@
 import './JustToolBar.css'
 import IconLogo from "../../assets/icon.svg?react"
-import {useDynamicSlice} from "@/store/hooks";
+import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
   type JustLayoutState, LAYOUT_ID
-} from "@/app/just-layout/justLayoutSlice";
+} from "@/app/just-layout/justLayoutSlice.ts";
 import classNames from "classnames";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import {INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/app/side-menu/ui/SideMenu";
-import {fromWinId, fromWinObjId} from "@/App";
-import {CONFIG_KEYS} from "@/app/config/configsSlice";
+import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
+import {fromWinId, fromWinObjId, INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
 
 
 function JustToolBar() {
