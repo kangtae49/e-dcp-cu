@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain  } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import {getAppResourcePath, getScriptPath, readDataExcel, startDataFile, startScript, stopScript} from "./api_core";
-import {FileWatcher} from "@/file_watcher.ts";
+import {FileWatcher} from "./file_watcher.ts";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
