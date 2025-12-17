@@ -29,17 +29,36 @@ function createReducer() {
   })
 }
 
+
+const args = window.api.getArgs();
+const isVerbose = args.includes('--verbose');
+
 export const store = configureStore({
   reducer: createReducer(),
   devTools: false,
-  enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(devToolsEnhancer({
-    name: "DcpCu",
-    realtime: true,
-    trace: true,
-    maxAge: 1000,
-    hostname: "localhost",
-    port: 8001
-  }))
+  enhancers: (getDefaultEnhancers) => {
+    const enhancers = getDefaultEnhancers();
+    if (isVerbose) {
+      return enhancers.concat(devToolsEnhancer({
+        name: "DcpCu",
+        realtime: true,
+        trace: true,
+        maxAge: 1000,
+        hostname: "localhost",
+        port: 8001
+      }));
+    }
+
+    return enhancers;
+  }
+  // enhancers: (getDefaultEnhancers) => getDefaultEnhancers().concat(devToolsEnhancer({
+  //   name: "DcpCu",
+  //   realtime: true,
+  //   trace: true,
+  //   maxAge: 1000,
+  //   hostname: "localhost",
+  //   port: 8001
+  // }))
 })
 
 export function injectReducer(key: string, slice: Slice) { //reducer: Reducer) {

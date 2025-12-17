@@ -1,5 +1,5 @@
 import './JustToolBar.css'
-import IconLogo from "../../assets/dcp-cu.svg?react"
+import IconLogo from "../../assets/icon.svg?react"
 import {useDynamicSlice} from "@/store/hooks";
 import {
   createJustLayoutSlice,

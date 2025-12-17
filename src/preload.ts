@@ -6,6 +6,8 @@ import * as Electron from "electron";
 
 export interface Api {
   echo(message: string): Promise<string>,
+  getArgs: () => string [],
+
   getResourcePath(): Promise<string>,
   // getResourceSubPath(subpath: string): Promise<string>,
 
@@ -30,6 +32,7 @@ const api: Api = {
   echo: (message: string): Promise<string> => {
     return ipcRenderer.invoke('echo', message);
   },
+  getArgs: () => process.argv,
   getResourcePath: (): Promise<string> => {
     return ipcRenderer.invoke('get-app-resource-path');
   },

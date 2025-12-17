@@ -27,7 +27,7 @@ function ConfigView({winObjId}: Props) {
   }
 
   const openSetting = (key: string) => {
-    window.pywebview.api.start_data_file(key)
+    window.api.startDataFile(key)
   }
 
   return (

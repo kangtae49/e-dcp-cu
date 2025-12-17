@@ -7,7 +7,7 @@ function DemoGridView() {
 
   const configKey = "data\\company.xlsx";
   const clickEdit = () => {
-    window.pywebview.api.start_data_file(configKey)
+    window.api.startDataFile(configKey)
   }
 
   return (

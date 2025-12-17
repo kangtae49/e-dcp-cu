@@ -10,7 +10,7 @@ interface Props {
 
 function OutputGrid({outFile, title}: Props) {
   const openGrid = (filePath: string) => {
-    window.pywebview.api.start_data_file(filePath)
+    window.api.startDataFile(filePath)
   }
 
   return (

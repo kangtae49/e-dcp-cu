@@ -12,8 +12,9 @@ import path from "path";
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
-    // icon: 'src/assets/dcp-cu',
-    icon: path.join(__dirname,'src/assets/dcp-cu'),
+    executableName: 'dcp-cu',
+    // icon: 'src/assets/icon',
+    icon: path.join(__dirname,'src/assets/icon'),
     extraResource: [
       'src-py',
     ]
@@ -21,8 +22,8 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      // setupIcon: 'src/assets/dcp-cu.ico',
-      setupIcon: path.join(__dirname, 'src/assets/dcp-cu.ico'),
+      // setupIcon: 'src/assets/icon.ico',
+      setupIcon: path.join(__dirname, 'src/assets/icon.ico'),
     }),
     // new MakerWix({
     //   // language: 1252,

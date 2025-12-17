@@ -1,11 +1,11 @@
 {
-  "name": "e-dcp-cu",
-  "productName": "e-dcp-cu",
+  "name": "dcp-cu",
+  "productName": "dcp-cu",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "electron-forge start -- --verbose",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

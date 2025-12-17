@@ -15,9 +15,10 @@ const createWindow = () => {
     width: 800,
     height: 600,
     autoHideMenuBar: true,
-    // icon: path.join(__dirname, 'assets/dcp-cu.png'),
+    icon: path.join(__dirname, 'assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      additionalArguments: process.argv,
     },
   });
 
@@ -31,7 +32,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   return mainWindow;
 };
 
