@@ -14,7 +14,7 @@ import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDragga
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
-import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {GetWinInfoFn} from "@/app/just-layout";
 // import '@szhsin/react-menu/dist/index.css';
 // import '@szhsin/react-menu/dist/transitions/zoom.css';

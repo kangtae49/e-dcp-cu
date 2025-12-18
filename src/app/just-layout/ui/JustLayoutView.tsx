@@ -11,7 +11,7 @@ import {
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
 import classNames from "classnames";
-import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {GetWinInfoFn} from "@/app/just-layout";
 
 interface Props {

@@ -1,7 +1,12 @@
 
-.react-datepicker__calendar-icon {
+.month-picker .react-datepicker__calendar-icon {
     color: #007bff;
 }
+
+.month-picker .react-datepicker__view-calendar-icon input {
+    padding: 6px 5px 5px 25px;
+}
+
 .month-picker input {
     width: 50px;
     outline: none;
@@ -9,3 +14,4 @@
 
 .month-picker svg {
 }
+

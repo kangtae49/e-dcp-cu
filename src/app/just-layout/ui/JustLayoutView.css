@@ -51,7 +51,6 @@
     display: flex;
     align-items: center;
     padding-right: 3px;
-    z-index: 999;
 }
 
 .just-title-menu {
@@ -149,10 +148,9 @@
     height: 100%;
     display: flex;
     align-items: center;
-
 }
-.just-draggable-title>div {
-    height: 100%;
+
+.just-draggable-title.just-title-menus {
 }
 
 .just-title-menus .szh-menu-container {
@@ -168,6 +166,7 @@
     flex-direction: column;
     justify-content: center;
     outline: none;
+    z-index: 99999 !important;
 }
 
 .just-title-menus .szh-menu__item {

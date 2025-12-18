@@ -18,3 +18,8 @@
     display: flex;
     height: 100%;
 }
+
+
+.just-app .react-datepicker-popper {
+    z-index: 999;
+}

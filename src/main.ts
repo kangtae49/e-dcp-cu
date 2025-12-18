@@ -9,6 +9,10 @@ if (started) {
   app.quit();
 }
 
+console.log('__dirname:', __dirname)
+// DEV: C:\sources\e-dcp-cu\.vite\build
+// PACKAGE:
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({

@@ -1,5 +1,5 @@
 import {JSX} from "react";
-import {ViewId} from "@/utils/layout-util.ts";
+import {ViewId} from "@/utils/layout-util.tsx";
 import {stableStringify} from "@/utils/json-util.ts";
 
 export interface WinInfo {
@@ -29,7 +29,7 @@ export class WinObj implements WinObjId {
 
   constructor(data: Partial<WinObjId>) {
     this.viewId = data.viewId!;
-    this.dupId = data.dupId ?? "ONLY";
+    this.dupId = data.dupId ?? `${new Date().getTime()}`;
     this.params = data?.params ?? {};
   }
 

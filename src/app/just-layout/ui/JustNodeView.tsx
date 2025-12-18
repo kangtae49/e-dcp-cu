@@ -11,7 +11,7 @@ import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
 import {type CSSProperties, useRef} from "react";
-import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {GetWinInfoFn} from "@/app/just-layout";
 
 interface Props {

@@ -8,7 +8,7 @@ import {
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
 import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice.ts";
-import {WinObj} from "@/app/just-layout/index.ts";
+import {WinObj, WinObjId} from "@/app/just-layout/index.ts";
 
 export function createJustLayoutThunks(sliceId: string) {
   const toggleSideMenu = createSliceThunk(sliceId, ({size}, {dispatch, sliceState}) => {
@@ -59,12 +59,30 @@ export function createJustLayoutThunks(sliceId: string) {
   const openWinMenu = createSliceThunk(sliceId, ({winId}, {dispatch}) => {
     const viewId = WinObj.toWinObjId(winId).viewId;
     const winIds: string[] = dispatch(getWinIds({viewId})) as unknown as string[];
-    if (winIds.includes(winId) || winIds.length === 0) {
+    if (winIds.length === 0) {
+      console.log('openWinMenu1', winIds, winId)
       dispatch(openWin({winId}))
     } else {
-      dispatch(openWin({winId: winIds.at(-1)}))
+      const newWinId = winIds
+        .toSorted((a, b) => (WinObj.toWinObjId(a).dupId ?? '') <= (WinObj.toWinObjId(b).dupId ?? '') ? -1: 1)
+        .at(-1)
+      console.log('openWinMenu2', winIds, newWinId)
+      dispatch(openWin({winId: newWinId}))
     }
-
+  })
+  const cloneWin = createSliceThunk(sliceId, ({winId}, {dispatch, sliceState}) => {
+    const targetBranch = getBranchByWinId(sliceState?.layout ?? null, winId);
+    if (targetBranch === null) return;
+    const justLayoutActions = getActions<JustLayoutActions>(sliceId);
+    const dupId = `${new Date().getTime()}`
+    const newWinObjId: WinObjId = {
+      ...WinObj.toWinObjId(winId),
+      dupId
+    }
+    const newWinId = WinObj.toWinId(newWinObjId)
+    dispatch(justLayoutActions.insertWin({
+      branch: targetBranch, direction: "row", index: -1, pos: "stack", winId: newWinId,
+    }))
   })
 
   return {
@@ -72,6 +90,7 @@ export function createJustLayoutThunks(sliceId: string) {
     openWin,
     openWinMenu,
     getWinIds,
+    cloneWin,
   }
 }
 

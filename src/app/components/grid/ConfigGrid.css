@@ -6,5 +6,11 @@
     min-height: 0;
     min-width: 0;
     overflow: auto;
-    font-family: 'JetBrains Mono', monospace;
+    /*font-family: 'JetBrains Mono', monospace;*/
+    font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+    font-size: 11pt;
+    background-color: white;
+}
+.just-grid .rg-header-cell {
+    font-weight: bold;
 }

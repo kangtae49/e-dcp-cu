@@ -1,4 +1,4 @@
-import {useEffect, useLayoutEffect, useRef} from "react";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {
   createJustLayoutSlice,
   type JustBranch,
@@ -10,10 +10,12 @@ import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classnames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faCircleXmark} from "@fortawesome/free-solid-svg-icons"
+import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {LAYOUT_ID} from "@/utils/layout-util.ts";
-import {WinInfo} from "@/app/just-layout";
+import {LAYOUT_ID} from "@/utils/layout-util.tsx";
+import {WinInfo, WinObj, WinObjId} from "@/app/just-layout";
+import {ControlledMenu, Menu, MenuItem, useMenuState} from "@szhsin/react-menu";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 export interface DragItem {
   justBranch: JustBranch
@@ -34,11 +36,14 @@ interface Prop {
 function JustDraggableTitle(props: Prop) {
   const { winInfo, justBranch, winId, justStack, rect: parentRect } = props;
   const ref = useRef<HTMLDivElement>(null)
+  const [menuProps, toggleMenu] = useMenuState();
+  const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
   const {
     state: justLayoutState,
     actions: justLayoutActions,
+    thunks: justLayoutThunks,
     dispatch,
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
   const closeWin = (winId: string) => {
     console.log("closeWin", winId)
@@ -48,6 +53,15 @@ function JustDraggableTitle(props: Prop) {
       })
     )
   }
+
+  const cloneWin = (winId: string) => {
+    dispatch(
+      justLayoutThunks.cloneWin({
+        winId
+      })
+    )
+  }
+
   const activeWin = (winId: string) => {
     console.log("activeWin", winId)
     dispatch(
@@ -131,25 +145,58 @@ function JustDraggableTitle(props: Prop) {
     }
   }, [drop, drag]);
 
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setAnchorPoint({ x: e.clientX, y: e.clientY });
+    toggleMenu(true);
+  }, [toggleMenu]);
+
   // console.log("JustDraggableTitle", winId, winInfo)
   return (
     <div
       className={classnames(
         "just-draggable-title",
+        "just-title-menus",
         {
           "dragging": isDragging,
           "just-active": justStack.active === winId
         }
       )}
       ref={ref}
+      onContextMenu={handleContextMenu}
     >
       <div className="just-icon" onClick={() => activeWin(winId)}>{winInfo.icon}</div>
       <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}</div>
 
       {(winInfo.showClose ?? true) &&
-        <div className="just-icon just-close" onClick={() => closeWin(winId)}>
-        <Icon icon={faCircleXmark}/>
+      <div className="just-icon just-close" onClick={() => closeWin(winId)}>
+          <Icon icon={faCircleXmark}/>
       </div>}
+      <ControlledMenu
+        {...menuProps}
+        anchorPoint={anchorPoint}
+        onClose={() => toggleMenu(false)}
+        >
+        <MenuItem onClick={() => closeWin(winId)}>
+          <div className="just-icon">
+          </div>
+          <div className="just-title">
+            Close
+          </div>
+          <div className="just-icon" />
+        </MenuItem>
+        {(winInfo.canDup ?? false) &&
+          <MenuItem onClick={() => cloneWin(winId)}>
+            <div className="just-icon">
+                <Icon icon={faClone} />
+            </div>
+            <div className="just-title">
+                Clone
+            </div>
+            <div className="just-icon" />
+          </MenuItem>
+        }
+      </ControlledMenu>
     </div>
   )
 }

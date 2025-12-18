@@ -11,7 +11,7 @@ import {
 import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef} from "react";
-import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {GetWinInfoFn} from "@/app/just-layout";
 
 interface Prop {
