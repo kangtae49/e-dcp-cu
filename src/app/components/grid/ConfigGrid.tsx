@@ -15,9 +15,9 @@ interface Props {
   configKey: string
 }
 
-const getColumns = (header: string[]): Column[] => [
+const getColumns = (header: string[], columnSize: Record<string, number>): Column[] => [
   { columnId: " ", width: 50, resizable: true, },
-  ...header.map(h => ({ columnId: h, width: 100, resizable: true, })),
+  ...header.map(h => ({ columnId: h, width: columnSize?.[h] ?? 150, resizable: true, })),
 ]
 function ConfigGrid({configKey}: Props) {
   const {
@@ -33,9 +33,9 @@ function ConfigGrid({configKey}: Props) {
   const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
 
   const configTable = configsState?.configs[configKey] ?? defaultConfigTable;
-  const [columns, setColumns] = useState(()=> getColumns(configTable.header));
 
-  const isReady = !!(configsState?.configs && configKey in configsState.configs);
+  const [columnsSize, setColumnsSize] = useState({});
+
   const getTableRows = (table: ConfigTable): Row[] => {
     return [
       getTableHeader(table.header),
@@ -70,18 +70,13 @@ function ConfigGrid({configKey}: Props) {
   }
 
   useEffect(() => {
-    // if (ref.current == null) return null;
     ref?.current?.forceUpdate();
   }, [configTable]);
 
-
   const handleColumnResize = (ci: Id, width: number) => {
-    setColumns((prevColumns) => {
-      const columnIndex = prevColumns.findIndex(el => el.columnId === ci);
-      const resizedColumn = prevColumns[columnIndex];
-      prevColumns[columnIndex] = {...resizedColumn, width};
-      return [...prevColumns];
-    });
+    setColumnsSize((prev) => {
+      return {...prev, [ci]: width};
+    })
   }
 
   const handleScroll = () => {
@@ -95,19 +90,18 @@ function ConfigGrid({configKey}: Props) {
   }
 
   const throttledUpdateScroll = throttle(()=> updateScroll, 1000 / 2)
-  console.log('configTable:', configKey, configTable, columns, isReady)
+
+  const rows = getTableRows(configTable);
+  const columns = getColumns(configTable.header, columnsSize);
+  console.log('configTable:', configKey, configTable)
   return (
-    // <AutoSizer>
-    //   {({ height, width }) => (
-    //   )}
-    // </AutoSizer>
 
   <div className="just-grid" onScroll={handleScroll}>
     <ReactGrid
       key={configKey}
       ref={ref}
-      rows={getTableRows(configTable)}
-      columns={getColumns(configTable.header)}
+      rows={rows}
+      columns={columns}
       stickyTopRows={1}
       stickyLeftColumns={1}
       enableRangeSelection={true}
