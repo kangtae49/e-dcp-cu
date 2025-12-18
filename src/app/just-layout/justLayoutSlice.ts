@@ -1,5 +1,4 @@
 import {createSlice, current, type PayloadAction} from "@reduxjs/toolkit";
-import {type JSX} from "react";
 import {
   activeWinId,
   insertWinId,
@@ -8,7 +7,7 @@ import {
   updateSplitSize,
 } from "@/app/just-layout/layoutUtil.ts";
 
-export const LAYOUT_ID = "JUST-LAYOUT"
+
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
@@ -94,16 +93,7 @@ const initialState: JustLayoutState = {
   layout: null,
 }
 
-export interface WinInfo {
-  title: string
-  icon: JSX.Element
-  view: JSX.Element
-  canDrag?: boolean
-  canDrop?: boolean
-  showClose?: boolean
-  showTitle?: boolean
-}
-export type GetWinInfoFn = (winId: string)=> WinInfo;
+
 
 export const createJustLayoutSlice = (id: string) =>
   createSlice({

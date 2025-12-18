@@ -4,16 +4,18 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 
 import {
-  createJustLayoutSlice, type GetWinInfoFn,
+  createJustLayoutSlice,
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustStack, LAYOUT_ID,
+  type JustStack,
 } from "@/app/just-layout/justLayoutSlice";
 import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
+import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {GetWinInfoFn} from "@/app/just-layout";
 // import '@szhsin/react-menu/dist/index.css';
 // import '@szhsin/react-menu/dist/transitions/zoom.css';
 
@@ -97,7 +99,11 @@ function JustWinTitleView({justBranch, justStack, getWinInfo}: Prop) {
     }), [justStack]
   )
 
-  drop(ref)
+  useLayoutEffect(() => {
+    if (ref.current) {
+      drop(ref)
+    }
+  }, [drop]);
 
   useEffect(() => {
     if (ref.current === null) return;

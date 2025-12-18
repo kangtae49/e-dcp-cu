@@ -2,7 +2,7 @@ import './App.css'
 
 import JustLayoutView from "@/app/just-layout/ui/JustLayoutView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
-import type {GetWinInfoFn, JustNode, WinInfo} from "@/app/just-layout/justLayoutSlice.ts";
+import type {JustNode} from "@/app/just-layout/justLayoutSlice.ts";
 
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons"
@@ -26,7 +26,8 @@ import DemoGridView from "@/app/demo/DemoGridView";
 import ConfigView from "@/app/config/ui/ConfigView";
 import DemoLineChartView from "@/app/demo/DemoLineChartView";
 import Page01View from "@/app/page/Page01View";
-import {fromWinId, fromWinObjId, ViewId, WinObjId} from "@/utils/layout-util.ts";
+import {ViewId} from "@/utils/layout-util.ts";
+import {GetWinInfoFn, WinInfo, WinObj, WinObjId} from "@/app/just-layout";
 
 
 
@@ -41,7 +42,7 @@ const viewMap = {
     // showClose: false,
   }),
   "page01": (winId: string) => {
-    const winObjId = fromWinId(winId)
+    const winObjId = WinObj.toWinObjId(winId)
     return ({
       title: "자산통계정보",
       icon: <Jdenticon size="30" value={winObjId.viewId} />,
@@ -79,22 +80,18 @@ const viewMap = {
   // },
 } as Record<ViewId, GetWinInfoFn>;
 
-CONFIG_KEYS.forEach((winObjId: WinObjId) => {
+CONFIG_KEYS.forEach((winObjId: WinObj) => {
 
   viewMap[winObjId.viewId] = () => ({
-    title: winObjId.params?.['title'],
+    title: WinObj.getParamString(winObjId, 'title'),
     icon: <Jdenticon size="30" value={"setting-config"} />,
     view: <ConfigView winObjId={winObjId} />
   });
 })
 
-
-// dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
-// dispatch(justLayoutActions.removeWin({ branch: [], winId: "winId01" }))
-// dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
-// dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId02", direction: 'column', pos: 'second' }))
-// dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId03", direction: 'row', pos: 'first' }))
-// dispatch(justLayoutActions.insertWin({ branch: ['second', 'second'], winId: "winId04", direction: 'row', pos: 'stack' }))
+const sideMenuId = new WinObj({viewId: 'side-menu'}).toWinId();
+const demoGridId = new WinObj({viewId: 'demo-grid'}).toWinId();
+const aboutId = new WinObj({viewId: 'about'}).toWinId();
 
 const initialValue: JustNode = {
   type: 'split-pixels',
@@ -105,8 +102,8 @@ const initialValue: JustNode = {
   // minSize: 38,
   first: {
     type: 'stack',
-    tabs: [fromWinObjId({viewId: 'side-menu'})],
-    active: fromWinObjId({viewId: 'side-menu'})
+    tabs: [sideMenuId],
+    active: sideMenuId
   },
   second: {
     type: 'split-percentage',
@@ -115,13 +112,13 @@ const initialValue: JustNode = {
     show: true,
     first: {
       type: 'stack',
-      tabs: [fromWinObjId({viewId: 'demo-grid'})],
-      active: fromWinObjId({viewId: 'demo-grid'})
+      tabs: [demoGridId],
+      active: demoGridId
     },
     second: {
       type: 'stack',
-      tabs: [fromWinObjId({viewId: 'about'})],
-      active: fromWinObjId({viewId: 'about'})
+      tabs: [aboutId],
+      active: aboutId
     }
   },
 }
@@ -130,68 +127,23 @@ function getWinInfo(winId: string): WinInfo {
   const viewId = JSON.parse(winId).viewId as ViewId;
   return viewMap[viewId](winId)
 }
-//
-//
-// export function fromWinObjId(winObjId: WinObjId): string {
-//   const winId = stableStringify(winObjId)
-//   if (winId == undefined) throw new Error("buildWinId: stringify error")
-//   return winId
-// }
-//
-// export function fromWinId(winId: string): WinObjId {
-//   return JSON.parse(winId) as WinObjId
-// }
 
 function App() {
-  // const [isPywebviewReady, setIsPywebviewReady] = useState(false);
   const {
     actions: configsActions, dispatch
   } = useDynamicSlice<ConfigsSlice, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
-  // useEffect(() => {
-  //
-  //   window.addEventListener("pywebviewready", handleReady);
-  //
-  //   return () => {
-  //     window.removeEventListener("pywebviewready", handleReady);
-  //   };
-  // }, []);
-
-  // function handleReady() {
-  //   console.log("pywebview is ready!");
-  //   // setIsPywebviewReady(true);
-  // }
 
   useEffect(() => {
-    // if(!isPywebviewReady) return;
-    // console.log("api", window.pywebview.api)
-
     CONFIG_KEYS.forEach((winObjId: WinObjId) => {
-      const file: string = winObjId.params?.['file'];
+      const file: string = WinObj.getParamString(winObjId, 'file');
       window.api.readDataExcel(file)
         .then(res => {
           dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
         })
-
-      // viewMap[winObjId.viewId] = (_winId) => ({
-      //   title: winObjId.params?.['title'],
-      //   icon: <Jdenticon size="30" value={"setting-config"} />,
-      //   view: <ConfigView winObjId={winObjId} />
-      // });
     })
 
-
-
-    // window.pywebview.api.read_config("설정1.xlsx").then(res => {
-    //   dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
-    // })
-    // window.pywebview.api.read_config("설정2.xlsx").then(res => {
-    //   dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
-    // })
-  // }, [isPywebviewReady])
-  }, [])
-
-
+  }, [configsActions, dispatch])
 
   return (
     <>

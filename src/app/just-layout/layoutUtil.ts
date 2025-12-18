@@ -7,7 +7,8 @@ import type {
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, isEqual, set} from "lodash";
-import {fromWinObjId} from "@/utils/layout-util.ts";
+import {WinObj} from "@/app/just-layout/index.ts";
+
 
 
 export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert): JustNode | null {
@@ -39,7 +40,7 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
       }
     })
   } else if (payload.pos === 'second') {
-    if (targetNode.type === 'stack' && targetNode.active === fromWinObjId({viewId: "side-menu"})) {
+    if (targetNode.type === 'stack' && WinObj.toWinObjId(targetNode.active ?? '').viewId === "side-menu") {
       return updateNodeOfBranch(layout, payload.branch, {
         $set: {
           type: 'split-pixels',
@@ -266,6 +267,20 @@ export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode
     }
     return null
   }
+}
+
+export function queryWinIdByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {
+  if( layout === null) return winIds
+  if (layout.type === 'stack') {
+    return [
+      ...winIds,
+      ...layout.tabs.filter((winId: string) => WinObj.toWinObjId(winId).viewId === viewId)
+    ]
+  } else {
+    const firstIds = queryWinIdByViewId(layout.first, viewId, winIds);
+    return queryWinIdByViewId(layout.second, viewId, [...winIds, ...firstIds]);
+  }
+
 }
 
 function getNodeByBranch<T extends JustNode>(obj: JustNode, path: JustBranch): T {

@@ -22,7 +22,7 @@ import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
-import {WinObjId} from "@/utils/layout-util.ts";
+import {WinObjId} from "@/app/just-layout";
 
 interface Props {
   winObjId: WinObjId
@@ -42,7 +42,7 @@ function Page01View({winObjId}: Props) {
   const {
     state: pageState,
     actions: pageActions,
-  } = useDynamicSlice<PageState, PageActions>(PAGE01_ID, createPageSlice)
+  } = useDynamicSlice<PageState, PageActions>(`${PAGE01_ID}_${winObjId.dupId}`, createPageSlice)
 
   const {
     state: jobMonitorState,

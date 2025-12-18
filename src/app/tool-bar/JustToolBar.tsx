@@ -4,7 +4,7 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
-  type JustLayoutState, LAYOUT_ID
+  type JustLayoutState,
 } from "@/app/just-layout/justLayoutSlice.ts";
 import classNames from "classnames";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
@@ -13,7 +13,8 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
-import {fromWinId, fromWinObjId, INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
+import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
+import {WinObj} from "@/app/just-layout";
 
 
 function JustToolBar() {
@@ -30,7 +31,7 @@ function JustToolBar() {
   }
 
   const openWin = (winId: string) => {
-    dispatch(justLayoutTrunks.openWin({winId}))
+    dispatch(justLayoutTrunks.openWinMenu({winId}))
   }
 
   const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
@@ -51,7 +52,7 @@ function JustToolBar() {
           SIDE_MENU_ID_LIST.map(item =>
             <div key={item.menuId} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
               <div className="just-icon">
-                <Jdenticon size="25" value={fromWinId(item.menuId).viewId} />
+                <Jdenticon size="25" value={WinObj.toWinObjId(item.menuId).viewId} />
               </div>
             </div>
           )
@@ -67,7 +68,7 @@ function JustToolBar() {
         }>
           {
             CONFIG_KEYS.map((winObjId) =>
-              <MenuItem key={fromWinObjId(winObjId)} className="just-menu-item" onClick={() => openWin(fromWinObjId(winObjId))}>
+              <MenuItem key={WinObj.toWinId(winObjId)} className="just-menu-item" onClick={() => openWin(WinObj.toWinId(winObjId))}>
                 <div className="just-icon">
                   <Jdenticon size="25" value={winObjId.viewId} />
                 </div>

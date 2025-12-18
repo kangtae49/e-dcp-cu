@@ -2,16 +2,16 @@ import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
-import {WinObjId} from "@/utils/layout-util.ts";
+import {WinObj, WinObjId} from "@/app/just-layout";
 
 interface Props {
   winObjId: WinObjId
 }
 
 function ConfigView({winObjId}: Props) {
-  const configKey = winObjId.params?.file;
-  const configTitle = winObjId.params?.title;
 
+  const configKey = WinObj.getParamString(winObjId, 'file');
+  const configTitle = WinObj.getParamString(winObjId, 'title');
   // const {
   //   state: configsState,
   // } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
@@ -34,7 +34,7 @@ function ConfigView({winObjId}: Props) {
         </div>
       </div>
       <div className="config-table">
-        {configKey && <ConfigGrid configKey={configKey} />}
+        <ConfigGrid configKey={configKey} />
       </div>
     </div>
   )

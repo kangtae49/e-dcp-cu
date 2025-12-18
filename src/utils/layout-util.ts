@@ -1,12 +1,11 @@
-import {stableStringify} from "@/utils/json-util.ts";
+import {WinObj} from "@/app/just-layout";
+
+export const LAYOUT_ID = "JUST-LAYOUT"
 
 export type ViewId = "side-menu"
   | "page01"
   | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
-export interface WinObjId {
-  viewId: ViewId
-  params?: Record<string, any>
-}
+
 
 export const INIT_SIDE_MENU_SIZE = 200;
 
@@ -15,19 +14,10 @@ export interface SideMenuItem {
   menuName: string
 }
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
-  {menuId: fromWinObjId({viewId: 'page01'}), menuName: "자산통계정보"},
-  {menuId: fromWinObjId({viewId: 'demo'}), menuName: "Demo"},
-  {menuId: fromWinObjId({viewId: 'demo-grid'}), menuName: "Demo Grid"},
-  {menuId: fromWinObjId({viewId: 'demo-line-chart'}), menuName: "Demo Line Chart"},
+  {menuId: new WinObj({viewId: 'page01'}).toWinId(), menuName: "자산통계정보"},
+  {menuId: new WinObj({viewId: 'demo'}).toWinId(), menuName: "Demo"},
+  {menuId: new WinObj({viewId: 'demo-grid'}).toWinId(), menuName: "Demo Grid"},
+  {menuId: new WinObj({viewId: 'demo-line-chart'}).toWinId(), menuName: "Demo Line Chart"},
 ]
 
 
-export function fromWinObjId(winObjId: WinObjId): string {
-  const winId = stableStringify(winObjId)
-  if (winId == undefined) throw new Error("buildWinId: stringify error")
-  return winId
-}
-
-export function fromWinId(winId: string): WinObjId {
-  return JSON.parse(winId) as WinObjId
-}

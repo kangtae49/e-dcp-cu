@@ -3,14 +3,16 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {
-  createJustLayoutSlice, type GetWinInfoFn,
+  createJustLayoutSlice,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode, LAYOUT_ID,
+  type JustNode,
 } from "../justLayoutSlice.ts";
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
 import classNames from "classnames";
+import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {GetWinInfoFn} from "@/app/just-layout";
 
 interface Props {
   // viewMap: Record<string, WinInfo>

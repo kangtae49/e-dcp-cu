@@ -5,10 +5,11 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   createJustLayoutSlice,
   type JustLayoutActions,
-  type JustLayoutState, LAYOUT_ID
+  type JustLayoutState,
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
-import {fromWinId, INIT_SIDE_MENU_SIZE, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
+import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/utils/layout-util.ts";
+import {WinObj} from "@/app/just-layout";
 
 
 
@@ -24,8 +25,16 @@ function SideMenu() {
     dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
   }
 
-  const openWin = (winId: string) => {
-    dispatch(justLayoutTrunks.openWin({winId}))
+  const openWin = async (winId: string) => {
+    dispatch(justLayoutTrunks.openWinMenu({winId}))
+
+    // const viewId = WinObj.toWinObjId(winId).viewId;
+    // const winIds: string[] = dispatch(justLayoutTrunks.queryWinIdByViewId({viewId}))
+    // if (winIds.includes(winId) || winIds.length === 0) {
+    //   dispatch(justLayoutTrunks.openWin({winId}))
+    // } else {
+    //   dispatch(justLayoutTrunks.openWin({winId: winIds.at(-1)}))
+    // }
   }
 
   return (
@@ -39,7 +48,7 @@ function SideMenu() {
           SIDE_MENU_ID_LIST.map(item =>
             <div key={item.menuId} className="side-menu-item" onClick={() => openWin(item.menuId)}>
               <div className="side-menu-icon">
-                <Jdenticon size="25" value={fromWinId(item.menuId).viewId} />
+                <Jdenticon size="25" value={WinObj.toWinObjId(item.menuId).viewId} />
               </div>
               <div className="side-menu-name">{item.menuName}</div>
             </div>

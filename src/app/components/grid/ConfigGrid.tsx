@@ -26,6 +26,8 @@ function ConfigGrid({configKey}: Props) {
     // dispatch
   } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
+
+
   const ref = useRef<ReactGrid>(null)
 
   const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
@@ -33,6 +35,7 @@ function ConfigGrid({configKey}: Props) {
   const configTable = configsState?.configs[configKey] ?? defaultConfigTable;
   const [columns, setColumns] = useState(()=> getColumns(configTable.header));
 
+  const isReady = !!(configsState?.configs && configKey in configsState.configs);
   const getTableRows = (table: ConfigTable): Row[] => {
     return [
       getTableHeader(table.header),
@@ -92,7 +95,7 @@ function ConfigGrid({configKey}: Props) {
   }
 
   const throttledUpdateScroll = throttle(()=> updateScroll, 1000 / 2)
-
+  console.log('configTable:', configKey, configTable, columns, isReady)
   return (
     // <AutoSizer>
     //   {({ height, width }) => (
@@ -104,7 +107,7 @@ function ConfigGrid({configKey}: Props) {
       key={configKey}
       ref={ref}
       rows={getTableRows(configTable)}
-      columns={columns}
+      columns={getColumns(configTable.header)}
       stickyTopRows={1}
       stickyLeftColumns={1}
       enableRangeSelection={true}

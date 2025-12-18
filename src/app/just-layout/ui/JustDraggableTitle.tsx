@@ -1,11 +1,10 @@
-import {useEffect, useRef} from "react";
+import {useEffect, useLayoutEffect, useRef} from "react";
 import {
   createJustLayoutSlice,
   type JustBranch,
   type JustDirection, type JustLayoutActions, type JustLayoutState,
   type JustPos,
-  type JustStack, LAYOUT_ID,
-  type WinInfo
+  type JustStack,
 } from "@/app/just-layout/justLayoutSlice.ts";
 import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
@@ -13,6 +12,8 @@ import classnames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
+import {LAYOUT_ID} from "@/utils/layout-util.ts";
+import {WinInfo} from "@/app/just-layout";
 
 export interface DragItem {
   justBranch: JustBranch
@@ -120,11 +121,15 @@ function JustDraggableTitle(props: Prop) {
         inline: 'center'
       })
     }
-  }, [ref.current, parentRect, justLayoutState])
+  }, [parentRect, justLayoutState, justStack.active, winId])
 
 
-  drag(drop(ref))
 
+  useLayoutEffect(() => {
+    if (ref.current) {
+      drag(drop(ref))
+    }
+  }, [drop, drag]);
 
   // console.log("JustDraggableTitle", winId, winInfo)
   return (
