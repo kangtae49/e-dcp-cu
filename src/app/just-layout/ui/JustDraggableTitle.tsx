@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {
   createJustLayoutSlice,
   type JustBranch,
@@ -13,8 +13,8 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {WinInfo, WinObj, WinObjId} from "@/app/just-layout";
-import {ControlledMenu, Menu, MenuItem, useMenuState} from "@szhsin/react-menu";
+import {WinInfo} from "@/app/just-layout";
+import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 export interface DragItem {
