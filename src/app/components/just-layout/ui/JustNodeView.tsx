@@ -4,15 +4,15 @@ import {
   type JustLayoutActions,
   type JustLayoutState,
   type JustNode, type JustSplitDirection, type JustSplitType,
-} from "@/app/just-layout/justLayoutSlice.ts";
-import JustWinView from "@/app/just-layout/ui/JustWinView.tsx";
+} from "../justLayoutSlice.ts";
+import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
+import JustSplit, {type SplitSize} from "./JustSplit.tsx";
 import {type CSSProperties, useRef} from "react";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   justBranch: JustBranch

@@ -1,6 +1,6 @@
 import './App.css'
 
-import JustLayoutView from "@/app/just-layout/ui/JustLayoutView.tsx";
+import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
@@ -13,11 +13,11 @@ import {
   createConfigsSlice
 } from "@/app/config/configsSlice";
 import React, {useEffect} from "react";
-import {INIT_SIDE_MENU_SIZE, initialLayoutValue, LAYOUT_ID, ViewId, viewMap} from "@/utils/layout-util.tsx";
-import {WinInfo, WinObj, WinObjId} from "@/app/just-layout";
+import {initialLayoutValue, LAYOUT_ID, ViewId, viewMap} from "@/utils/layout-util.tsx";
+import {WinInfo, WinObj, WinObjId} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
-import {createJustLayoutSlice, JustLayoutActions, JustLayoutState} from "@/app/just-layout/justLayoutSlice.ts";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {createJustLayoutSlice, JustLayoutActions, JustLayoutState} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
 
 
 function getWinInfo(winId: string): WinInfo {
@@ -55,7 +55,7 @@ function App() {
   }
   const onDoubleClickTitle = (e: React.MouseEvent, winId: string) => {
     console.log(e, winId)
-    dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
+    dispatch(justLayoutTrunks.toggleSideMenu())
   }
 
   return (

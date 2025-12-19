@@ -5,16 +5,16 @@ import {
   createJustLayoutSlice,
   type JustLayoutActions,
   type JustLayoutState,
-} from "@/app/just-layout/justLayoutSlice.ts";
+} from "@/app/components/just-layout/justLayoutSlice.ts";
 import classNames from "classnames";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
 import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/utils/layout-util.tsx";
-import {WinObj} from "@/app/just-layout";
+import {WinObj} from "@/app/components/just-layout/index.ts";
 
 
 function JustToolBar() {
@@ -27,7 +27,7 @@ function JustToolBar() {
   // const [size, setSize] = useState(INIT_SIDE_MENU_SIZE);
 
   const toggleSideMenu = () => {
-    dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
+    dispatch(justLayoutTrunks.toggleSideMenu())
   }
 
   const openWin = (winId: string) => {

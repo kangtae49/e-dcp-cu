@@ -7,12 +7,12 @@ import {
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
-} from "@/app/just-layout/justLayoutSlice.ts";
-import {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle.tsx";
+} from "../justLayoutSlice.ts";
+import {type DragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef} from "react";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {GetWinInfoFn} from "@/app/just-layout";
+import {GetWinInfoFn} from "..";
 
 interface Prop {
   justBranch: JustBranch

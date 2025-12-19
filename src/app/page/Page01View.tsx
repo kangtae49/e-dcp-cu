@@ -21,7 +21,7 @@ import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
-import {WinObj, WinObjId} from "@/app/just-layout";
+import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
 
 interface Props {
   winObjId: WinObjId

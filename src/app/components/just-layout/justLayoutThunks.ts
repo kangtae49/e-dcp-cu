@@ -4,19 +4,19 @@ import {
   getBranchRightTop,
   hasWinId, queryWinIdsByStack,
   queryWinIdsByViewId
-} from "@/app/just-layout/layoutUtil.ts";
+} from "./layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
-import type {JustLayoutActions} from "@/app/just-layout/justLayoutSlice.ts";
-import {WinObj, WinObjId} from "@/app/just-layout/index.ts";
+import type {JustLayoutActions} from "./justLayoutSlice.ts";
+import {WinObj, WinObjId} from "./index.ts";
 
 export function createJustLayoutThunks(sliceId: string) {
-  const toggleSideMenu = createSliceThunk(sliceId, ({size}, {dispatch, sliceState}) => {
+  const toggleSideMenu = createSliceThunk(sliceId, (_, {dispatch, sliceState}) => {
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     if (sliceState.layout.type === 'stack') {
       return;
     }
-    const newSize = sliceState.layout.size <= 0 ? size : 0;
+    const newSize = sliceState.layout.size <= 0 ? sliceState.layout.primaryDefaultSize : 0;
     dispatch(justLayoutActions.updateResize({
       branch: [],
       size: newSize

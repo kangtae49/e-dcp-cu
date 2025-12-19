@@ -5,7 +5,7 @@ import {
   moveWinId, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
-} from "@/app/just-layout/layoutUtil.ts";
+} from "./layoutUtil.ts";
 
 
 
@@ -42,7 +42,9 @@ export interface JustSplitPercentage extends JustSplitBase {
 
 export interface JustSplitPixels extends JustSplitBase {
   type: 'split-pixels'
+  name: string
   primary: JustSplitDirection
+  primaryDefaultSize: number
 }
 
 export type JustPos = JustSplitDirection | 'stack'

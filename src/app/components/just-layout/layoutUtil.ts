@@ -3,11 +3,11 @@ import type {
   JustNode, JustPayloadInsert,
   JustPos,
   JustStack,
-} from "@/app/just-layout/justLayoutSlice.ts";
+} from "./justLayoutSlice.ts";
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, isEqual, set} from "lodash";
-import {WinObj} from "@/app/just-layout/index.ts";
+import {WinObj} from "./index.ts";
 
 
 

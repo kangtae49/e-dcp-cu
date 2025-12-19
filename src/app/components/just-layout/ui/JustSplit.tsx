@@ -4,7 +4,7 @@ import type {
   JustSplitDirection,
   JustSplitType,
   JustSplitTypeUnit
-} from "@/app/just-layout/justLayoutSlice.ts";
+} from "../justLayoutSlice.ts";
 import classNames from "classnames";
 import throttle from 'lodash/throttle';
 import clamp from "lodash/clamp";

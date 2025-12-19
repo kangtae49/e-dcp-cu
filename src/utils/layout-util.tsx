@@ -1,4 +1,4 @@
-import {GetWinInfoFn, WinObj} from "@/app/just-layout";
+import {GetWinInfoFn, WinObj} from "@/app/components/just-layout/index.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
 import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
@@ -10,7 +10,7 @@ import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
-import type {JustNode} from "@/app/just-layout/justLayoutSlice.ts";
+import type {JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
 
 export const LAYOUT_ID = "JUST-LAYOUT"
 
@@ -99,7 +99,9 @@ const aboutId = new WinObj({viewId: 'about'}).toWinId();
 export const initialLayoutValue: JustNode = {
   type: 'split-pixels',
   direction: 'row',
+  name: 'side-menu',
   primary: 'first',
+  primaryDefaultSize: 200,
   size: 200,
   show: true,
   // minSize: 38,

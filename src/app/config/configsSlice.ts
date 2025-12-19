@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ConfigTable} from "@/types.ts";
-import {WinObj, WinObjId} from "@/app/just-layout";
+import {WinObj, WinObjId} from "@/app/components/just-layout";
 
 export const CONFIG_ID = "CONFIGS"
 

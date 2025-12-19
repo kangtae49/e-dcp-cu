@@ -2,7 +2,7 @@ import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
-import {WinObj, WinObjId} from "@/app/just-layout";
+import {WinObj, WinObjId} from "@/app/components/just-layout";
 
 interface Props {
   winObjId: WinObjId

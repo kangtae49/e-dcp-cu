@@ -9,14 +9,14 @@ import {
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
-} from "@/app/just-layout/justLayoutSlice";
-import JustDraggableTitle, {type DragItem} from "@/app/just-layout/ui/JustDraggableTitle";
+} from "../justLayoutSlice.ts";
+import JustDraggableTitle, {type DragItem} from "./JustDraggableTitle";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 
 
 interface Prop {

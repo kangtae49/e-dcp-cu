@@ -1,7 +1,7 @@
-import JustWinTitleView from "@/app/just-layout/ui/JustWinTitleView.tsx";
-import JustWinBodyView from "@/app/just-layout/ui/JustWinBodyView.tsx";
-import type {JustBranch, JustStack} from "@/app/just-layout/justLayoutSlice.ts";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
+import JustWinTitleView from "./JustWinTitleView.tsx";
+import JustWinBodyView from "./JustWinBodyView.tsx";
+import type {JustBranch, JustStack} from "../justLayoutSlice.ts";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Prop {
   justBranch: JustBranch

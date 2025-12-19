@@ -5,7 +5,7 @@ import {
   type JustDirection, type JustLayoutActions, type JustLayoutState,
   type JustPos,
   type JustStack,
-} from "@/app/just-layout/justLayoutSlice.ts";
+} from "../justLayoutSlice.ts";
 import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classnames from "classnames";
@@ -13,9 +13,9 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "@/app/just-layout";
+import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
-import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
+import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 
 export interface DragItem {
   justBranch: JustBranch

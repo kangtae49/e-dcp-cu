@@ -9,10 +9,10 @@ import {
   type JustNode,
 } from "../justLayoutSlice.ts";
 import useOnload from "@/hooks/useOnload.ts";
-import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
+import {JustNodeView} from "./JustNodeView.tsx";
 import classNames from "classnames";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   // viewMap: Record<string, WinInfo>
