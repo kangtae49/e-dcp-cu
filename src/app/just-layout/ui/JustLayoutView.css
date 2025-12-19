@@ -152,6 +152,9 @@
 
 .just-draggable-title.just-title-menus {
 }
+.just-draggable-title.just-title-menus .szh-menu svg {
+    color: #ffc233
+}
 
 .just-title-menus .szh-menu-container {
     display: flex;
