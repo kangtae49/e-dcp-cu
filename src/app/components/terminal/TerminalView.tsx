@@ -30,13 +30,17 @@ function TerminalView({lines}: Props) {
     if (containerRef.current) {
       const term = new XTerm({
         // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
-        fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
+        fontFamily: '"Gulimche", "굴림체", dotum, sans-serif',
+        // fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
         // fontFamily: 'Pretendard',
-        fontSize: 14,
-        lineHeight: 1.2,
-        fontWeight: 'normal',
+        fontSize: 16,
+        // lineHeight: 1.2,
+        // fontWeight: 'normal',
         // fontWeightBold: 'bold',
-        theme: { background: '#0c0c0c' },
+        theme: {
+          background: '#0c0c0c',
+          foreground: '#cccccc'
+        },
         cursorStyle: 'underline',
         cursorBlink: false,
       });

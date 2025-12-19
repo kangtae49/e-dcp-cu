@@ -27,8 +27,12 @@ export class FileWatcher {
         /(^|[\/\\])\..|node_modules/,
         (currentPath) => {
           const fileName = path.basename(currentPath);
-          if (!currentPath || !fs.existsSync(currentPath) || fs.statSync(currentPath).isDirectory()) {
-            return false;
+          try {
+            if (fs.lstatSync(currentPath).isDirectory()) {
+              return false
+            }
+          } catch (e) {
+            console.log(e.toString())
           }
           if (!['.xlsx'].includes(path.extname(fileName))) {
             return true;

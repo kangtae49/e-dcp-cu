@@ -14,3 +14,8 @@
 /*.xterm-viewport {*/
 /*    font-family: 'Consolas', 'Courier New', monospace;*/
 /*}*/
+
+/*.just-terminal .xterm-dom-renderer-owner-1 .xterm-rows {*/
+/*    font-family: "Gulim", "굴림", dotum, sans-serif; !important*/
+/*    font-size: 16px;*/
+/*}*/

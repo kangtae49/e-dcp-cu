@@ -82,12 +82,16 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
   console.log('startScript', jobId, subpath, args)
   console.log(scriptsRoot, pythonExecutable, scriptPathAbs)
 
-  if (!fs.existsSync(pythonExecutable) || !fs.existsSync(scriptPathAbs)) {
+  try{
+
+    fs.accessSync(pythonExecutable, fs.constants.X_OK)
+    fs.accessSync(scriptPathAbs, fs.constants.R_OK);
+  } catch (err) {
     console.log('startScript not fount script')
     dispatchJobEvent(window, {
       action: 'JOB_ERROR',
       jobId,
-      data: {message: 'not found script'},
+      data: {message: err.toString()},
       timestamp: Date.now()
     });
     return;

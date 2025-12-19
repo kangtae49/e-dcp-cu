@@ -32,7 +32,14 @@ export default defineConfig({
           const parsed = url.parse(req.url!, true);
           const filePath = parsed.query.path as string;
 
-          if (!filePath || !fs.existsSync(filePath)) {
+          try {
+            fs.accessSync(filePath, fs.constants.F_OK);
+          } catch(err) {
+            res.writeHead(404);
+            res.end(err.toString());
+            return;
+          }
+          if (!filePath) {
             res.writeHead(404);
             res.end('File not found');
             return;
