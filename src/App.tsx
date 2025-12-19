@@ -12,10 +12,12 @@ import {
   type ConfigsSlice,
   createConfigsSlice
 } from "@/app/config/configsSlice";
-import {useEffect} from "react";
-import {initialLayoutValue, ViewId, viewMap} from "@/utils/layout-util.tsx";
+import React, {useEffect} from "react";
+import {INIT_SIDE_MENU_SIZE, initialLayoutValue, LAYOUT_ID, ViewId, viewMap} from "@/utils/layout-util.tsx";
 import {WinInfo, WinObj, WinObjId} from "@/app/just-layout";
 import {removeReducer} from "@/store";
+import {createJustLayoutSlice, JustLayoutActions, JustLayoutState} from "@/app/just-layout/justLayoutSlice.ts";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 
 function getWinInfo(winId: string): WinInfo {
@@ -24,6 +26,10 @@ function getWinInfo(winId: string): WinInfo {
 }
 
 function App() {
+  const {
+    thunks: justLayoutTrunks
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
+
   const {
     actions: configsActions, dispatch
   } = useDynamicSlice<ConfigsSlice, ConfigsActions>(CONFIG_ID, createConfigsSlice)
@@ -44,6 +50,13 @@ function App() {
     console.log('closeWin!!!', winId)
     removeReducer(winId)
   }
+  const onClickTitle = (e: React.MouseEvent, winId: string) => {
+    console.log(e, winId)
+  }
+  const onDoubleClickTitle = (e: React.MouseEvent, winId: string) => {
+    console.log(e, winId)
+    dispatch(justLayoutTrunks.toggleSideMenu({size: INIT_SIDE_MENU_SIZE}))
+  }
 
   return (
     <>
@@ -52,7 +65,13 @@ function App() {
       <div className="just-app">
         <div className="just-container">
           <JustToolBar />
-          <JustLayoutView getWinInfo={getWinInfo} closeWin={closeWin} initialValue={initialLayoutValue} />
+          <JustLayoutView
+            getWinInfo={getWinInfo}
+            initialValue={initialLayoutValue}
+            closeWin={closeWin}
+            onClickTitle={onClickTitle}
+            onDoubleClickTitle={onDoubleClickTitle}
+          />
         </div>
       </div>
     </>

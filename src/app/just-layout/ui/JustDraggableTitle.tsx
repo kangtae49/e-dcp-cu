@@ -13,7 +13,7 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, WinInfo} from "@/app/just-layout";
+import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "@/app/just-layout";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
@@ -32,10 +32,18 @@ interface Prop {
   justStack: JustStack
   rect: DOMRect | null
   closeWin?: CloseWinFn
+  onClickTitle?: OnClickTitleFn
+  onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
 function JustDraggableTitle(props: Prop) {
-  const { winInfo, justBranch, winId, justStack, closeWin, rect: parentRect } = props;
+  const {
+    winInfo, justBranch, winId, justStack,
+    closeWin,
+    onClickTitle,
+    onDoubleClickTitle,
+    rect: parentRect
+  } = props;
   const ref = useRef<HTMLDivElement>(null)
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
@@ -67,13 +75,24 @@ function JustDraggableTitle(props: Prop) {
     )
   }
 
-  const activeWin = (winId: string) => {
-    console.log("activeWin", winId)
+  const clickTitle = (e: React.MouseEvent<HTMLDivElement>, winId: string) => {
+    console.log("clickTitle", winId)
     dispatch(
       justLayoutActions.activeWin({
         winId
       })
     )
+    if (onClickTitle) {
+      onClickTitle(e, winId)
+    }
+
+  }
+
+  const dblClickTitle = (e: React.MouseEvent<HTMLDivElement>, winId: string) => {
+    console.log("dblClickTitle", winId)
+    if (onDoubleClickTitle) {
+      onDoubleClickTitle(e, winId)
+    }
   }
 
   const [{ isDragging }, drag] = useDrag(
@@ -170,8 +189,18 @@ function JustDraggableTitle(props: Prop) {
       ref={ref}
       onContextMenu={handleContextMenu}
     >
-      <div className="just-icon" onClick={() => activeWin(winId)}>{winInfo.icon}</div>
-      <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}</div>
+      <div className="just-icon"
+           onClick={(e) => clickTitle(e, winId)}
+           onDoubleClick={(e) => dblClickTitle(e, winId)}
+      >
+        {winInfo.icon}
+      </div>
+      <div className="just-title"
+           onClick={(e) => clickTitle(e, winId)}
+           onDoubleClick={(e) => dblClickTitle(e, winId)}
+      >
+        {winInfo.title}
+      </div>
 
       {(winInfo.showClose ?? true) &&
       <div className="just-icon just-close" onClick={() => clickClose(winId)}>

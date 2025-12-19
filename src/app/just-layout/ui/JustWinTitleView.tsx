@@ -15,7 +15,7 @@ import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 
@@ -24,10 +24,12 @@ interface Prop {
   justStack: JustStack
   getWinInfo: GetWinInfoFn
   closeWin?: CloseWinFn
+  onClickTitle?: OnClickTitleFn
+  onDoubleClickTitle?: OnDoubleClickTitleFn
   // viewMap: Record<string, WinInfo>
 }
 
-function JustWinTitleView({justBranch, justStack, getWinInfo, closeWin}: Prop) {
+function JustWinTitleView({justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
@@ -150,12 +152,14 @@ function JustWinTitleView({justBranch, justStack, getWinInfo, closeWin}: Prop) {
         {justStack.tabs.map(winId =>
           <JustDraggableTitle
             key={[...justBranch, winId].join(",")}
+            rect={rect}
             winId={winId}
             justBranch={justBranch}
             justStack={justStack}
             winInfo={getWinInfo(winId)}
             closeWin={closeWin}
-            rect={rect}
+            onClickTitle={onClickTitle}
+            onDoubleClickTitle={onDoubleClickTitle}
           />
         )}
       </div>

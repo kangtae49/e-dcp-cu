@@ -12,17 +12,19 @@ import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
 import {type CSSProperties, useRef} from "react";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "@/app/just-layout";
 
 interface Props {
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
   closeWin?: CloseWinFn
+  onClickTitle?: OnClickTitleFn
+  onDoubleClickTitle?: OnDoubleClickTitleFn
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, closeWin }) => {
+export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
@@ -60,6 +62,8 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
           justBranch={justBranch}
           getWinInfo={getWinInfo}
           closeWin={closeWin}
+          onClickTitle={onClickTitle}
+          onDoubleClickTitle={onDoubleClickTitle}
         />
       )}
       {(node?.type === 'split-percentage' || node?.type === 'split-pixels') && (
@@ -83,6 +87,8 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
               justBranch={[...justBranch, "first"]}
               getWinInfo={getWinInfo}
               closeWin={closeWin}
+              onClickTitle={onClickTitle}
+              onDoubleClickTitle={onDoubleClickTitle}
             />
           </div>
 
@@ -106,6 +112,8 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
               justBranch={[...justBranch, "second"]}
               getWinInfo={getWinInfo}
               closeWin={closeWin}
+              onClickTitle={onClickTitle}
+              onDoubleClickTitle={onDoubleClickTitle}
             />
           </div>
         </div>

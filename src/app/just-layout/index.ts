@@ -1,4 +1,4 @@
-import {JSX} from "react";
+import React, {JSX} from "react";
 import {ViewId} from "@/utils/layout-util.tsx";
 import {stableStringify} from "@/utils/json-util.ts";
 
@@ -14,6 +14,8 @@ export interface WinInfo {
 }
 export type GetWinInfoFn = (winId: string) => WinInfo;
 export type CloseWinFn = (winId: string) => void;
+export type OnClickTitleFn = (event: React.MouseEvent, winId: string) => void;
+export type OnDoubleClickTitleFn = (event: React.MouseEvent, winId: string) => void;
 
 export type WinObjParamVal = string | number | boolean | null;
 

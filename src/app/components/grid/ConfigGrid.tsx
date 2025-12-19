@@ -95,19 +95,18 @@ function ConfigGrid({configKey}: Props) {
   const columns = getColumns(configTable.header, columnsSize);
   console.log('configTable:', configKey, configTable)
   return (
-
-  <div className="just-grid" onScroll={handleScroll}>
-    <ReactGrid
-      key={configKey}
-      ref={ref}
-      rows={rows}
-      columns={columns}
-      stickyTopRows={1}
-      stickyLeftColumns={1}
-      enableRangeSelection={true}
-      onColumnResized={handleColumnResize}
-      disableVirtualScrolling={false}
-    />
+    <div className="just-grid" onScroll={handleScroll}>
+      <ReactGrid
+        key={configKey}
+        ref={ref}
+        rows={rows}
+        columns={columns}
+        stickyTopRows={1}
+        stickyLeftColumns={1}
+        enableRangeSelection={true}
+        onColumnResized={handleColumnResize}
+        disableVirtualScrolling={false}
+      />
     </div>
   )
 }

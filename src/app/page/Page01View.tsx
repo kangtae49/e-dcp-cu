@@ -218,7 +218,7 @@ function Page01View({winObjId}: Props) {
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
             {outFile &&
               <OutputGrid
-                  title={outFile}
+                  title={outFile ?? ''}
                   outFile={`output\\${outFile}`}
               />
             }
@@ -226,7 +226,7 @@ function Page01View({winObjId}: Props) {
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
             {outFile &&
               <PageLineChart
-                  title={outFile}
+                  title={outFile ?? ''}
                   outFile={`output\\${outFile}`}
                   legend={[
                     {
