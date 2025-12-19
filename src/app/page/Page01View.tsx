@@ -15,15 +15,13 @@ import {
   type JobMonitorState
 } from "@/app/job/jobMonitorSlice";
 import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks";
-// import TerminalView from "@/app/terminal/TerminalView";
-import {createPageSlice, PAGE01_ID, type PageActions, type PageState} from "@/app/page/pageSlice";
+import {createPageSlice, type PageActions, type PageState} from "@/app/page/pageSlice";
 import classNames from "classnames";
 import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
 import {WinObj, WinObjId} from "@/app/just-layout";
-import {removeReducer} from "@/store";
 
 interface Props {
   winObjId: WinObjId
