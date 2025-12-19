@@ -269,7 +269,7 @@ export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode
   }
 }
 
-export function queryWinIdByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {
+export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {
   if( layout === null) return winIds
   if (layout.type === 'stack') {
     return [
@@ -277,10 +277,19 @@ export function queryWinIdByViewId(layout: JustNode | null, viewId: string, winI
       ...layout.tabs.filter((winId: string) => WinObj.toWinObjId(winId).viewId === viewId)
     ]
   } else {
-    const firstIds = queryWinIdByViewId(layout.first, viewId, winIds);
-    return queryWinIdByViewId(layout.second, viewId, [...winIds, ...firstIds]);
+    const firstIds = queryWinIdsByViewId(layout.first, viewId, winIds);
+    return queryWinIdsByViewId(layout.second, viewId, [...winIds, ...firstIds]);
   }
 
+}
+
+export function queryWinIdsByStack(layout: JustNode | null, branch: JustBranch): string [] {
+  if( layout === null) return []
+  const justStack = getNodeByBranch<JustStack>(layout, branch);
+  if (justStack.type !== 'stack') {
+    return []
+  }
+  return justStack.tabs
 }
 
 function getNodeByBranch<T extends JustNode>(obj: JustNode, path: JustBranch): T {

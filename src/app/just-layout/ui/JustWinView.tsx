@@ -1,15 +1,16 @@
 import JustWinTitleView from "@/app/just-layout/ui/JustWinTitleView.tsx";
 import JustWinBodyView from "@/app/just-layout/ui/JustWinBodyView.tsx";
 import type {JustBranch, JustStack} from "@/app/just-layout/justLayoutSlice.ts";
-import {GetWinInfoFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
 
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
   getWinInfo: GetWinInfoFn
+  closeWin?: CloseWinFn
 }
 
-function JustWinView ({justBranch, justStack, getWinInfo}: Prop) {
+function JustWinView ({justBranch, justStack, getWinInfo, closeWin}: Prop) {
   const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
   const showTitle = winInfo?.showTitle ?? true
   return (
@@ -19,6 +20,7 @@ function JustWinView ({justBranch, justStack, getWinInfo}: Prop) {
           justBranch={justBranch}
           justStack={justStack}
           getWinInfo={getWinInfo}
+          closeWin={closeWin}
         />
       }
       <JustWinBodyView justBranch={justBranch} justStack={justStack} getWinInfo={getWinInfo} />

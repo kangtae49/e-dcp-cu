@@ -12,16 +12,17 @@ import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplit, {type SplitSize} from "@/app/just-layout/ui/JustSplit.tsx";
 import {type CSSProperties, useRef} from "react";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {GetWinInfoFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
 
 interface Props {
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
+  closeWin?: CloseWinFn
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) => {
+export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, closeWin }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
@@ -58,6 +59,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) 
           justStack={node}
           justBranch={justBranch}
           getWinInfo={getWinInfo}
+          closeWin={closeWin}
         />
       )}
       {(node?.type === 'split-percentage' || node?.type === 'split-pixels') && (
@@ -80,6 +82,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) 
               node={node.first}
               justBranch={[...justBranch, "first"]}
               getWinInfo={getWinInfo}
+              closeWin={closeWin}
             />
           </div>
 
@@ -102,6 +105,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo }) 
               node={node.second}
               justBranch={[...justBranch, "second"]}
               getWinInfo={getWinInfo}
+              closeWin={closeWin}
             />
           </div>
         </div>

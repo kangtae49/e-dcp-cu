@@ -12,17 +12,18 @@ import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "@/app/just-layout/ui/JustNodeView.tsx";
 import classNames from "classnames";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {GetWinInfoFn} from "@/app/just-layout";
+import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
 
 interface Props {
   // viewMap: Record<string, WinInfo>
   getWinInfo: GetWinInfoFn
+  closeWin?: CloseWinFn
   initialValue: JustNode
 }
 
 
 
-export function JustLayoutView({getWinInfo, initialValue}: Props) {
+export function JustLayoutView({getWinInfo, closeWin, initialValue}: Props) {
   const {onLoad} = useOnload();
   const {
     state: justLayoutState,
@@ -51,6 +52,7 @@ export function JustLayoutView({getWinInfo, initialValue}: Props) {
             node={justLayoutState.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}
+            closeWin={closeWin}
         />}
       </div>
     </DndProvider>

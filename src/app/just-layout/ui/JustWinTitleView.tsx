@@ -15,41 +15,54 @@ import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {GetWinInfoFn} from "@/app/just-layout";
-// import '@szhsin/react-menu/dist/index.css';
-// import '@szhsin/react-menu/dist/transitions/zoom.css';
+import {CloseWinFn, GetWinInfoFn} from "@/app/just-layout";
+import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
 
 interface Prop {
   justBranch: JustBranch
   justStack: JustStack
   getWinInfo: GetWinInfoFn
+  closeWin?: CloseWinFn
   // viewMap: Record<string, WinInfo>
 }
 
-function JustWinTitleView({justBranch, justStack, getWinInfo}: Prop) {
+function JustWinTitleView({justBranch, justStack, getWinInfo, closeWin}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
-    actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+    actions: justLayoutActions,
+    thunks: justLayoutThunks,
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
   const dispatch = useAppDispatch();
 
-  const closeWin = (winId: string) => {
-    console.log("closeWin", winId)
+  const clickClose = (winId: string) => {
+    console.log("clickClose", winId)
+
     dispatch(
       justLayoutActions.removeWin({
         winId
       })
     )
+    if (closeWin) {
+      closeWin(winId)
+    }
   }
 
   const closeAllTabs = (branch: JustBranch) => {
+    const winIds: string[] = dispatch(justLayoutThunks.getWinIdsByBranch({branch}));
+
     dispatch(
       justLayoutActions.removeAllTabs({
         branch
       })
     )
+
+    if (closeWin) {
+      winIds.forEach((winId: string) => {
+        closeWin(winId)
+      });
+    }
   }
 
   const activeWin = (winId: string) => {
@@ -141,6 +154,7 @@ function JustWinTitleView({justBranch, justStack, getWinInfo}: Prop) {
             justBranch={justBranch}
             justStack={justStack}
             winInfo={getWinInfo(winId)}
+            closeWin={closeWin}
             rect={rect}
           />
         )}
@@ -160,7 +174,7 @@ function JustWinTitleView({justBranch, justStack, getWinInfo}: Prop) {
 
               {(getWinInfo(winId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
                 e.stopPropagation();
-                closeWin(winId)
+                clickClose(winId)
               }}>
                   <Icon icon={faCircleXmark}/>
               </div>}

@@ -2,8 +2,8 @@ import {
   getActiveWinIds,
   getBranchByWinId,
   getBranchRightTop,
-  hasWinId,
-  queryWinIdByViewId
+  hasWinId, queryWinIdsByStack,
+  queryWinIdsByViewId
 } from "@/app/just-layout/layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
@@ -54,7 +54,10 @@ export function createJustLayoutThunks(sliceId: string) {
     }
   })
   const getWinIds = createSliceThunk(sliceId, ({viewId}, {sliceState}) => {
-    return queryWinIdByViewId(sliceState?.layout ?? null, viewId, [])
+    return queryWinIdsByViewId(sliceState?.layout ?? null, viewId, [])
+  })
+  const getWinIdsByBranch = createSliceThunk(sliceId, ({branch}, {sliceState}) => {
+    return queryWinIdsByStack(sliceState?.layout ?? null, branch)
   })
   const openWinMenu = createSliceThunk(sliceId, ({winId}, {dispatch}) => {
     const viewId = WinObj.toWinObjId(winId).viewId;
@@ -90,6 +93,7 @@ export function createJustLayoutThunks(sliceId: string) {
     openWin,
     openWinMenu,
     getWinIds,
+    getWinIdsByBranch,
     cloneWin,
   }
 }

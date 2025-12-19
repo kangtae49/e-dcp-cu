@@ -13,7 +13,7 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {LAYOUT_ID} from "@/utils/layout-util.tsx";
-import {WinInfo} from "@/app/just-layout";
+import {CloseWinFn, WinInfo} from "@/app/just-layout";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "@/app/just-layout/justLayoutThunks.ts";
 
@@ -31,10 +31,11 @@ interface Prop {
   winInfo: WinInfo
   justStack: JustStack
   rect: DOMRect | null
+  closeWin?: CloseWinFn
 }
 
 function JustDraggableTitle(props: Prop) {
-  const { winInfo, justBranch, winId, justStack, rect: parentRect } = props;
+  const { winInfo, justBranch, winId, justStack, closeWin, rect: parentRect } = props;
   const ref = useRef<HTMLDivElement>(null)
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
@@ -45,13 +46,17 @@ function JustDraggableTitle(props: Prop) {
     dispatch,
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
-  const closeWin = (winId: string) => {
+  const clickClose = (winId: string) => {
     console.log("closeWin", winId)
+
     dispatch(
       justLayoutActions.removeWin({
         winId
       })
     )
+    if (closeWin) {
+      closeWin(winId);
+    }
   }
 
   const cloneWin = (winId: string) => {
@@ -169,7 +174,7 @@ function JustDraggableTitle(props: Prop) {
       <div className="just-title" onClick={() => activeWin(winId)}>{winInfo.title}</div>
 
       {(winInfo.showClose ?? true) &&
-      <div className="just-icon just-close" onClick={() => closeWin(winId)}>
+      <div className="just-icon just-close" onClick={() => clickClose(winId)}>
           <Icon icon={faCircleXmark}/>
       </div>}
       <ControlledMenu
@@ -177,7 +182,7 @@ function JustDraggableTitle(props: Prop) {
         anchorPoint={anchorPoint}
         onClose={() => toggleMenu(false)}
         >
-        <MenuItem onClick={() => closeWin(winId)}>
+        <MenuItem onClick={() => clickClose(winId)}>
           <div className="just-icon">
           </div>
           <div className="just-title">

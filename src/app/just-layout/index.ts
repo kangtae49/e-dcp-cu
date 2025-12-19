@@ -13,6 +13,7 @@ export interface WinInfo {
   showTitle?: boolean
 }
 export type GetWinInfoFn = (winId: string) => WinInfo;
+export type CloseWinFn = (winId: string) => void;
 
 export type WinObjParamVal = string | number | boolean | null;
 

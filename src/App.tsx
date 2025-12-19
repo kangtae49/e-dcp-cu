@@ -15,6 +15,7 @@ import {
 import {useEffect} from "react";
 import {initialLayoutValue, ViewId, viewMap} from "@/utils/layout-util.tsx";
 import {WinInfo, WinObj, WinObjId} from "@/app/just-layout";
+import {removeReducer} from "@/store";
 
 
 function getWinInfo(winId: string): WinInfo {
@@ -39,6 +40,11 @@ function App() {
 
   }, [configsActions, dispatch])
 
+  const closeWin = (winId: string) => {
+    console.log('closeWin!!!', winId)
+    removeReducer(winId)
+  }
+
   return (
     <>
       <JobListener />
@@ -46,7 +52,7 @@ function App() {
       <div className="just-app">
         <div className="just-container">
           <JustToolBar />
-          <JustLayoutView getWinInfo={getWinInfo} initialValue={initialLayoutValue} />
+          <JustLayoutView getWinInfo={getWinInfo} closeWin={closeWin} initialValue={initialLayoutValue} />
         </div>
       </div>
     </>

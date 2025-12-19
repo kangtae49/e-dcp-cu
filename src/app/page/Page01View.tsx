@@ -22,7 +22,8 @@ import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
-import {WinObjId} from "@/app/just-layout";
+import {WinObj, WinObjId} from "@/app/just-layout";
+import {removeReducer} from "@/store";
 
 interface Props {
   winObjId: WinObjId
@@ -37,12 +38,12 @@ function Page01View({winObjId}: Props) {
   // terminal.svg
   // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
   // const [companyList, setCompanyList] = useState<Option[]>([])
-
+  const winId = WinObj.toWinId(winObjId)
   const dispatch = useAppDispatch();
   const {
     state: pageState,
     actions: pageActions,
-  } = useDynamicSlice<PageState, PageActions>(`${PAGE01_ID}_${winObjId.dupId}`, createPageSlice)
+  } = useDynamicSlice<PageState, PageActions>(winId, createPageSlice)
 
   const {
     state: jobMonitorState,
