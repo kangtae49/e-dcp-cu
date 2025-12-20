@@ -33,7 +33,7 @@ export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   {menuId: new WinObj({viewId: 'demo-line-chart'}).toWinId(), menuName: "Demo Line Chart"},
 ]
 
-export const viewMap = {
+const viewMap = {
   "side-menu": (winId: string) => ({
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
@@ -92,6 +92,8 @@ CONFIG_KEYS.forEach((winObjId: WinObj<ViewId>) => {
     view: <ConfigView winObjId={winObjId} />
   });
 })
+
+export {viewMap};
 
 const sideMenuId = new WinObj({viewId: 'side-menu'}).toWinId();
 const demoGridId = new WinObj({viewId: 'demo-grid'}).toWinId();

@@ -1,37 +1,31 @@
 import './JustToolBar.css'
 import IconLogo from "../../assets/icon.svg?react"
-import {useDynamicSlice} from "@/store/hooks.ts";
-import {
-  createJustLayoutSlice,
-  type JustLayoutActions,
-  type JustLayoutState,
-} from "@/app/components/just-layout/justLayoutSlice.ts";
 import classNames from "classnames";
-import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
-import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/app/layout/layout-util.tsx";
+import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout-util.tsx";
 import {WinObj} from "@/app/components/just-layout/index.ts";
+import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 
 
 function JustToolBar() {
+
   const {
     state: justLayoutState,
-    // actions: justLayoutActions,
-    dispatch,
-    thunks: justLayoutTrunks
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
-  // const [size, setSize] = useState(INIT_SIDE_MENU_SIZE);
+    toggleWin,
+    addTabWin
+  } = useJustLayout(LAYOUT_ID)
+
 
   const toggleSideMenu = () => {
-    dispatch(justLayoutTrunks.toggleSideMenu())
+    toggleWin(SIDE_MENU_NODE_NAME)
   }
 
   const openWin = (winId: string) => {
-    dispatch(justLayoutTrunks.openWinMenu({winId}))
+    addTabWin(winId)
   }
 
   const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")

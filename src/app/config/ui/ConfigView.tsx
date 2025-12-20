@@ -11,6 +11,7 @@ interface Props {
 
 function ConfigView({winObjId}: Props) {
 
+  console.log('ConfigView', winObjId)
   const configKey = WinObj.getParamString(winObjId, 'file');
   const configTitle = WinObj.getParamString(winObjId, 'title');
   // const {

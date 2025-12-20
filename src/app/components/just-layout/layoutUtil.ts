@@ -1,7 +1,7 @@
 import type {
   JustBranch, JustDirection,
   JustNode, JustPayloadInsert,
-  JustPos,
+  JustPos, JustSplitDirection,
   JustStack,
 } from "./justLayoutSlice.ts";
 import update, {type Spec} from "immutability-helper"
@@ -294,26 +294,37 @@ export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode
   }
 }
 
-export function getStackBranch(layout: JustNode | null, curBranch: JustBranch): JustBranch | null {
+export function getTabBranch(layout: JustNode | null, curBranch: JustBranch): JustBranch | null {
   if( layout === null) return null
   if (layout.type === 'stack') {
     return curBranch
   } else {
+    let targetBranch: JustSplitDirection;
     if (layout.type === 'split-pixels') {
-      const otherBranch = layout.primary === 'first' ? 'second' : 'first'
-      const retBranch = getStackBranch(layout[otherBranch], [...curBranch, otherBranch])
-      if (retBranch != null) {
-        return retBranch
-      }
+      targetBranch = layout.primary === 'first' ? 'second' : 'first'
     } else {
-      const branchSecond = getStackBranch(layout.second, [...curBranch, 'second'])
-      if (branchSecond != null) {
-        return branchSecond
-      }
+      targetBranch = layout.direction === 'row' ? 'second' : 'first'
+    }
+    const retBranch = getTabBranch(layout[targetBranch], [...curBranch, targetBranch])
+    if (retBranch != null) {
+      return retBranch
     }
   }
   return null
 }
+
+export function addTabWin(layout: JustNode | null, branch: JustBranch, winId: string): JustNode | null {
+  if( layout === null) return null
+  const node = getNodeByBranch(layout, branch)
+  if (node.type !== 'stack') return layout
+  return updateNodeOfBranch(layout, branch, {
+    $merge: {
+      tabs: [...node.tabs, winId],
+      active: winId,
+    }
+  })
+}
+
 
 export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {
   if( layout === null) return winIds

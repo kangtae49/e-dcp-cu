@@ -1,40 +1,24 @@
 import "./SideMenu.css"
 import Jdenticon from "react-jdenticon";
 import IconMinimize from "@/assets/minimize.svg?react"
-import {useDynamicSlice} from "@/store/hooks.ts";
-import {
-  createJustLayoutSlice,
-  type JustLayoutActions,
-  type JustLayoutState,
-} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
-import {LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/app/layout/layout-util.tsx";
+import {LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout-util.tsx";
 import {WinObj} from "@/app/components/just-layout/index.ts";
-
-
+import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 
 
 function SideMenu() {
-  const {
-    dispatch,
-    thunks: justLayoutTrunks
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
+  const {
+    toggleWin,
+    addTabWin
+  } = useJustLayout(LAYOUT_ID)
 
   const toggleSideMenu = () => {
-    dispatch(justLayoutTrunks.toggleSideMenu())
+    toggleWin(SIDE_MENU_NODE_NAME)
   }
 
   const openWin = async (winId: string) => {
-    dispatch(justLayoutTrunks.openWinMenu({winId}))
-
-    // const viewId = WinObj.toWinObjId(winId).viewId;
-    // const winIds: string[] = dispatch(justLayoutTrunks.queryWinIdByViewId({viewId}))
-    // if (winIds.includes(winId) || winIds.length === 0) {
-    //   dispatch(justLayoutTrunks.openWin({winId}))
-    // } else {
-    //   dispatch(justLayoutTrunks.openWin({winId: winIds.at(-1)}))
-    // }
+    addTabWin(winId)
   }
 
   return (

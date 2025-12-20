@@ -1,6 +1,6 @@
 import {createSlice, current, type PayloadAction} from "@reduxjs/toolkit";
 import {
-  activeWinId,
+  activeWinId, addTabWin, getTabBranch, hasWinId,
   insertWinId,
   moveWinId, removeAllTabs, removeEmpty,
   removeWinId,
@@ -57,6 +57,9 @@ export interface JustPayloadInsert {
   index: number
   size?: number
 }
+export interface JustPayloadAddTab {
+  winId: string
+}
 
 export interface JustPayloadRemove {
   winId: string
@@ -108,6 +111,17 @@ export const createJustLayoutSlice = (id: string) =>
           state.layout == null ? null : current(state.layout),
           payload
         )
+      },
+      addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
+        const layout = state.layout == null ? null : current(state.layout)
+        const branch = getTabBranch(layout, [])
+        if (branch == null) return;
+        if (hasWinId(layout, payload.winId)) {
+          state.layout = activeWinId(layout, payload.winId)
+        } else {
+
+          state.layout = addTabWin(layout, branch, payload.winId)
+        }
       },
       removeWin: (state, { payload }: PayloadAction<JustPayloadRemove>) => {
         state.layout = removeEmpty(removeWinId(

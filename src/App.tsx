@@ -25,9 +25,6 @@ function getWinInfo(winId: string): WinInfo {
 }
 
 function App() {
-  // const {
-  //   thunks: justLayoutTrunks
-  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
 
   const {toggleWin} = useJustLayout(LAYOUT_ID);
 

@@ -1,24 +1,20 @@
 import {useEffect} from "react";
-import {useDynamicSlice} from "@/store/hooks.ts";
-import {createJobMonitorSlice, JOB_MONITOR_ID, JobMonitorActions, JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
+import {JOB_MONITOR_ID} from "@/app/job/jobMonitorSlice.ts";
 import {JobStatusData} from "@/types.ts";
+import useJobMonitor from "@/app/job/useJobMonitor.ts";
 
 function JobListener(): null {
-  const {
-    // state: jobMonitorState,
-    actions: jobMonitorActions,
-    dispatch
-  } = useDynamicSlice<JobMonitorState, JobMonitorActions>(JOB_MONITOR_ID, createJobMonitorSlice)
 
+  const {setStatus, addEvent} = useJobMonitor(JOB_MONITOR_ID);
 
   useEffect(() => {
     window.api.onJobEvent((event, jobEvent) => {
       console.log(jobEvent)
       if (jobEvent.action === "JOB_STATUS") {
         const dataStatus = jobEvent.data as JobStatusData
-        dispatch(jobMonitorActions.setStatus({jobId: jobEvent.jobId, status: dataStatus.status}))
+        setStatus(jobEvent.jobId, dataStatus.status)
       }
-      dispatch(jobMonitorActions.addEvent({jobId: jobEvent.jobId, event: jobEvent}))
+      addEvent(jobEvent.jobId, jobEvent)
     })
   }, [])
   return null

@@ -5,8 +5,8 @@ import {createJustLayoutThunks} from "./justLayoutThunks.ts";
 const useJustLayout = (layoutId: string) => {
   console.log(layoutId)
   const {
-    // state: justLayoutState,
-    // actions: justLayoutActions,
+    state: justLayoutState,
+    actions: justLayoutActions,
     thunks: justLayoutTrunks,
     dispatch
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
@@ -15,9 +15,15 @@ const useJustLayout = (layoutId: string) => {
     console.log(nodeName)
     dispatch(justLayoutTrunks.toggleWin({nodeName}))
   }
+  const addTabWin = (winId: string) => {
+    dispatch(justLayoutActions.addTab({winId}))
+  }
 
+  const state = justLayoutState
   return {
-    toggleWin
+    state,
+    toggleWin,
+    addTabWin
   }
 }
 

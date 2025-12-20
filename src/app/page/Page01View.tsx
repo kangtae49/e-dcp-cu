@@ -9,12 +9,8 @@ import {CONFIG_ID, type ConfigsActions, type ConfigsState, createConfigsSlice} f
 import {Activity, useEffect} from "react";
 import { format } from "date-fns";
 import {
-  createJobMonitorSlice,
   JOB_MONITOR_ID,
-  type JobMonitorActions,
-  type JobMonitorState
 } from "@/app/job/jobMonitorSlice";
-import {createJobMonitorThunks} from "@/app/job/jobMonitorThunks";
 import {createPageSlice, type PageActions, type PageState} from "@/app/page/pageSlice";
 import classNames from "classnames";
 import TerminalView from "@/app/components/terminal/TerminalView";
@@ -23,6 +19,7 @@ import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
 import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
 import {ViewId} from "@/app/layout/layout-util.tsx";
+import useJobMonitor from "@/app/job/useJobMonitor.ts";
 
 interface Props {
   winObjId: WinObjId<ViewId>
@@ -46,10 +43,11 @@ function Page01View({winObjId}: Props) {
 
   const {
     state: jobMonitorState,
-    actions: jobMonitorActions,
-    thunks: jobMonitorThunks,
-    // dispatch
-  } = useDynamicSlice<JobMonitorState, JobMonitorActions>(JOB_MONITOR_ID, createJobMonitorSlice, createJobMonitorThunks)
+    getJobStatus,
+    getJobEvents,
+    clearEvents,
+  } = useJobMonitor(JOB_MONITOR_ID);
+
 
   const {
     state: configsState,
@@ -83,17 +81,17 @@ function Page01View({winObjId}: Props) {
   useEffect(() => {
     if (!pageState?.jobInfo) return;
 
-    const status: JobStatus | null = dispatch(jobMonitorThunks.getJobStatus({jobId: pageState.jobInfo.jobId}))
+    const status: JobStatus | null = getJobStatus(pageState.jobInfo.jobId)
     if (status !== null && pageState.jobInfo.status !== status) {
       console.log('jobStatus:', status)
       dispatch(pageActions.setJobInfo({...pageState.jobInfo, status}))
     }
 
-    const events: JobEvent [] = dispatch(jobMonitorThunks.getJobEvents({jobId: pageState.jobInfo?.jobId}))
+    const events: JobEvent [] = getJobEvents(pageState.jobInfo?.jobId)
     const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
     const logs = streamEvents.map((event) => (event.data as JobStreamData).message ?? '')
     dispatch(pageActions.setLogs(logs))
-  }, [dispatch, jobMonitorState, jobMonitorThunks, pageActions, pageState?.jobInfo]);
+  }, [dispatch, jobMonitorState, pageActions, pageState?.jobInfo]);
 
 
 
@@ -123,7 +121,7 @@ function Page01View({winObjId}: Props) {
     console.log('searchPage01')
 
     if (pageState.jobInfo) {
-      dispatch(jobMonitorActions.clearEvents({jobId: pageState.jobInfo?.jobId}))
+      clearEvents(pageState.jobInfo?.jobId)
     }
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
