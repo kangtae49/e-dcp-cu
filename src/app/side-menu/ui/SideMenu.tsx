@@ -8,7 +8,7 @@ import {
   type JustLayoutState,
 } from "@/app/components/just-layout/justLayoutSlice.ts";
 import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
-import {LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/utils/layout-util.tsx";
+import {LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/app/layout/layout-util.tsx";
 import {WinObj} from "@/app/components/just-layout/index.ts";
 
 

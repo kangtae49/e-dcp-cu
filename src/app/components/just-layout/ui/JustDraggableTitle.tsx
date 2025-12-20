@@ -12,7 +12,6 @@ import classnames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
@@ -26,6 +25,7 @@ export interface DragItem {
 }
 
 interface Prop {
+  layoutId: string
   justBranch: JustBranch
   winId: string
   winInfo: WinInfo
@@ -38,6 +38,7 @@ interface Prop {
 
 function JustDraggableTitle(props: Prop) {
   const {
+    layoutId,
     winInfo, justBranch, winId, justStack,
     closeWin,
     onClickTitle,
@@ -52,7 +53,7 @@ function JustDraggableTitle(props: Prop) {
     actions: justLayoutActions,
     thunks: justLayoutThunks,
     dispatch,
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const clickClose = (winId: string) => {
     console.log("closeWin", winId)

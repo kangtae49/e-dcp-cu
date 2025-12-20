@@ -13,6 +13,7 @@ import ConfigView from "@/app/config/ui/ConfigView.tsx";
 import type {JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
 
 export const LAYOUT_ID = "JUST-LAYOUT"
+export const SIDE_MENU_NODE_NAME = "side-menu"
 
 export type ViewId = "side-menu"
   | "page01"
@@ -43,7 +44,7 @@ export const viewMap = {
     // showClose: false,
   }),
   "page01": (winId: string) => {
-    const winObjId = WinObj.toWinObjId(winId)
+    const winObjId = WinObj.toWinObjId<ViewId>(winId)
     return ({
       title: "자산통계정보",
       canDup: true,
@@ -83,7 +84,7 @@ export const viewMap = {
 } as Record<ViewId, GetWinInfoFn>;
 
 
-CONFIG_KEYS.forEach((winObjId: WinObj) => {
+CONFIG_KEYS.forEach((winObjId: WinObj<ViewId>) => {
 
   viewMap[winObjId.viewId] = () => ({
     title: WinObj.getParamString(winObjId, 'title'),
@@ -99,7 +100,7 @@ const aboutId = new WinObj({viewId: 'about'}).toWinId();
 export const initialLayoutValue: JustNode = {
   type: 'split-pixels',
   direction: 'row',
-  name: 'side-menu',
+  name: SIDE_MENU_NODE_NAME,
   primary: 'first',
   primaryDefaultSize: 200,
   size: 200,

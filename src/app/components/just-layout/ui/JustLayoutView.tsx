@@ -11,11 +11,11 @@ import {
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "./JustNodeView.tsx";
 import classNames from "classnames";
-import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   // viewMap: Record<string, WinInfo>
+  layoutId: string
   getWinInfo: GetWinInfoFn
   initialValue: JustNode
   closeWin?: CloseWinFn
@@ -25,12 +25,12 @@ interface Props {
 
 
 
-export function JustLayoutView({getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
+export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
   const {onLoad} = useOnload();
   const {
     state: justLayoutState,
     actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
   onLoad(() => {
     dispatch(justLayoutActions.setLayout(initialValue))
@@ -51,6 +51,7 @@ export function JustLayoutView({getWinInfo, initialValue, closeWin, onClickTitle
         // "thema-dark"
       )}>
         {justLayoutState && <JustNodeView
+            layoutId={layoutId}
             node={justLayoutState.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}

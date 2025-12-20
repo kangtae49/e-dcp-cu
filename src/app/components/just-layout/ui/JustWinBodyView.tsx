@@ -11,10 +11,10 @@ import {
 import {type DragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef} from "react";
-import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {GetWinInfoFn} from "..";
 
 interface Prop {
+  layoutId: string
   justBranch: JustBranch
   justStack: JustStack
   // viewMap: Record<string, WinInfo>
@@ -24,12 +24,12 @@ interface Prop {
 function JustWinBodyView (props: Prop) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const { getWinInfo, justBranch, justStack } = props;
+  const { layoutId, getWinInfo, justBranch, justStack } = props;
 
   const {
     // state: justLayoutState,
     actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
   const onDrop = (itemType: any, item: DragItem) => {

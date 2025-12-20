@@ -1,6 +1,6 @@
 import React, {JSX} from "react";
-import {ViewId} from "@/utils/layout-util.tsx";
-import {stableStringify} from "@/utils/json-util.ts";
+// import {ViewId} from "@/utils/layout-util.tsx";
+import {stableStringify} from "./json-util.ts";
 
 export interface WinInfo {
   title: string
@@ -19,18 +19,18 @@ export type OnDoubleClickTitleFn = (event: React.MouseEvent, winId: string) => v
 
 export type WinObjParamVal = string | number | boolean | null;
 
-export interface WinObjId {
-  viewId: ViewId
+export interface WinObjId<T extends string> {
+  viewId: T
   dupId?: string
   params?: Record<string, WinObjParamVal>
 }
 
-export class WinObj implements WinObjId {
-  viewId: ViewId;
+export class WinObj<T extends string> implements WinObjId<T> {
+  viewId: T;
   dupId: string;
   params: Record<string, WinObjParamVal>;
 
-  constructor(data: Partial<WinObjId>) {
+  constructor(data: Partial<WinObjId<T>>) {
     this.viewId = data.viewId!;
     this.dupId = data.dupId ?? `${new Date().getTime()}`;
     this.params = data?.params ?? {};
@@ -42,7 +42,7 @@ export class WinObj implements WinObjId {
     if (winId == undefined) throw new Error("buildWinId: stringify error")
     return winId
   }
-  toWinObjId(): WinObjId {
+  toWinObjId(): WinObjId<T> {
     return { ...this }
   }
   getParamString(key: string): string {
@@ -52,25 +52,25 @@ export class WinObj implements WinObjId {
     return this.params?.[key]
   }
 
-  static toWinId(winObjId: WinObjId): string {
+  static toWinId<T extends string>(winObjId: WinObjId<T>): string {
     const winId = stableStringify(winObjId)
     if (winId == undefined) throw new Error("buildWinId: stringify error")
     return winId
   }
 
-  static toWinObjId(winId: string): WinObjId {
-    return JSON.parse(winId) as WinObjId
+  static toWinObjId<T extends string>(winId: string): WinObjId<T> {
+    return JSON.parse(winId) as WinObjId<T>
   }
 
-  static toWinObj(winId: string): WinObj {
-    const winObjId = JSON.parse(winId) as WinObjId
+  static toWinObj<T extends string>(winId: string): WinObj<T> {
+    const winObjId = JSON.parse(winId) as WinObjId<T>
     return new WinObj(winObjId)
   }
 
-  static getParamString(winObjId: WinObjId, key: string): string {
+  static getParamString<T extends string>(winObjId: WinObjId<T>, key: string): string {
     return new WinObj(winObjId).getParamString(key)?.toString() ?? ""
   }
-  static getParam(winObjId: WinObjId, key: string): WinObjParamVal | undefined {
+  static getParam<T extends string>(winObjId: WinObjId<T>, key: string): WinObjParamVal | undefined {
     return new WinObj(winObjId).getParam(key)
   }
 

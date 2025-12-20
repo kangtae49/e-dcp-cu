@@ -11,10 +11,10 @@ import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplit, {type SplitSize} from "./JustSplit.tsx";
 import {type CSSProperties, useRef} from "react";
-import {LAYOUT_ID} from "@/utils/layout-util.tsx";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
+  layoutId: string
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
@@ -24,13 +24,13 @@ interface Props {
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
+export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
     // state: justLayoutState,
     actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice)
+  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
   const onResize= ({size}: SplitSize) => {
@@ -58,6 +58,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
     <div className="just-node" ref={refNode}>
       {node?.type === 'stack' && (
         <JustWinView
+          layoutId={layoutId}
           justStack={node}
           justBranch={justBranch}
           getWinInfo={getWinInfo}
@@ -83,6 +84,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
             style={getStyle(node, 'first')}
           >
             <JustNodeView
+              layoutId={layoutId}
               node={node.first}
               justBranch={[...justBranch, "first"]}
               getWinInfo={getWinInfo}
@@ -93,6 +95,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
           </div>
 
           <JustSplit
+            layoutId={layoutId}
             node={node}
             justBranch={justBranch}
             containerRef={refNode}
@@ -108,6 +111,7 @@ export const JustNodeView: React.FC<Props> = ({ node, justBranch, getWinInfo, cl
                style={getStyle(node, 'second')}
           >
             <JustNodeView
+              layoutId={layoutId}
               node={node.second}
               justBranch={[...justBranch, "second"]}
               getWinInfo={getWinInfo}

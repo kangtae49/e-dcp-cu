@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {RefObject, useEffect, useRef, useState} from "react";
 import type {
   JustBranch,
   JustSplitDirection,
@@ -26,9 +26,10 @@ export interface SplitSizePiexels {
 }
 
 interface Props {
+  layoutId: string
   node: JustSplitType
   justBranch: JustBranch
-  containerRef: React.RefObject<HTMLDivElement | null>
+  containerRef: RefObject<HTMLDivElement | null>
   onChange?: (splitSize: SplitSize) => void;
   onRelease?: (splitSize: SplitSize) => void;
 }

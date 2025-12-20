@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {ConfigTable} from "@/types.ts";
 import {WinObj, WinObjId} from "@/app/components/just-layout";
+import {ViewId} from "@/app/layout/layout-util.tsx";
 
 export const CONFIG_ID = "CONFIGS"
 
@@ -8,10 +9,10 @@ export const CONFIG_ID = "CONFIGS"
 
 export interface ConfigsState {
   configs: Record<string, ConfigTable>
-  keys: WinObjId[]
+  keys: WinObjId<ViewId>[]
 }
 
-export const CONFIG_KEYS: WinObjId[] = [
+export const CONFIG_KEYS: WinObjId<ViewId>[] = [
   new WinObj({viewId: "setting-config", params: {"title": "업체명", "file": "data\\company.xlsx"}}).toWinObjId()
 ]
 

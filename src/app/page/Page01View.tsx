@@ -22,9 +22,10 @@ import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
 import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
+import {ViewId} from "@/app/layout/layout-util.tsx";
 
 interface Props {
-  winObjId: WinObjId
+  winObjId: WinObjId<ViewId>
 }
 
 

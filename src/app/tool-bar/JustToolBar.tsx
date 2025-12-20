@@ -13,7 +13,7 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
-import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/utils/layout-util.tsx";
+import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST} from "@/app/layout/layout-util.tsx";
 import {WinObj} from "@/app/components/just-layout/index.ts";
 
 

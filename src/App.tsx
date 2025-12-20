@@ -13,11 +13,10 @@ import {
   createConfigsSlice
 } from "@/app/config/configsSlice";
 import React, {useEffect} from "react";
-import {initialLayoutValue, LAYOUT_ID, ViewId, viewMap} from "@/utils/layout-util.tsx";
+import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout-util.tsx";
 import {WinInfo, WinObj, WinObjId} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
-import {createJustLayoutSlice, JustLayoutActions, JustLayoutState} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {createJustLayoutThunks} from "@/app/components/just-layout/justLayoutThunks.ts";
+import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 
 
 function getWinInfo(winId: string): WinInfo {
@@ -26,9 +25,11 @@ function getWinInfo(winId: string): WinInfo {
 }
 
 function App() {
-  const {
-    thunks: justLayoutTrunks
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
+  // const {
+  //   thunks: justLayoutTrunks
+  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(LAYOUT_ID, createJustLayoutSlice, createJustLayoutThunks)
+
+  const {toggleWin} = useJustLayout(LAYOUT_ID);
 
   const {
     actions: configsActions, dispatch
@@ -36,7 +37,7 @@ function App() {
 
 
   useEffect(() => {
-    CONFIG_KEYS.forEach((winObjId: WinObjId) => {
+    CONFIG_KEYS.forEach((winObjId: WinObjId<ViewId>) => {
       const file: string = WinObj.getParamString(winObjId, 'file');
       window.api.readDataExcel(file)
         .then(res => {
@@ -55,7 +56,7 @@ function App() {
   }
   const onDoubleClickTitle = (e: React.MouseEvent, winId: string) => {
     console.log(e, winId)
-    dispatch(justLayoutTrunks.toggleSideMenu())
+    toggleWin(SIDE_MENU_NODE_NAME)
   }
 
   return (
@@ -66,6 +67,7 @@ function App() {
         <div className="just-container">
           <JustToolBar />
           <JustLayoutView
+            layoutId={LAYOUT_ID}
             getWinInfo={getWinInfo}
             initialValue={initialLayoutValue}
             closeWin={closeWin}

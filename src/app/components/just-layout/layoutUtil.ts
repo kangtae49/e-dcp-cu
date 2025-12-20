@@ -6,7 +6,7 @@ import type {
 } from "./justLayoutSlice.ts";
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
-import {get, isEqual, set} from "lodash";
+import {get, set} from "lodash";
 import {WinObj} from "./index.ts";
 
 
@@ -156,12 +156,13 @@ export function getActiveWinIds(layout: JustNode | null): string[] {
 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
-  const branch = findEmptyBranch(layout)
+  const branch = findEmptyBranch(layout, [])
   if (branch === null) return layout
   if (branch.length === 0) return null
-  if (isEqual(branch, ['second'])) {  // first: side-menu
-    return layout;
-  }
+
+  // if (isEqual(branch, ['second'])) {  // first: side-menu
+  //   return layout;
+  // }
   const lastSplitType = branch[branch.length - 1]
   const parentBranch = branch.slice(0, -1)
   const otherSplitType = lastSplitType === 'first' ? 'second' : 'first'
@@ -172,30 +173,35 @@ export function removeEmpty(layout: JustNode | null): JustNode | null {
 }
 
 
-export function findEmptyBranch(layout: JustNode | null): JustBranch | null {
+export function findEmptyBranch(layout: JustNode | null, branch: JustBranch): JustBranch | null {
 
-  const findFn = (layout: JustNode | null, branch: JustBranch): JustBranch | null => {
-    if( layout === null) return null
-    if (layout.type === 'stack') {
-      if (layout.tabs.length === 0) {
-        return branch
-      } else {
-        return null
-      }
+  if( layout === null) return null
+  if (layout.type === 'stack') {
+    if (layout.tabs.length === 0) {
+      return branch
     } else {
-      const nodeFirst = findFn(layout.first, [...branch, 'first'])
-      if (nodeFirst != null) {
-        return nodeFirst
-      }
-      const nodeSecond = findFn(layout.second, [...branch, 'second'])
-      if (nodeSecond != null) {
-        return nodeSecond
-      }
       return null
     }
-  }
+  } else {
+    if (layout.type === 'split-pixels' && layout.first.type === 'stack') {
+      // nothing
+    } else {
+      const branchFirst = findEmptyBranch(layout.first, [...branch, 'first'])
+      if (branchFirst != null ) {
+        return branchFirst
+      }
+    }
 
-  return findFn(layout, [])
+    if (layout.type === 'split-pixels' && layout.second.type === 'stack') {
+      // nothing
+    } else {
+      const branchSecond = findEmptyBranch(layout.second, [...branch, 'second'])
+      if (branchSecond != null) {
+        return branchSecond
+      }
+    }
+    return null
+  }
 }
 
 
@@ -247,6 +253,25 @@ function getBranch(layout: JustNode | null, winId: string, branch: JustBranch): 
 export function getBranchByWinId(layout: JustNode | null, winId: string): JustBranch | null {
   return getBranch(layout, winId, [])
 }
+export function getBranchByNodeName(layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null {
+  if( layout === null) return null
+  if (layout.type === 'split-pixels') {
+    if (layout.name == nodeName) {
+      return [...curBranch]
+    }
+    const nodeFirst = getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
+    if (nodeFirst != null) {
+      return nodeFirst
+    }
+    const nodeSecond = getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
+    if (nodeSecond != null) {
+      return nodeSecond
+    }
+    return null
+  } else {
+    return null
+  }
+}
 
 export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode | null {
   if( layout === null) return null
@@ -267,6 +292,27 @@ export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode
     }
     return null
   }
+}
+
+export function getStackBranch(layout: JustNode | null, curBranch: JustBranch): JustBranch | null {
+  if( layout === null) return null
+  if (layout.type === 'stack') {
+    return curBranch
+  } else {
+    if (layout.type === 'split-pixels') {
+      const otherBranch = layout.primary === 'first' ? 'second' : 'first'
+      const retBranch = getStackBranch(layout[otherBranch], [...curBranch, otherBranch])
+      if (retBranch != null) {
+        return retBranch
+      }
+    } else {
+      const branchSecond = getStackBranch(layout.second, [...curBranch, 'second'])
+      if (branchSecond != null) {
+        return branchSecond
+      }
+    }
+  }
+  return null
 }
 
 export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {

@@ -1,9 +1,10 @@
 import {
   getActiveWinIds,
   getBranchByWinId,
+  getBranchByNodeName,
   getBranchRightTop,
   hasWinId, queryWinIdsByStack,
-  queryWinIdsByViewId
+  queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch
 } from "./layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
@@ -21,6 +22,24 @@ export function createJustLayoutThunks(sliceId: string) {
       branch: [],
       size: newSize
     }))
+  })
+  const toggleWin = createSliceThunk(sliceId, ({nodeName}, {dispatch, sliceState}) => {
+    const justLayoutActions = getActions<JustLayoutActions>(sliceId);
+    const layout = sliceState?.layout;
+    const branch = getBranchByNodeName(layout, nodeName, [])
+    if (branch == null) return;
+    const node = getNodeAtBranch(layout, branch)
+    if (node == null) return;
+    if (node.type !== 'split-pixels') return;
+    const newSize = node.size === 0 ? node.primaryDefaultSize : 0;
+    const updateSpec = buildSpecFromUpdateSpec(branch, {
+      $merge: {
+        size: newSize
+      }
+    })
+    const newLayout = updateNode(node, updateSpec)
+    if (newLayout == null) return;
+    dispatch(justLayoutActions.setLayout(newLayout))
   })
 
   const openWin = createSliceThunk(sliceId, ({winId}, {dispatch, sliceState}) => {
@@ -78,7 +97,7 @@ export function createJustLayoutThunks(sliceId: string) {
     if (targetBranch === null) return;
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     const dupId = `${new Date().getTime()}`
-    const newWinObjId: WinObjId = {
+    const newWinObjId: WinObjId<string> = {
       ...WinObj.toWinObjId(winId),
       dupId
     }
@@ -90,6 +109,7 @@ export function createJustLayoutThunks(sliceId: string) {
 
   return {
     toggleSideMenu,
+    toggleWin,
     openWin,
     openWinMenu,
     getWinIds,
