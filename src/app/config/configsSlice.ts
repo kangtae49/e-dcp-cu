@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {ConfigTable} from "@/types.ts";
 import {WinObj, WinObjId} from "@/app/components/just-layout";
 import {ViewId} from "@/app/layout/layout-util.tsx";
@@ -35,10 +35,10 @@ export const createConfigsSlice = (id: string) =>
     name: id,
     initialState,
     reducers: {
-      setConfig: (state, { payload }: {payload: ConfigsPayloadSetConfig}) => {
+      setConfig: (state, { payload }: PayloadAction<ConfigsPayloadSetConfig>) => {
         state.configs[payload.key] = payload.val
       },
-      updateConfigs: (state, { payload }: {payload: ConfigsPayloadUpdateConfigs}) => {
+      updateConfigs: (state, { payload }: PayloadAction<ConfigsPayloadUpdateConfigs>) => {
         state.configs = {
           ...state.configs,
           ...payload.configs,

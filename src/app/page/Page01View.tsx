@@ -5,7 +5,7 @@ import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawes
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import {CONFIG_ID, type ConfigsActions, type ConfigsState, createConfigsSlice} from "@/app/config/configsSlice.ts";
+import {CONFIG_ID} from "@/app/config/configsSlice.ts";
 import {Activity, useEffect} from "react";
 import { format } from "date-fns";
 import {
@@ -20,6 +20,7 @@ import {JobEvent, JobStatus, JobStreamData} from "@/types";
 import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
 import {ViewId} from "@/app/layout/layout-util.tsx";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
+import useConfigs from "@/app/config/useConfigs.ts";
 
 interface Props {
   winObjId: WinObjId<ViewId>
@@ -48,12 +49,7 @@ function Page01View({winObjId}: Props) {
     clearEvents,
   } = useJobMonitor(JOB_MONITOR_ID);
 
-
-  const {
-    state: configsState,
-    // actions: configsActions,
-    // dispatch
-  } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
+  const {state: configsState} = useConfigs(CONFIG_ID)
 
   // const [outFile, setOutFile] = useState<string | null>(null);
 

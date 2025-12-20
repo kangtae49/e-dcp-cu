@@ -4,19 +4,16 @@ import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
-import {useDynamicSlice} from "@/store/hooks";
 import {
   CONFIG_ID,
   CONFIG_KEYS,
-  type ConfigsActions,
-  type ConfigsSlice,
-  createConfigsSlice
 } from "@/app/config/configsSlice";
 import React, {useEffect} from "react";
 import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout-util.tsx";
 import {WinInfo, WinObj, WinObjId} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
+import useConfigs from "@/app/config/useConfigs.ts";
 
 
 function getWinInfo(winId: string): WinInfo {
@@ -28,21 +25,20 @@ function App() {
 
   const {toggleWin} = useJustLayout(LAYOUT_ID);
 
-  const {
-    actions: configsActions, dispatch
-  } = useDynamicSlice<ConfigsSlice, ConfigsActions>(CONFIG_ID, createConfigsSlice)
-
+  const {updateConfigs} = useConfigs(CONFIG_ID)
 
   useEffect(() => {
     CONFIG_KEYS.forEach((winObjId: WinObjId<ViewId>) => {
       const file: string = WinObj.getParamString(winObjId, 'file');
       window.api.readDataExcel(file)
         .then(res => {
-          dispatch(configsActions.updateConfigs({ configs: {[res.key]: res}}))
+          updateConfigs({
+            [res.key]: res
+          })
         })
     })
 
-  }, [configsActions, dispatch])
+  }, [])
 
   const closeWin = (winId: string) => {
     console.log('closeWin!!!', winId)

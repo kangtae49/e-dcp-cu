@@ -14,11 +14,7 @@ function ConfigView({winObjId}: Props) {
   console.log('ConfigView', winObjId)
   const configKey = WinObj.getParamString(winObjId, 'file');
   const configTitle = WinObj.getParamString(winObjId, 'title');
-  // const {
-  //   state: configsState,
-  // } = useDynamicSlice<ConfigsState, ConfigsActions>("CONFIGS", createConfigsSlice)
 
-  // const [configKey, setConfigKey] = useState<string | null>(null)
   const clickConfigKey = () => {
     console.log(configKey)
     openSetting(configKey)

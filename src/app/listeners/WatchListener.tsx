@@ -1,18 +1,15 @@
 import {useEffect} from "react";
-import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   CONFIG_ID,
-  ConfigsActions,
-  ConfigsState,
-  createConfigsSlice
 } from "@/app/config/configsSlice.ts";
+import useConfigs from "@/app/config/useConfigs.ts";
 
 function WatchListener(): null {
+
   const {
     state: configsState,
-    actions: configsActions,
-    dispatch
-  } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
+    updateConfigs,
+  } = useConfigs(CONFIG_ID)
 
   useEffect(() => {
     if (!configsState || !configsState.keys) {
@@ -28,31 +25,23 @@ function WatchListener(): null {
         setTimeout(() => {
           window.api.readDataExcel(watchFile.key)
             .then((res) => {
-              dispatch(
-                configsActions.updateConfigs({
-                  configs: {
-                    [watchFile.key]: res
-                  }
-                })
-              )
+              updateConfigs({
+                [watchFile.key]: res
+              })
             })
         }, 100)
       } else if (watchFile.status === 'DELETED') {
-        dispatch(
-          configsActions.updateConfigs({
-            configs: {
-              [watchFile.key]: {
-                key: watchFile.key,
-                header: [],
-                data: []
-              }
-            }
-          })
-        )
+        updateConfigs({
+          [watchFile.key]: {
+            key: watchFile.key,
+            header: [],
+            data: []
+          }
+        })
       }
 
     })
-  }, [configsState, dispatch])
+  }, [configsState])
   return null
 }
 

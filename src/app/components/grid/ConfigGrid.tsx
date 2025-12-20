@@ -1,15 +1,12 @@
 import "./ConfigGrid.css"
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
-import {useDynamicSlice} from "@/store/hooks.ts";
 import {
   CONFIG_ID,
-  type ConfigsActions,
-  type ConfigsState,
-  createConfigsSlice
 } from "@/app/config/configsSlice.ts";
 import throttle from "lodash/throttle";
 import {ConfigTable} from "@/types.ts";
+import useConfigs from "@/app/config/useConfigs.ts";
 
 interface Props {
   configKey: string
@@ -20,13 +17,8 @@ const getColumns = (header: string[], columnSize: Record<string, number>): Colum
   ...header.map(h => ({ columnId: h, width: columnSize?.[h] ?? 150, resizable: true, })),
 ]
 function ConfigGrid({configKey}: Props) {
-  const {
-    state: configsState,
-    // actions: configsActions,
-    // dispatch
-  } = useDynamicSlice<ConfigsState, ConfigsActions>(CONFIG_ID, createConfigsSlice)
 
-
+  const {state: configsState} = useConfigs(CONFIG_ID)
 
   const ref = useRef<ReactGrid>(null)
 
