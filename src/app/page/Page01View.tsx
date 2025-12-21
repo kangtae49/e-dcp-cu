@@ -4,14 +4,12 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {CONFIG_ID} from "@/app/config/configsSlice.ts";
 import {Activity, useEffect} from "react";
 import { format } from "date-fns";
 import {
   JOB_MONITOR_ID,
 } from "@/app/job/jobMonitorSlice";
-import {createPageSlice, type PageActions, type PageState} from "@/app/page/pageSlice";
 import classNames from "classnames";
 import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
@@ -21,6 +19,7 @@ import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
 import {ViewId} from "@/app/layout/layout-util.tsx";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
+import usePage from "@/app/page/usePage.ts";
 
 interface Props {
   winObjId: WinObjId<ViewId>
@@ -34,13 +33,18 @@ function Page01View({winObjId}: Props) {
   // chart-line.svg
   // terminal.svg
   // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
-  // const [companyList, setCompanyList] = useState<Option[]>([])
+
   const winId = WinObj.toWinId(winObjId)
-  const dispatch = useAppDispatch();
+
   const {
     state: pageState,
-    actions: pageActions,
-  } = useDynamicSlice<PageState, PageActions>(winId, createPageSlice)
+    setCompany,
+    setLogs,
+    setJobInfo,
+    setStartDate,
+    setEndDate,
+    setTab,
+  } = usePage(winId);
 
   const {
     state: jobMonitorState,
@@ -69,9 +73,9 @@ function Page01View({winObjId}: Props) {
 
   useEffect(() => {
     if (companyList.length > 0 && !pageState?.company) {
-      dispatch(pageActions.setCompany(companyList[0]));
+      setCompany(companyList[0]);
     }
-  }, [companyList, dispatch, pageActions, pageState?.company]);
+  }, [companyList, pageState?.company]);
 
 
   useEffect(() => {
@@ -80,14 +84,14 @@ function Page01View({winObjId}: Props) {
     const status: JobStatus | null = getJobStatus(pageState.jobInfo.jobId)
     if (status !== null && pageState.jobInfo.status !== status) {
       console.log('jobStatus:', status)
-      dispatch(pageActions.setJobInfo({...pageState.jobInfo, status}))
+      setJobInfo({...pageState.jobInfo, status})
     }
 
     const events: JobEvent [] = getJobEvents(pageState.jobInfo?.jobId)
     const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
     const logs = streamEvents.map((event) => (event.data as JobStreamData).message ?? '')
-    dispatch(pageActions.setLogs(logs))
-  }, [dispatch, jobMonitorState, pageActions, pageState?.jobInfo]);
+    setLogs(logs)
+  }, [jobMonitorState, pageState?.jobInfo]);
 
 
 
@@ -95,16 +99,16 @@ function Page01View({winObjId}: Props) {
 
   const onChangeStartDate = (date: string | null) => {
     console.log('onChangeStartDate:', date)
-    dispatch(pageActions.setStartDate(date))
+    setStartDate(date)
   }
 
   const onChangeEndDate = (date: string | null) => {
     console.log('onChangeEndDate:', date)
-    dispatch(pageActions.setEndDate(date))
+    setEndDate(date)
   }
 
   const handleCompany = (option: Option) => {
-    dispatch(pageActions.setCompany(option))
+    setCompany(option)
   }
   const searchPage01 = () => {
 
@@ -122,7 +126,7 @@ function Page01View({winObjId}: Props) {
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
     const args = [jobId, winObjId.viewId, companyVal?.toString() ?? '', startYm, endYm];
-    dispatch(pageActions.setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args}))
+    setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
@@ -184,7 +188,7 @@ function Page01View({winObjId}: Props) {
                   "active": pageState?.tab === "GRAPH",
                 }
               )}
-              onClick={()=>dispatch(pageActions.setTab('GRAPH'))}>
+              onClick={()=> setTab('GRAPH')}>
             <Icon icon={faChartLine} />graph
           </div>
           <div className={classNames(
@@ -193,7 +197,7 @@ function Page01View({winObjId}: Props) {
                   "active": pageState?.tab === "GRID",
                 }
               )}
-              onClick={()=>dispatch(pageActions.setTab('GRID'))}>
+              onClick={()=> setTab('GRID')}>
             <Icon icon={faTableList} />grid
           </div>
           <div className={classNames(
@@ -202,7 +206,7 @@ function Page01View({winObjId}: Props) {
                   "active": pageState?.tab === "LOG",
                 }
               )}
-              onClick={()=>dispatch(pageActions.setTab('LOG'))}>
+              onClick={()=> setTab('LOG')}>
             <Icon icon={faTerminal} />log
           </div>
         </div>
