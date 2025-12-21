@@ -13,7 +13,6 @@ function TerminalView({lines}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  const renderedCountRef = useRef<number>(0);
 
   const writeLine = (term: XTerm, line: JobStreamData) => {
     term.write(line.message)
@@ -57,7 +56,7 @@ function TerminalView({lines}: Props) {
       fitAddonRef.current = fitAddon;
       termRef.current?.clear()
 
-      lines.forEach((line) => writeLine(term, line))
+      // lines.forEach((line) => writeLine(term, line))
     }
     return () => {
       console.log("dispose terminal");
@@ -66,20 +65,15 @@ function TerminalView({lines}: Props) {
   }, []);
 
   useEffect(() => {
-    if (lines.length == 1) {
-      termRef?.current?.clear()
-    }
+    termRef?.current?.clear()
 
     lines
-      .slice(renderedCountRef.current)
       .forEach((line) => {
       if (termRef.current) {
         writeLine(termRef.current, line)
       }
     })
 
-    renderedCountRef.current = lines.length;
-    // setCurLines(lines)
     fitAddonRef.current?.fit();
     termRef?.current?.scrollToBottom()
   }, [lines.length]);
