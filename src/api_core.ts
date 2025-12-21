@@ -5,6 +5,8 @@ import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
 import {ConfigTable, JobEvent, JobStatus} from "./types.ts";
+import iconv from 'iconv-lite';
+
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
 export function getAppResourcePath() {
@@ -118,22 +120,24 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
 
   child.stdout.on('data', (data) => {
     // console.log(data.toString());
-    process.stdout.write(data.toString())
+    const decodedMessage = iconv.decode(data, 'euc-kr');
+    process.stdout.write(decodedMessage)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
-      data: {message: data.toString(), messageType: 'STDOUT'},
+      data: {message: decodedMessage, messageType: 'STDOUT'},
       timestamp: Date.now()
     });
   });
 
   child.stderr.on('data', (data) => {
+    const decodedMessage = iconv.decode(data, 'euc-kr');
     // console.log(data.toString());
-    process.stderr.write(data.toString())
+    process.stderr.write(decodedMessage)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
-      data: {message: data.toString(), messageType: 'STDERR'},
+      data: {message: decodedMessage, messageType: 'STDERR'},
       timestamp: Date.now()
     });
   });

@@ -8,8 +8,33 @@ import {
 } from "./layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
-import type {JustLayoutActions} from "./justLayoutSlice.ts";
+import type {JustBranch, JustLayoutActions} from "./justLayoutSlice.ts";
 import {WinObj, WinObjId} from "./index.ts";
+
+
+interface PayloadToggleWin {
+  nodeName: string
+}
+
+interface PayloadOpenWin {
+  winId: string
+}
+
+interface PayloadGetWinIds {
+  viewId: string
+}
+
+interface PayloadGetWinIdsByBranch {
+  branch: JustBranch
+}
+
+interface PayloadOpenWinMenu {
+  winId: string
+}
+
+interface PayloadCloneWin {
+  winId: string
+}
 
 export function createJustLayoutThunks(sliceId: string) {
   const toggleSideMenu = createSliceThunk(sliceId, (_, {dispatch, sliceState}) => {
@@ -23,7 +48,7 @@ export function createJustLayoutThunks(sliceId: string) {
       size: newSize
     }))
   })
-  const toggleWin = createSliceThunk(sliceId, ({nodeName}, {dispatch, sliceState}) => {
+  const toggleWin = createSliceThunk(sliceId, ({nodeName}: PayloadToggleWin, {dispatch, sliceState}) => {
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     const layout = sliceState?.layout;
     const branch = getBranchByNodeName(layout, nodeName, [])
@@ -42,7 +67,7 @@ export function createJustLayoutThunks(sliceId: string) {
     dispatch(justLayoutActions.setLayout(newLayout))
   })
 
-  const openWin = createSliceThunk(sliceId, ({winId}, {dispatch, sliceState}) => {
+  const openWin = createSliceThunk(sliceId, ({winId}: PayloadOpenWin, {dispatch, sliceState}) => {
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     if (hasWinId(sliceState?.layout ?? null, winId)) {
       dispatch(justLayoutActions.activeWin({
@@ -72,13 +97,13 @@ export function createJustLayoutThunks(sliceId: string) {
 
     }
   })
-  const getWinIds = createSliceThunk(sliceId, ({viewId}, {sliceState}) => {
+  const getWinIds = createSliceThunk(sliceId, ({viewId}: PayloadGetWinIds, {sliceState}) => {
     return queryWinIdsByViewId(sliceState?.layout ?? null, viewId, [])
   })
-  const getWinIdsByBranch = createSliceThunk(sliceId, ({branch}, {sliceState}) => {
+  const getWinIdsByBranch = createSliceThunk(sliceId, ({branch}: PayloadGetWinIdsByBranch, {sliceState}) => {
     return queryWinIdsByStack(sliceState?.layout ?? null, branch)
   })
-  const openWinMenu = createSliceThunk(sliceId, ({winId}, {dispatch}) => {
+  const openWinMenu = createSliceThunk(sliceId, ({winId}: PayloadOpenWinMenu, {dispatch}) => {
     const viewId = WinObj.toWinObjId(winId).viewId;
     const winIds: string[] = dispatch(getWinIds({viewId})) as unknown as string[];
     if (winIds.length === 0) {
@@ -92,7 +117,7 @@ export function createJustLayoutThunks(sliceId: string) {
       dispatch(openWin({winId: newWinId}))
     }
   })
-  const cloneWin = createSliceThunk(sliceId, ({winId}, {dispatch, sliceState}) => {
+  const cloneWin = createSliceThunk(sliceId, ({winId}: PayloadCloneWin, {dispatch, sliceState}) => {
     const targetBranch = getBranchByWinId(sliceState?.layout ?? null, winId);
     if (targetBranch === null) return;
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
