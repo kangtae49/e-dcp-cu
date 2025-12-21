@@ -21,7 +21,7 @@ function OutputGrid({outFile, title}: Props) {
         </div>
       </div>
       <div className="output-grid-table">
-        <ConfigGrid configKey={outFile} />
+        <ConfigGrid key={outFile} configKey={outFile} />
       </div>
     </div>
   )

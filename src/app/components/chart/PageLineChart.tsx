@@ -65,11 +65,12 @@ function PageLineChart({title, outFile, legend}: Props) {
   //   },
   // ];
   return (
-    <div style={{display: "flex", flexDirection: "column", width: "100%", height: "100%", minHeight: 0, padding: "5px", boxSizing: "border-box"}}>
-      <div style={{flex: "0 0 25px"}}>{title}</div>
-      <div style={{flex: 1, minHeight: 0}}>
+    <div className="page-chart">
+      <div className="chart-title">{title}</div>
+      <div className="chart-body">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
+            key={outFile}
             // style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }}
             responsive
             data={configTable.data}

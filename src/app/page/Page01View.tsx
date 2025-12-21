@@ -88,7 +88,7 @@ function Page01View({winObjId}: Props) {
 
     const events: JobEvent [] = getJobEvents(pageState.jobInfo?.jobId)
     const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
-    const logs = streamEvents.map((event) => (event.data as JobStreamData).message ?? '')
+    const logs = streamEvents.map((event) => (event.data as JobStreamData))
     setLogs(logs)
   }, [jobMonitorState, pageState?.jobInfo]);
 
@@ -211,34 +211,35 @@ function Page01View({winObjId}: Props) {
         </div>
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
-            {pageState?.logs && <TerminalView lines={pageState.logs} />}
+            <TerminalView
+                key={`output\\${outFile}`}
+                lines={pageState?.logs ?? []}
+            />
           </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
-            {outFile &&
-              <OutputGrid
-                  title={outFile ?? ''}
-                  outFile={`output\\${outFile}`}
-              />
-            }
+            <OutputGrid
+                key={`output\\${outFile}`}
+                title={outFile ?? ''}
+                outFile={`output\\${outFile}`}
+            />
           </Activity>
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
-            {outFile &&
-              <PageLineChart
-                  title={outFile ?? ''}
-                  outFile={`output\\${outFile}`}
-                  legend={[
-                    {
-                      id: "cpstrtRlest",
-                      name: "cpstrtRlest",
-                      color: "#ca2828"
-                    }, {
-                      id: "cpstrtVlscrt",
-                      name: "cpstrtVlscrt",
-                      color: "#1140bd"
-                    }
-                  ]}
-              />
-            }
+            <PageLineChart
+                key={`output\\${outFile}`}
+                title={outFile ?? ''}
+                outFile={`output\\${outFile}`}
+                legend={[
+                  {
+                    id: "cpstrtRlest",
+                    name: "cpstrtRlest",
+                    color: "#ca2828"
+                  }, {
+                    id: "cpstrtVlscrt",
+                    name: "cpstrtVlscrt",
+                    color: "#1140bd"
+                  }
+                ]}
+            />
           </Activity>
         </div>
       </div>

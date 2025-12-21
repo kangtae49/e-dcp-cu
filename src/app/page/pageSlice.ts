@@ -1,7 +1,7 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {Option} from "@/app/components/select/SelectBox.tsx";
 import {format} from "date-fns";
-import {JobStatus} from "@/types.ts";
+import {JobStatus, JobStreamData} from "@/types.ts";
 
 
 export const PAGE01_ID = "PAGE01"
@@ -20,7 +20,7 @@ export interface PageState {
   endDate: string | null
   jobInfo: JobInfo | null
   tab: TabType
-  logs: string[]
+  logs: JobStreamData[]
 }
 
 const initialState: PageState = {
@@ -42,7 +42,7 @@ export const createPageSlice = (id: string) =>
       setEndDate: (state, { payload }: PayloadAction<string | null>) => { state.endDate = payload },
       setJobInfo: (state, { payload }: PayloadAction<JobInfo | null>) => { state.jobInfo = payload },
       setTab: (state, { payload }: PayloadAction<TabType>) => { state.tab = payload },
-      setLogs: (state, { payload }: PayloadAction<string[]>) => { state.logs = payload },
+      setLogs: (state, { payload }: PayloadAction<JobStreamData[]>) => { state.logs = payload },
     }
   })
 

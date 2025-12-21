@@ -31,7 +31,9 @@ function ConfigView({winObjId}: Props) {
         </div>
       </div>
       <div className="config-table">
-        <ConfigGrid configKey={configKey} />
+        <ConfigGrid
+          configKey={configKey}
+        />
       </div>
     </div>
   )

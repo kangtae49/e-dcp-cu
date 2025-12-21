@@ -3,17 +3,22 @@ import {useEffect, useRef, useState} from "react";
 import {Terminal as XTerm} from "@xterm/xterm"
 import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
+import {JobStreamData} from "@/types.ts";
 
 interface Props {
-  lines: string[]
+  lines: JobStreamData[]
 }
 
 function TerminalView({lines}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
-  const [curLines, setCurLines] = useState<string[]>([])
+  const [curLines, setCurLines] = useState<JobStreamData[]>([])
   // console.log("curLines:", curLines.length, "lines:", lines.length)
+
+  const writeLine = (term: XTerm, line: JobStreamData) => {
+    term.write(line.message)
+  }
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -51,7 +56,7 @@ function TerminalView({lines}: Props) {
         term.open(containerRef.current);
         termRef.current = term;
         fitAddonRef.current = fitAddon;
-        curLines.forEach((line) => term.write(line))
+        curLines.forEach((line) => writeLine(term, line))
       } catch (e) {
         console.log(e);
       }
@@ -69,7 +74,9 @@ function TerminalView({lines}: Props) {
       setCurLines([])
     } else {
       lines.slice(curLines.length).forEach((line) => {
-        termRef?.current?.write(line)
+        if (termRef.current) {
+          writeLine(termRef.current, line)
+        }
       })
       setCurLines(lines)
     }
