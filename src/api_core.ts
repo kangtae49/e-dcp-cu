@@ -121,7 +121,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
   child.stdout.on('data', (data) => {
     // console.log(data.toString());
     const decodedMessage = iconv.decode(data, 'euc-kr');
-    process.stdout.write(decodedMessage)
+    process.stdout.write(data)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
@@ -133,7 +133,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
   child.stderr.on('data', (data) => {
     const decodedMessage = iconv.decode(data, 'euc-kr');
     // console.log(data.toString());
-    process.stderr.write(decodedMessage)
+    process.stderr.write(data)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
