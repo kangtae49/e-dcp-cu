@@ -1,7 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {ConfigTable} from "@/types.ts";
 import {WinObj, WinObjId} from "@/app/components/just-layout";
-import {ViewId} from "@/app/layout/layout-util.tsx";
 
 export const CONFIG_ID = "CONFIGS"
 

@@ -3,7 +3,6 @@ import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {WinObj, WinObjId} from "@/app/components/just-layout";
-import {ViewId} from "@/app/layout/layout-util.tsx";
 
 interface Props {
   winObjId: WinObjId
