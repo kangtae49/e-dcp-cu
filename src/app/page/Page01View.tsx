@@ -16,13 +16,12 @@ import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
 import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
-import {ViewId} from "@/app/layout/layout-util.tsx";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
 
 interface Props {
-  winObjId: WinObjId<ViewId>
+  winObjId: WinObjId
 }
 
 

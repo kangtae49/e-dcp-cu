@@ -72,10 +72,6 @@ export interface JustPayloadActive {
   winId: string
 }
 
-export interface JustPayloadHasWin {
-  winId: string
-}
-
 export interface JustPayloadResize {
   branch: JustBranch
   size: number

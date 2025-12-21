@@ -9,10 +9,10 @@ export const CONFIG_ID = "CONFIGS"
 
 export interface ConfigsState {
   configs: Record<string, ConfigTable>
-  keys: WinObjId<ViewId>[]
+  keys: WinObjId[]
 }
 
-export const CONFIG_KEYS: WinObjId<ViewId>[] = [
+export const CONFIG_KEYS: WinObjId[] = [
   new WinObj({viewId: "setting-config", params: {"title": "업체명", "file": "data\\company.xlsx"}}).toWinObjId()
 ]
 

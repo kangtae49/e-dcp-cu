@@ -122,7 +122,7 @@ export function createJustLayoutThunks(sliceId: string) {
     if (targetBranch === null) return;
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     const dupId = `${new Date().getTime()}`
-    const newWinObjId: WinObjId<string> = {
+    const newWinObjId: WinObjId = {
       ...WinObj.toWinObjId(winId),
       dupId
     }

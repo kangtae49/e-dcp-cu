@@ -6,7 +6,7 @@ import {WinObj, WinObjId} from "@/app/components/just-layout";
 import {ViewId} from "@/app/layout/layout-util.tsx";
 
 interface Props {
-  winObjId: WinObjId<ViewId>
+  winObjId: WinObjId
 }
 
 function ConfigView({winObjId}: Props) {

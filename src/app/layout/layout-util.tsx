@@ -44,7 +44,7 @@ const viewMap = {
     // showClose: false,
   }),
   "page01": (winId: string) => {
-    const winObjId = WinObj.toWinObjId<ViewId>(winId)
+    const winObjId = WinObj.toWinObjId(winId)
     return ({
       title: "자산통계정보",
       canDup: true,
@@ -84,9 +84,9 @@ const viewMap = {
 } as Record<ViewId, GetWinInfoFn>;
 
 
-CONFIG_KEYS.forEach((winObjId: WinObj<ViewId>) => {
+CONFIG_KEYS.forEach((winObjId: WinObj) => {
 
-  viewMap[winObjId.viewId] = () => ({
+  viewMap[winObjId.viewId as ViewId] = () => ({
     title: WinObj.getParamString(winObjId, 'title'),
     icon: <Jdenticon size="30" value={"setting-config"} />,
     view: <ConfigView winObjId={winObjId} />

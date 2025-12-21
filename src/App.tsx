@@ -28,7 +28,7 @@ function App() {
   const {updateConfigs} = useConfigs(CONFIG_ID)
 
   useEffect(() => {
-    CONFIG_KEYS.forEach((winObjId: WinObjId<ViewId>) => {
+    CONFIG_KEYS.forEach((winObjId: WinObjId) => {
       const file: string = WinObj.getParamString(winObjId, 'file');
       window.api.readDataExcel(file)
         .then(res => {
