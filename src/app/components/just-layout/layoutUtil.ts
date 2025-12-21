@@ -7,7 +7,7 @@ import type {
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, set} from "lodash";
-import {WinObj} from "./index.ts";
+import {WinObj, WinObjId} from "./index.ts";
 
 
 
@@ -337,7 +337,30 @@ export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, win
     const firstIds = queryWinIdsByViewId(layout.first, viewId, winIds);
     return queryWinIdsByViewId(layout.second, viewId, [...winIds, ...firstIds]);
   }
+}
 
+export function queryDupWinIdsByWinId(layout: JustNode | null, winId: string, winIds: string []): string [] {
+  if( layout === null) return winIds
+  if (layout.type === 'stack') {
+    const targetWinObjId: WinObjId = {
+      ...WinObj.toWinObjId(winId),
+    }
+    delete targetWinObjId.dupId
+    const targetWinId = WinObj.toWinId(targetWinObjId)
+    const ids = layout.tabs.filter((tab) => {
+      const tabObjId: WinObjId = {
+        ...WinObj.toWinObjId(tab),
+      }
+      delete tabObjId.dupId
+      const tabWinId = WinObj.toWinId(tabObjId)
+      console.log("tabObjId: ", tabObjId, ", targetWinObjId: ", targetWinObjId)
+      return tabWinId == targetWinId
+    })
+    return [...winIds, ...ids]
+  } else {
+    const firstIds = queryDupWinIdsByWinId(layout.first, winId, winIds);
+    return queryDupWinIdsByWinId(layout.second, winId, [...winIds, ...firstIds]);
+  }
 }
 
 export function queryWinIdsByStack(layout: JustNode | null, branch: JustBranch): string [] {

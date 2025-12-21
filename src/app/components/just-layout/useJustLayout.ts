@@ -16,7 +16,10 @@ const useJustLayout = (layoutId: string) => {
     dispatch(justLayoutTrunks.toggleWin({nodeName}))
   }
   const addTabWin = (winId: string) => {
-    dispatch(justLayoutActions.addTab({winId}))
+    const ids: string [] = dispatch(justLayoutTrunks.getDupWinIds({winId}))
+
+    const dupWinId = ids.toSorted().at(-1) ?? winId;
+    dispatch(justLayoutActions.addTab({winId: dupWinId}))
   }
 
   const state = justLayoutState

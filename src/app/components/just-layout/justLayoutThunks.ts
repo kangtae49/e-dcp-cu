@@ -4,7 +4,7 @@ import {
   getBranchByNodeName,
   getBranchRightTop,
   hasWinId, queryWinIdsByStack,
-  queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch
+  queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch, queryDupWinIdsByWinId
 } from "./layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
@@ -22,6 +22,10 @@ interface PayloadOpenWin {
 
 interface PayloadGetWinIds {
   viewId: string
+}
+
+interface PayloadGetDupWinIds{
+  winId: string
 }
 
 interface PayloadGetWinIdsByBranch {
@@ -100,6 +104,9 @@ export function createJustLayoutThunks(sliceId: string) {
   const getWinIds = createSliceThunk(sliceId, ({viewId}: PayloadGetWinIds, {sliceState}) => {
     return queryWinIdsByViewId(sliceState?.layout ?? null, viewId, [])
   })
+  const getDupWinIds = createSliceThunk(sliceId, ({winId}: PayloadGetDupWinIds, {sliceState}) => {
+    return queryDupWinIdsByWinId(sliceState?.layout ?? null, winId, [])
+  })
   const getWinIdsByBranch = createSliceThunk(sliceId, ({branch}: PayloadGetWinIdsByBranch, {sliceState}) => {
     return queryWinIdsByStack(sliceState?.layout ?? null, branch)
   })
@@ -138,6 +145,7 @@ export function createJustLayoutThunks(sliceId: string) {
     openWin,
     openWinMenu,
     getWinIds,
+    getDupWinIds,
     getWinIdsByBranch,
     cloneWin,
   }

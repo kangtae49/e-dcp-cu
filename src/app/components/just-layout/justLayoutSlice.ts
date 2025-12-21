@@ -115,7 +115,6 @@ export const createJustLayoutSlice = (id: string) =>
         if (hasWinId(layout, payload.winId)) {
           state.layout = activeWinId(layout, payload.winId)
         } else {
-
           state.layout = addTabWin(layout, branch, payload.winId)
         }
       },
