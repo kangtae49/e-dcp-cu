@@ -15,7 +15,7 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 export interface DragItem {
   justBranch: JustBranch

@@ -19,7 +19,7 @@ import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Props {
   justId: JustId

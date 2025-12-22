@@ -1,4 +1,5 @@
 import type {
+  JSONValue,
   JustBranch, JustDirection, JustId,
   JustNode, JustPayloadInsert,
   JustPos, JustSplitDirection,
@@ -7,7 +8,7 @@ import type {
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, set} from "lodash";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {stableStringify} from "@/app/components/just-layout/json-util.ts";
 
 
 
@@ -443,3 +444,38 @@ export function updateSplitSize(node: JustNode | null, branch: JustBranch, size:
   return updateNode(node, updateSpec)
 }
 
+export class JustUtil {
+
+  static toString(justId: JustId): string {
+    const winId = stableStringify(justId)
+    if (winId == undefined) throw new Error("buildWinId: stringify error")
+    return winId
+  }
+
+  static getParamString(justId: JustId, key: string): string {
+    return justId.params?.[key]?.toString() ?? ""
+  }
+  static getParam(justId: JustId, key: string): JSONValue {
+    return justId.params?.[key]
+  }
+
+  static isEquals(justId1: JustId | null, justId2: JustId | null): boolean {
+    if (justId1 == null || justId2 == null) return false
+    return JustUtil.toString(justId1) === JustUtil.toString(justId2)
+  }
+
+  static includes(tab: JustId[], justId: JustId): boolean {
+    return tab.map(JustUtil.toString).includes(JustUtil.toString(justId))
+  }
+
+  static withoutDup(justId: JustId): JustId {
+    const { params, viewId } = justId
+    return { params, viewId }
+  }
+
+  static replaceDup(justId: JustId): JustId {
+    const { params, viewId } = justId
+    return { params, viewId, dupId: `${new Date().getTime()}`}
+  }
+
+}

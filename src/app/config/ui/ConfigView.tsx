@@ -3,7 +3,7 @@ import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Props {
   justId: JustId

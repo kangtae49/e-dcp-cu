@@ -1,9 +1,10 @@
 import "./SideMenu.css"
 import Jdenticon from "react-jdenticon";
 import IconMinimize from "@/assets/minimize.svg?react"
-import {JustUtil, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout-util.tsx";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
 
 
 function SideMenu() {

@@ -6,15 +6,10 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
-import {
-  INIT_SIDE_MENU_SIZE,
-  JustUtil,
-  LAYOUT_ID,
-  SIDE_MENU_ID_LIST,
-  SIDE_MENU_NODE_NAME
-} from "@/app/layout/layout-util.tsx";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout.tsx";
 
 
 function JustToolBar() {

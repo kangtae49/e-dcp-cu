@@ -12,7 +12,7 @@ import {type DragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef} from "react";
 import {GetWinInfoFn} from "..";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
   layoutId: string

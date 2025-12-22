@@ -16,7 +16,7 @@ import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
-import {JustUtil} from "@/app/layout/layout-util.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 
 interface Prop {

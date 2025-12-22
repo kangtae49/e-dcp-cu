@@ -10,34 +10,18 @@ import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
-import {JSONObject, JSONValue, JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {stableStringify} from "@/app/components/just-layout/json-util.ts";
-
-
+import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
 export const SIDE_MENU_NODE_NAME = "side-menu"
+export const INIT_SIDE_MENU_SIZE = 200
 
 export type ViewId = "side-menu"
   | "page01"
   | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
 
-
-
-// export interface WinObjId extends JSONObject {
-//   viewId: string
-//   dupId?: string
-//   params?: JSONObject
-// }
-
-// export type WinObjId = JSONObject & {
-//   viewId: string
-//   dupId?: string
-//   params?: JSONObject
-// }
-
-export const INIT_SIDE_MENU_SIZE = 200;
 
 export interface SideMenuItem {
   menuId: JustId,
@@ -58,32 +42,32 @@ const viewMap = {
     canDrag: false,
     canDrop: false,
     showTitle: false,
-    // showClose: false,
+  // showClose: false,
   }),
   "page01": (justId: JustId) => {
     return ({
       title: "자산통계정보",
       canDup: true,
       icon: <Jdenticon size="30" value={justId.viewId} />,
-      view: <Page01View justId={justId} />
-    })
+    view: <Page01View justId={justId} />
+  })
   },
-  "demo": () => ({
+    "demo": () => ({
     title: "Demo",
     icon: <Jdenticon size="30" value="demo" />,
     view: <DemoView />
   }),
-  "demo-grid": () => ({
+    "demo-grid": () => ({
     title: "Demo Grid",
     icon: <Jdenticon size="30" value="demo-grid" />,
     view: <DemoGridView />
   }),
-  "demo-line-chart": () => ({
+    "demo-line-chart": () => ({
     title: "Demo Line Chart",
     icon: <Jdenticon size="30" value="demo-line-chart" />,
     view: <DemoLineChartView />
   }),
-  "about": () => ({
+    "about": () => ({
     title: "About",
     icon: <Jdenticon size="30" value="about" />,
     view: <AboutView  />
@@ -105,8 +89,8 @@ CONFIG_KEYS.forEach((justId: JustId) => {
   viewMap[justId.viewId as ViewId] = (justId: JustId) => ({
     title: JustUtil.getParamString(justId, 'title'),
     icon: <Jdenticon size="30" value={"setting-config"} />,
-    view: <ConfigView justId={justId} />
-  });
+  view: <ConfigView justId={justId} />
+});
 })
 
 export {viewMap};
@@ -147,73 +131,3 @@ export const initialLayoutValue: JustNode = {
   },
 }
 
-export class JustUtil {
-  viewId: string;
-  dupId: string;
-  params: JSONObject;
-
-  constructor(data: Partial<JustId>) {
-    this.viewId = data.viewId!;
-    this.dupId = data.dupId ?? `${new Date().getTime()}`;
-    this.params = data?.params ?? {};
-  }
-
-  toString(): string {
-    const winObjId = { ...this };
-    const winId = stableStringify(winObjId)
-    if (winId == undefined) throw new Error("buildWinId: stringify error")
-    return winId
-  }
-
-  getParamString(key: string): string {
-    return this.params?.[key]?.toString() ?? ""
-  }
-  getParam(key: string): JSONValue {
-    return this.params?.[key]
-  }
-
-  static toString(justId: JustId): string {
-    const winId = stableStringify(justId)
-    if (winId == undefined) throw new Error("buildWinId: stringify error")
-    return winId
-  }
-
-
-
-
-  // static toWinObjId(winId: string): JustId {
-  //   return JSON.parse(winId) as JustId
-  // }
-
-  // static toWinObj(winId: string): JustUtil {
-  //   const winObjId = JSON.parse(winId) as JustId
-  //   return new JustUtil(winObjId)
-  // }
-
-  static getParamString(justId: JustId, key: string): string {
-    return new JustUtil(justId).getParamString(key)?.toString() ?? ""
-  }
-  // static getParam(justId: JustId, key: string): JSONValue {
-  //   return new JustUtil(justId).getParam(key)
-  // }
-
-  static isEquals(justId1: JustId | null, justId2: JustId | null): boolean {
-    if (justId1 == null || justId2 == null) return false
-    return JustUtil.toString(justId1) === JustUtil.toString(justId2)
-  }
-
-  static includes(tab: JustId[], justId: JustId): boolean {
-    return tab.map(JustUtil.toString).includes(JustUtil.toString(justId))
-  }
-
-  static withoutDup(justId: JustId): JustId {
-    const { params, viewId } = justId
-    return { params, viewId }
-  }
-
-  static replaceDup(justId: JustId): JustId {
-    const { params, viewId } = justId
-    return { params, viewId, dupId: `${new Date().getTime()}`}
-  }
-
-}
