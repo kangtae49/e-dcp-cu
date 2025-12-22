@@ -29,10 +29,12 @@ function createReducer() {
   })
 }
 
-
 const args = window.api.getArgs();
+const env = await window.api.getEnv();
+console.log(env)
 const isVerbose = args.includes('--verbose');
-
+const port = parseInt(env.DEV_PORT ?? '8000', 10);
+console.log('DEV_PORT', port)
 export const store = configureStore({
   reducer: createReducer(),
   devTools: false,
@@ -45,7 +47,7 @@ export const store = configureStore({
         trace: true,
         maxAge: 1000,
         hostname: "localhost",
-        port: 8001
+        port: port
       }));
     }
 

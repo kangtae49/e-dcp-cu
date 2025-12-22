@@ -5,13 +5,13 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "electron-forge start -- --verbose",
+    "start": "cross-env DEV_PORT=8000 electron-forge start -- --verbose",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "make-trace": "cross-env NODE_OPTIONS='--trace-deprecation' electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "redux": "redux-devtools --hostname=localhost --port=8001"
+    "redux": "redux-devtools --hostname=localhost --port=8000"
   },
   "keywords": [],
   "author": {
@@ -36,7 +36,7 @@
     "@types/electron-squirrel-startup": "^1.0.2",
     "@types/lodash": "^4.17.21",
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^24.10.3",
+    "@types/node": "^24.10.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^5.62.0",

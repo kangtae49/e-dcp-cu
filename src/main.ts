@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import {getAppResourcePath, getScriptPath, readDataExcel, startDataFile, startScript, stopScript} from "./api_core";
 import {FileWatcher} from "./file_watcher.ts";
+import {Env} from "@/types.ts";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -54,7 +55,10 @@ app.on('ready', () => {
   ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
-
+  ipcMain.handle('get-env', () => {
+    const myEnv: Env = { ...process.env };
+    return myEnv;
+  })
   const watchPath = getScriptPath();
   const watcher = new FileWatcher(mainWindow, watchPath);
   watcher.startWatching();
