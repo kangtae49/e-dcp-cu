@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "
 import {
   createJustLayoutSlice,
   type JustBranch,
-  type JustDirection, type JustLayoutActions, type JustLayoutState,
+  type JustDirection, JustId, type JustLayoutActions, type JustLayoutState,
   type JustPos,
   type JustStack,
 } from "../justLayoutSlice.ts";
@@ -15,10 +15,11 @@ import {useDynamicSlice} from "@/store/hooks.ts";
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 export interface DragItem {
   justBranch: JustBranch
-  winId: string
+  justId: JustId
   direction: JustDirection
   pos: JustPos
   index: number
@@ -27,7 +28,7 @@ export interface DragItem {
 interface Prop {
   layoutId: string
   justBranch: JustBranch
-  winId: string
+  justId: JustId
   winInfo: WinInfo
   justStack: JustStack
   rect: DOMRect | null
@@ -39,7 +40,7 @@ interface Prop {
 function JustDraggableTitle(props: Prop) {
   const {
     layoutId,
-    winInfo, justBranch, winId, justStack,
+    winInfo, justBranch, justId, justStack,
     closeWin,
     onClickTitle,
     onDoubleClickTitle,
@@ -55,44 +56,44 @@ function JustDraggableTitle(props: Prop) {
     dispatch,
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
-  const clickClose = (winId: string) => {
-    console.log("closeWin", winId)
+  const clickClose = (justId: JustId) => {
+    console.log("closeWin", justId)
 
     dispatch(
       justLayoutActions.removeWin({
-        winId
+        justId
       })
     )
     if (closeWin) {
-      closeWin(winId);
+      closeWin(justId);
     }
   }
 
-  const cloneWin = (winId: string) => {
+  const cloneWin = (justId: JustId) => {
     dispatch(
       justLayoutThunks.cloneWin({
-        winId
+        justId
       })
     )
   }
 
-  const clickTitle = (e: React.MouseEvent<HTMLDivElement>, winId: string) => {
-    console.log("clickTitle", winId)
+  const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
+    console.log("clickTitle", justId)
     dispatch(
       justLayoutActions.activeWin({
-        winId
+        justId
       })
     )
     if (onClickTitle) {
-      onClickTitle(e, winId)
+      onClickTitle(e, justId)
     }
 
   }
 
-  const dblClickTitle = (e: React.MouseEvent<HTMLDivElement>, winId: string) => {
-    console.log("dblClickTitle", winId)
+  const dblClickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
+    console.log("dblClickTitle", justId)
     if (onDoubleClickTitle) {
-      onDoubleClickTitle(e, winId)
+      onDoubleClickTitle(e, justId)
     }
   }
 
@@ -102,7 +103,7 @@ function JustDraggableTitle(props: Prop) {
       canDrag: winInfo.canDrag ?? true,
       item: {
         justBranch,
-        winId,
+        justId,
         index: -1,
       } as DragItem,
       collect: (monitor: DragSourceMonitor) => ({
@@ -123,7 +124,7 @@ function JustDraggableTitle(props: Prop) {
       if (!ref.current) {
         return
       }
-      if (winId === item.winId) {
+      if (justId === item.justId) {
         return
       }
       if (!monitor.canDrop()) {
@@ -134,10 +135,10 @@ function JustDraggableTitle(props: Prop) {
       const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left
 
-      const sourceWinId = item.winId;
-      const targetWinId = winId;
+      const sourceWinId = item.justId;
+      const targetWinId = justId;
 
-      const curTabs = justStack.tabs.filter(tabId => tabId !== sourceWinId)
+      const curTabs = justStack.tabs.filter(tabId => !JustUtil.isEquals(tabId, sourceWinId))
       let targetIndex = curTabs.indexOf(targetWinId)
       if (hoverClientX > hoverMiddleX) {
         targetIndex += 1
@@ -150,7 +151,7 @@ function JustDraggableTitle(props: Prop) {
   useEffect(() => {
     if (ref.current == null) return;
     if (parentRect == null) return;
-    if (justStack.active !== winId) return;
+    if (!JustUtil.isEquals(justStack.active, justId)) return;
     const rect = ref.current.getBoundingClientRect();
 
     if (parentRect.left > rect.left || parentRect.right < rect.right) {
@@ -160,7 +161,7 @@ function JustDraggableTitle(props: Prop) {
         inline: 'center'
       })
     }
-  }, [parentRect, justLayoutState, justStack.active, winId])
+  }, [parentRect, justLayoutState, justStack.active, justId])
 
 
 
@@ -184,27 +185,27 @@ function JustDraggableTitle(props: Prop) {
         "just-title-menus",
         {
           "dragging": isDragging,
-          "just-active": justStack.active === winId
+          "just-active": justStack.active === justId
         }
       )}
       ref={ref}
       onContextMenu={handleContextMenu}
     >
       <div className="just-icon"
-           onClick={(e) => clickTitle(e, winId)}
-           onDoubleClick={(e) => dblClickTitle(e, winId)}
+           onClick={(e) => clickTitle(e, justId)}
+           onDoubleClick={(e) => dblClickTitle(e, justId)}
       >
         {winInfo.icon}
       </div>
       <div className="just-title"
-           onClick={(e) => clickTitle(e, winId)}
-           onDoubleClick={(e) => dblClickTitle(e, winId)}
+           onClick={(e) => clickTitle(e, justId)}
+           onDoubleClick={(e) => dblClickTitle(e, justId)}
       >
         {winInfo.title}
       </div>
 
       {(winInfo.showClose ?? true) &&
-      <div className="just-icon just-close" onClick={() => clickClose(winId)}>
+      <div className="just-icon just-close" onClick={() => clickClose(justId)}>
           <Icon icon={faCircleXmark}/>
       </div>}
       <ControlledMenu
@@ -212,7 +213,7 @@ function JustDraggableTitle(props: Prop) {
         anchorPoint={anchorPoint}
         onClose={() => toggleMenu(false)}
         >
-        <MenuItem onClick={() => clickClose(winId)}>
+        <MenuItem onClick={() => clickClose(justId)}>
           <div className="just-icon">
           </div>
           <div className="just-title">
@@ -221,7 +222,7 @@ function JustDraggableTitle(props: Prop) {
           <div className="just-icon" />
         </MenuItem>
         {(winInfo.canDup ?? false) &&
-          <MenuItem onClick={() => cloneWin(winId)}>
+          <MenuItem onClick={() => cloneWin(justId)}>
             <div className="just-icon">
                 <Icon icon={faClone} />
             </div>

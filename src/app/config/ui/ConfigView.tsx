@@ -2,17 +2,18 @@ import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 import "./ConfigView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
-import {WinObj, WinObjId} from "@/app/components/just-layout";
+import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 interface Props {
-  winObjId: WinObjId
+  justId: JustId
 }
 
-function ConfigView({winObjId}: Props) {
+function ConfigView({justId}: Props) {
 
-  console.log('ConfigView', winObjId)
-  const configKey = WinObj.getParamString(winObjId, 'file');
-  const configTitle = WinObj.getParamString(winObjId, 'title');
+  console.log('ConfigView', justId)
+  const configKey = JustUtil.getParamString(justId, 'file');
+  const configTitle = JustUtil.getParamString(justId, 'title');
 
   const clickConfigKey = () => {
     console.log(configKey)

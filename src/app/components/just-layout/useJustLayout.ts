@@ -1,5 +1,5 @@
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {createJustLayoutSlice, JustLayoutActions, JustLayoutState} from "./justLayoutSlice.ts";
+import {createJustLayoutSlice, JustId, JustLayoutActions, JustLayoutState} from "./justLayoutSlice.ts";
 import {createJustLayoutThunks} from "./justLayoutThunks.ts";
 
 const useJustLayout = (layoutId: string) => {
@@ -15,11 +15,11 @@ const useJustLayout = (layoutId: string) => {
     console.log(nodeName)
     dispatch(justLayoutTrunks.toggleWin({nodeName}))
   }
-  const addTabWin = (winId: string) => {
-    const ids: string [] = dispatch(justLayoutTrunks.getDupWinIds({winId}))
+  const addTabWin = (justId: JustId) => {
+    const ids: JustId [] = dispatch(justLayoutTrunks.getDupWinIds({justId}))
 
-    const dupWinId = ids.toSorted().at(-1) ?? winId;
-    dispatch(justLayoutActions.addTab({winId: dupWinId}))
+    const dupWinId = ids.toSorted((a, b) => (a.dupId ?? '') >= (b.dupId ?? '') ? 1 : -1).at(-1) ?? justId;
+    dispatch(justLayoutActions.addTab({justId: dupWinId}))
   }
 
   const state = justLayoutState

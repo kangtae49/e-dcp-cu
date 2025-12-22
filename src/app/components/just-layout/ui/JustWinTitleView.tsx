@@ -5,7 +5,7 @@ import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-
 
 import {
   createJustLayoutSlice,
-  type JustBranch,
+  type JustBranch, JustId,
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
@@ -16,6 +16,7 @@ import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 
 interface Prop {
@@ -38,21 +39,21 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
   const dispatch = useAppDispatch();
 
-  const clickClose = (winId: string) => {
-    console.log("clickClose", winId)
+  const clickClose = (justId: JustId) => {
+    console.log("clickClose", justId)
 
     dispatch(
       justLayoutActions.removeWin({
-        winId
+        justId
       })
     )
     if (closeWin) {
-      closeWin(winId)
+      closeWin(justId)
     }
   }
 
   const closeAllTabs = (branch: JustBranch) => {
-    const winIds: string[] = dispatch(justLayoutThunks.getWinIdsByBranch({branch}));
+    const winIds: JustId[] = dispatch(justLayoutThunks.getWinIdsByBranch({branch}));
 
     dispatch(
       justLayoutActions.removeAllTabs({
@@ -61,17 +62,17 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
     )
 
     if (closeWin) {
-      winIds.forEach((winId: string) => {
-        closeWin(winId)
+      winIds.forEach((justId: JustId) => {
+        closeWin(justId)
       });
     }
   }
 
-  const activeWin = (winId: string) => {
-    console.log("activeWin", winId)
+  const activeWin = (justId: JustId) => {
+    console.log("activeWin", justId)
     dispatch(
       justLayoutActions.activeWin({
-        winId
+        justId
       })
     )
   }
@@ -83,7 +84,7 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,
-        winId: item.winId,
+        justId: item.justId,
         direction: item.direction,
         pos: 'stack',
         index: item.index
@@ -149,15 +150,15 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
       tabIndex={1}
     >
       <div className={classNames("just-title-list", {"is-over": isOver})} ref={ref}>
-        {justStack.tabs.map(winId =>
+        {justStack.tabs.map(justId =>
           <JustDraggableTitle
-            key={[...justBranch, winId].join(",")}
+            key={[...justBranch, JustUtil.toString(justId)].join(",")}
             layoutId={layoutId}
             rect={rect}
-            winId={winId}
+            justId={justId}
             justBranch={justBranch}
             justStack={justStack}
-            winInfo={getWinInfo(winId)}
+            winInfo={getWinInfo(justId)}
             closeWin={closeWin}
             onClickTitle={onClickTitle}
             onDoubleClickTitle={onDoubleClickTitle}
@@ -170,16 +171,16 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
             <Icon icon={faAngleDown} />
           </div>
         }>
-          {justStack.tabs.map(winId =>
-            <MenuItem key={winId} className="just-menu-item">
-              <div className="just-icon" onClick={() => activeWin(winId)}>{getWinInfo(winId).icon}</div>
-              <div className="just-title" onClick={() => activeWin(winId)}>
-                {getWinInfo(winId).title}
+          {justStack.tabs.map(justId =>
+            <MenuItem key={JustUtil.toString(justId)} className="just-menu-item">
+              <div className="just-icon" onClick={() => activeWin(justId)}>{getWinInfo(justId).icon}</div>
+              <div className="just-title" onClick={() => activeWin(justId)}>
+                {getWinInfo(justId).title}
               </div>
 
-              {(getWinInfo(winId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
+              {(getWinInfo(justId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {
                 e.stopPropagation();
-                clickClose(winId)
+                clickClose(justId)
               }}>
                   <Icon icon={faCircleXmark}/>
               </div>}

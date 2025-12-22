@@ -9,16 +9,24 @@ import {
   CONFIG_KEYS,
 } from "@/app/config/configsSlice";
 import React, {useEffect} from "react";
-import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout-util.tsx";
-import {WinInfo, WinObj, WinObjId} from "@/app/components/just-layout";
+import {
+  initialLayoutValue,
+  JustUtil,
+  LAYOUT_ID,
+  SIDE_MENU_NODE_NAME,
+  ViewId,
+  viewMap
+} from "@/app/layout/layout-util.tsx";
+import {WinInfo} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
+import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 
 
-function getWinInfo(winId: string): WinInfo {
-  const viewId = JSON.parse(winId).viewId as ViewId;
-  return viewMap[viewId](winId)
+function getWinInfo(justId: JustId): WinInfo {
+  const viewId = justId.viewId as ViewId;
+  return viewMap[viewId](justId)
 }
 
 function App() {
@@ -28,8 +36,8 @@ function App() {
   const {updateConfigs} = useConfigs(CONFIG_ID)
 
   useEffect(() => {
-    CONFIG_KEYS.forEach((winObjId: WinObjId) => {
-      const file: string = WinObj.getParamString(winObjId, 'file');
+    CONFIG_KEYS.forEach((justId: JustId) => {
+      const file: string = JustUtil.getParamString(justId, 'file');
       window.api.readDataExcel(file)
         .then(res => {
           updateConfigs({
@@ -40,15 +48,15 @@ function App() {
 
   }, [])
 
-  const closeWin = (winId: string) => {
-    console.log('closeWin!!!', winId)
-    removeReducer(winId)
+  const closeWin = (justId: JustId) => {
+    console.log('closeWin!!!', justId)
+    removeReducer(JustUtil.toString(justId))
   }
-  const onClickTitle = (e: React.MouseEvent, winId: string) => {
-    console.log(e, winId)
+  const onClickTitle = (e: React.MouseEvent, justId: JustId) => {
+    console.log(e, justId)
   }
-  const onDoubleClickTitle = (e: React.MouseEvent, winId: string) => {
-    console.log(e, winId)
+  const onDoubleClickTitle = (e: React.MouseEvent, justId: JustId) => {
+    console.log(e, justId)
     toggleWin(SIDE_MENU_NODE_NAME)
   }
 

@@ -6,9 +6,15 @@ import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
-import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout-util.tsx";
-import {WinObj} from "@/app/components/just-layout/index.ts";
+import {
+  INIT_SIDE_MENU_SIZE,
+  JustUtil,
+  LAYOUT_ID,
+  SIDE_MENU_ID_LIST,
+  SIDE_MENU_NODE_NAME
+} from "@/app/layout/layout-util.tsx";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
+import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 
 
 function JustToolBar() {
@@ -24,8 +30,8 @@ function JustToolBar() {
     toggleWin(SIDE_MENU_NODE_NAME)
   }
 
-  const openWin = (winId: string) => {
-    addTabWin(winId)
+  const openWin = (justId: JustId) => {
+    addTabWin(justId)
   }
 
   const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
@@ -44,9 +50,9 @@ function JustToolBar() {
         {
           size <= 0 &&
           SIDE_MENU_ID_LIST.map(item =>
-            <div key={item.menuId} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
+            <div key={JustUtil.toString(item.menuId)} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
               <div className="just-icon">
-                <Jdenticon size="25" value={WinObj.toWinObjId(item.menuId).viewId} />
+                <Jdenticon size="25" value={item.menuId.viewId} />
               </div>
             </div>
           )
@@ -61,13 +67,13 @@ function JustToolBar() {
           </div>
         }>
           {
-            CONFIG_KEYS.map((winObjId) =>
-              <MenuItem key={WinObj.toWinId(winObjId)} className="just-menu-item" onClick={() => openWin(WinObj.toWinId(winObjId))}>
+            CONFIG_KEYS.map((justId) =>
+              <MenuItem key={JustUtil.toString(justId)} className="just-menu-item" onClick={() => openWin(justId)}>
                 <div className="just-icon">
-                  <Jdenticon size="25" value={winObjId.viewId} />
+                  <Jdenticon size="25" value={justId.viewId} />
                 </div>
                 <div className="just-title">
-                  {winObjId.params?.['title']}
+                  {JustUtil.getParamString(justId, 'title')}
                 </div>
                 <div className="just-icon" />
               </MenuItem>

@@ -15,25 +15,20 @@ import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus, JobStreamData} from "@/types";
-import {WinObj, WinObjId} from "@/app/components/just-layout/index.ts";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
+import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 interface Props {
-  winObjId: WinObjId
+  justId: JustId
 }
 
 
 
-function Page01View({winObjId}: Props) {
+function Page01View({justId}: Props) {
   const configKey = "data\\company.xlsx";
-  // const jobId = `job-${new Date().getTime()}`
-  // chart-line.svg
-  // terminal.svg
-  // table.svg, table-cells-large.svg, table-cells.svg, table-list.svg
-
-  const winId = WinObj.toWinId(winObjId)
 
   const {
     state: pageState,
@@ -43,7 +38,7 @@ function Page01View({winObjId}: Props) {
     setStartDate,
     setEndDate,
     setTab,
-  } = usePage(winId);
+  } = usePage(JustUtil.toString(justId));
 
   const {
     state: jobMonitorState,
@@ -124,7 +119,7 @@ function Page01View({winObjId}: Props) {
     }
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
-    const args = [jobId, winObjId.viewId, companyVal?.toString() ?? '', startYm, endYm];
+    const args = [jobId, justId.viewId, companyVal?.toString() ?? '', startYm, endYm];
     setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
   }
@@ -135,7 +130,7 @@ function Page01View({winObjId}: Props) {
     <div className="win-page">
       <div className="page-title">
         <div className="page-icon">
-          <Jdenticon size="25" value={winObjId.viewId} />
+          <Jdenticon size="25" value={justId.viewId} />
         </div>
         <div className="page-label">자산통계정보</div>
       </div>

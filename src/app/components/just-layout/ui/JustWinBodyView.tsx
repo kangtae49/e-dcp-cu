@@ -12,6 +12,7 @@ import {type DragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef} from "react";
 import {GetWinInfoFn} from "..";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 interface Prop {
   layoutId: string
@@ -38,7 +39,7 @@ function JustWinBodyView (props: Prop) {
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,
-        winId: item.winId,
+        justId: item.justId,
         direction: item.direction,
         pos: item.pos,
         index: item.index
@@ -117,9 +118,9 @@ function JustWinBodyView (props: Prop) {
       className={classnames("just-win-body", {"isOver": isOver})}
       ref={ref}
     >
-      {justStack.tabs.map(winId =>
-        <Activity key={winId} mode={justStack.active === winId ? 'visible' : 'hidden'}>
-          {getWinInfo(winId).view}
+      {justStack.tabs.map(justId =>
+        <Activity key={JustUtil.toString(justId)} mode={JustUtil.isEquals(justStack.active, justId) ? 'visible' : 'hidden'}>
+          {getWinInfo(justId).view}
         </Activity>
       )}
     </div>

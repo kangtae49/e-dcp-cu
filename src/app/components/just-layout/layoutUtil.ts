@@ -1,5 +1,5 @@
 import type {
-  JustBranch, JustDirection,
+  JustBranch, JustDirection, JustId,
   JustNode, JustPayloadInsert,
   JustPos, JustSplitDirection,
   JustStack,
@@ -7,7 +7,7 @@ import type {
 import update, {type Spec} from "immutability-helper"
 import clamp from "lodash/clamp";
 import {get, set} from "lodash";
-import {WinObj, WinObjId} from "./index.ts";
+import {JustUtil} from "@/app/layout/layout-util.tsx";
 
 
 
@@ -17,9 +17,9 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
     return {
       type: "stack",
       tabs: [
-        payload.winId,
+        payload.justId,
       ],
-      active: payload.winId,
+      active: payload.justId,
     } as JustStack
   }
   const targetNode = getNodeByBranch(layout, payload.branch)
@@ -33,14 +33,14 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
         type: "stack",
         tabs: [
           ...targetTabs.slice(0, newIndex),
-          payload.winId,
+          payload.justId,
           ...targetTabs.slice(newIndex),
         ],
-        active: payload.winId,
+        active: payload.justId,
       }
     })
   } else if (payload.pos === 'second') {
-    if (targetNode.type === 'stack' && WinObj.toWinObjId(targetNode.active ?? '').viewId === "side-menu") {
+    if (targetNode.type === 'stack' && targetNode.active?.viewId === "side-menu") {
       return updateNodeOfBranch(layout, payload.branch, {
         $set: {
           type: 'split-pixels',
@@ -48,8 +48,8 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
           first: targetNode,
           second: {
             type: "stack",
-            tabs: [payload.winId],
-            active: payload.winId,
+            tabs: [payload.justId],
+            active: payload.justId,
           },
           primary: 'first',
           size: 200,
@@ -64,8 +64,8 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
           first: targetNode,
           second: {
             type: "stack",
-            tabs: [payload.winId],
-            active: payload.winId,
+            tabs: [payload.justId],
+            active: payload.justId,
           },
           size: payload.size ?? 50,
         }
@@ -79,8 +79,8 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
         direction: payload.direction,
         first: {
           type: "stack",
-          tabs: [payload.winId],
-          active: payload.winId,
+          tabs: [payload.justId],
+          active: payload.justId,
         },
         second: targetNode,
         size: payload.size ?? 50,
@@ -92,15 +92,15 @@ export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert)
 
 }
 
-export function removeWinId(layout: JustNode | null, winId: string): JustNode | null {
+export function removeWinId(layout: JustNode | null, justId: JustId): JustNode | null {
   if (layout == null) return null;
-  const justStack = getNodeByWinId(layout, winId) as unknown as JustStack | null
+  const justStack = getNodeByWinId(layout, justId) as unknown as JustStack | null
   if (justStack == null) return layout;
-  const newTabs = justStack.tabs.filter((tab: string) => tab !== winId)
+  const newTabs = justStack.tabs.filter((tab: JustId) => !JustUtil.isEquals(tab, justId))
   const active = (newTabs.length > 0 && justStack.active !== null)
     ? newTabs[clamp(justStack.tabs.indexOf(justStack.active), 0, newTabs.length-1)]
     : null
-  return updateNodeOfWinId(layout, winId, {
+  return updateNodeOfWinId(layout, justId, {
     $set: {
       ...justStack,
       tabs: newTabs,
@@ -124,20 +124,20 @@ export function removeAllTabs(layout: JustNode | null, branch: JustBranch): Just
 }
 
 
-export function activeWinId(layout: JustNode | null, winId: string): JustNode | null {
+export function activeWinId(layout: JustNode | null, justId: JustId): JustNode | null {
   if (layout == null) return null;
-  const justStack = getNodeByWinId(layout, winId) as unknown as JustStack | null
+  const justStack = getNodeByWinId(layout, justId) as unknown as JustStack | null
   if (justStack == null) return layout;
-  return updateNodeOfWinId(layout, winId, {
+  return updateNodeOfWinId(layout, justId, {
     $set: {
       ...justStack,
-      active: winId,
+      active: justId,
     }
   })
 }
 
-export function getActiveWinIds(layout: JustNode | null): string[] {
-  const findFn = (layout: JustNode | null, activeWinIds: string []): string [] => {
+export function getActiveWinIds(layout: JustNode | null): JustId[] {
+  const findFn = (layout: JustNode | null, activeWinIds: JustId []): JustId [] => {
     if( layout === null) return activeWinIds
     if (layout.type === 'stack') {
       if (layout.active !== null) {
@@ -207,10 +207,10 @@ export function findEmptyBranch(layout: JustNode | null, branch: JustBranch): Ju
 
 
 
-export function moveWinId(layout: JustNode | null, winId: string, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
-  const newLayout = removeWinId(layout, winId)
+export function moveWinId(layout: JustNode | null, justId: JustId, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
+  const newLayout = removeWinId(layout, justId)
   return insertWinId(newLayout, {
-    winId,
+    justId,
     branch,
     pos,
     direction,
@@ -229,20 +229,20 @@ export function moveWinId(layout: JustNode | null, winId: string, branch: JustBr
 // }
 
 
-function getBranch(layout: JustNode | null, winId: string, branch: JustBranch): JustBranch | null {
+function getBranch(layout: JustNode | null, justId: JustId, branch: JustBranch): JustBranch | null {
   if( layout === null) return null
   if (layout.type === 'stack') {
-    if (layout.tabs.includes(winId)) {
+    if (JustUtil.includes(layout.tabs, justId)) {
       return branch
     } else {
       return null
     }
   } else {
-    const branchFirst = getBranch(layout.first, winId, [...branch, 'first'])
+    const branchFirst = getBranch(layout.first, justId, [...branch, 'first'])
     if (branchFirst != null) {
       return branchFirst
     }
-    const branchSecond = getBranch(layout.second, winId, [...branch, 'second'])
+    const branchSecond = getBranch(layout.second, justId, [...branch, 'second'])
     if (branchSecond != null) {
       return branchSecond
     }
@@ -250,8 +250,8 @@ function getBranch(layout: JustNode | null, winId: string, branch: JustBranch): 
   }
 }
 
-export function getBranchByWinId(layout: JustNode | null, winId: string): JustBranch | null {
-  return getBranch(layout, winId, [])
+export function getBranchByWinId(layout: JustNode | null, justId: JustId): JustBranch | null {
+  return getBranch(layout, justId, [])
 }
 export function getBranchByNodeName(layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null {
   if( layout === null) return null
@@ -273,20 +273,20 @@ export function getBranchByNodeName(layout: JustNode | null, nodeName: string, c
   }
 }
 
-export function getNodeByWinId(layout: JustNode | null, winId: string): JustNode | null {
+export function getNodeByWinId(layout: JustNode | null, justId: JustId): JustNode | null {
   if( layout === null) return null
   if (layout.type === 'stack') {
-    if (layout.tabs.includes(winId)) {
+    if (JustUtil.includes(layout.tabs, justId)) {
       return layout
     } else {
       return null
     }
   } else {
-    const nodeFirst = getNodeByWinId(layout.first, winId)
+    const nodeFirst = getNodeByWinId(layout.first, justId)
     if (nodeFirst != null) {
       return nodeFirst
     }
-    const nodeSecond = getNodeByWinId(layout.second, winId)
+    const nodeSecond = getNodeByWinId(layout.second, justId)
     if (nodeSecond != null) {
       return nodeSecond
     }
@@ -313,57 +313,50 @@ export function getTabBranch(layout: JustNode | null, curBranch: JustBranch): Ju
   return null
 }
 
-export function addTabWin(layout: JustNode | null, branch: JustBranch, winId: string): JustNode | null {
+export function addTabWin(layout: JustNode | null, branch: JustBranch, justId: JustId): JustNode | null {
   if( layout === null) return null
   const node = getNodeByBranch(layout, branch)
   if (node.type !== 'stack') return layout
   return updateNodeOfBranch(layout, branch, {
     $merge: {
-      tabs: [...node.tabs, winId],
-      active: winId,
+      tabs: [...node.tabs, justId],
+      active: justId,
     }
   })
 }
 
 
-export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, winIds: string []): string [] {
-  if( layout === null) return winIds
+export function queryWinIdsByViewId(layout: JustNode | null, viewId: string, justIds: JustId []): JustId [] {
+  if( layout === null) return justIds
   if (layout.type === 'stack') {
     return [
-      ...winIds,
-      ...layout.tabs.filter((winId: string) => WinObj.toWinObjId(winId).viewId === viewId)
+      ...justIds,
+      ...layout.tabs.filter((tab: JustId) => tab.viewId === viewId)
     ]
   } else {
-    const firstIds = queryWinIdsByViewId(layout.first, viewId, winIds);
-    return queryWinIdsByViewId(layout.second, viewId, [...winIds, ...firstIds]);
+    const firstIds = queryWinIdsByViewId(layout.first, viewId, justIds);
+    return queryWinIdsByViewId(layout.second, viewId, [...justIds, ...firstIds]);
   }
 }
 
-export function queryDupWinIdsByWinId(layout: JustNode | null, winId: string, winIds: string []): string [] {
-  if( layout === null) return winIds
+export function queryDupWinIdsByWinId(layout: JustNode | null, justId: JustId, justIds: JustId []): JustId [] {
+  if( layout === null) return justIds
   if (layout.type === 'stack') {
-    const targetWinObjId: WinObjId = {
-      ...WinObj.toWinObjId(winId),
-    }
-    delete targetWinObjId.dupId
-    const targetWinId = WinObj.toWinId(targetWinObjId)
+
+    const justIdWithoutDup = JustUtil.withoutDup(justId)
+
     const ids = layout.tabs.filter((tab) => {
-      const tabObjId: WinObjId = {
-        ...WinObj.toWinObjId(tab),
-      }
-      delete tabObjId.dupId
-      const tabWinId = WinObj.toWinId(tabObjId)
-      console.log("tabObjId: ", tabObjId, ", targetWinObjId: ", targetWinObjId)
-      return tabWinId == targetWinId
+      const tabWithoutDup = JustUtil.withoutDup(tab)
+      return JustUtil.isEquals(justIdWithoutDup, tabWithoutDup)
     })
-    return [...winIds, ...ids]
+    return [...justIds, ...ids]
   } else {
-    const firstIds = queryDupWinIdsByWinId(layout.first, winId, winIds);
-    return queryDupWinIdsByWinId(layout.second, winId, [...winIds, ...firstIds]);
+    const firstIds = queryDupWinIdsByWinId(layout.first, justId, justIds);
+    return queryDupWinIdsByWinId(layout.second, justId, [...justIds, ...firstIds]);
   }
 }
 
-export function queryWinIdsByStack(layout: JustNode | null, branch: JustBranch): string [] {
+export function queryWinIdsByStack(layout: JustNode | null, branch: JustBranch): JustId [] {
   if( layout === null) return []
   const justStack = getNodeByBranch<JustStack>(layout, branch);
   if (justStack.type !== 'stack') {
@@ -385,16 +378,16 @@ function updateNodeOfBranch(layout: JustNode | null, branch: JustBranch, value: 
   return updateNode(layout, patch)
 }
 
-function updateNodeOfWinId(layout: JustNode | null, winId: string, value: any): JustNode | null {
-  const branch = getBranchByWinId(layout, winId)
+function updateNodeOfWinId(layout: JustNode | null, justId: JustId, value: any): JustNode | null {
+  const branch = getBranchByWinId(layout, justId)
   if (branch == null) return layout;
   // const patch = makePatch(branch, value)
   const patch = buildSpecFromUpdateSpec(branch, value)
   return updateNode(layout, patch)
 }
 
-export function hasWinId(layout: JustNode | null, winId: string)  {
-  return getNodeByWinId(layout, winId) != null
+export function hasWinId(layout: JustNode | null, justId: JustId)  {
+  return getNodeByWinId(layout, justId) != null
 }
 
 
