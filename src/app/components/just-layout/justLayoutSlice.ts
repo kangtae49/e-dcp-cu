@@ -129,6 +129,8 @@ export const createJustLayoutSlice = (id: string) =>
           layout as any,
           payload
         ) as JustNode | null | any
+        state.lastActiveId = payload.justId as JustId | null | any
+        state.lastActiveTm = new Date().getTime()
       },
       addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
         const layout = state.layout == null ? null : current(state.layout) as JustNode | null | any;
