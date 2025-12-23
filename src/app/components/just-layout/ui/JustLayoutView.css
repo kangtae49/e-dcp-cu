@@ -39,14 +39,34 @@
     height: 100%;
 }
 
-
-
 .just-win-title .just-title-list {
     flex: 1;
-    overflow: hidden;
-    /*cursor: move;*/
+    overflow-x: overlay;
     display: flex;
+    box-sizing: border-box;
+    height: 100%;
 }
+.just-win-title .just-title-list:hover {
+    padding-bottom: 0;
+}
+
+.just-title-list::-webkit-scrollbar {
+    height: 4px;
+}
+
+.just-title-list::-webkit-scrollbar-thumb {
+    background: #4d4d4d;
+    background-clip: padding-box;
+}
+
+.just-title-list::-webkit-scrollbar-thumb:hover {
+    background: #ffc233;
+}
+.just-title-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
 .just-win-title .just-title-menus {
     display: flex;
     align-items: center;
@@ -124,18 +144,18 @@
 .just-draggable-title {
     display: flex;
     margin: 0;
-    padding: 3px;
-    height: 100%;
+    padding: 4px;
+    height: 36px;
     align-items: center;
     white-space: nowrap;
     background-color: var(--title-bg-color);
     color: var(--title-font-color);
     font-size: 12px;
-    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
     box-sizing: border-box;
 }
 .just-draggable-title.just-active {
-    border-bottom: 4px solid #3574f0;
+    border-top: 4px solid #3574f0;
     box-sizing: border-box;
 }
 .just-draggable-title .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
@@ -225,3 +245,4 @@
     background-color: rgba(0, 0, 0, 0.5);
     pointer-events: none;
 }
+

@@ -149,19 +149,20 @@ function JustDraggableTitle(props: Prop) {
   })
 
   useEffect(() => {
-    if (ref.current == null) return;
-    if (parentRect == null) return;
-    if (!JustUtil.isEquals(justStack.active, justId)) return;
-    const rect = ref.current.getBoundingClientRect();
-
-    if (parentRect.left > rect.left || parentRect.right < rect.right) {
-      ref.current.scrollIntoView({
-        behavior: 'auto',
-        block: 'center',
-        inline: 'center'
-      })
+    if (JustUtil.isEquals(justId, justLayoutState?.lastActiveId ?? null)) {
+      if (ref.current == null) return;
+      if (parentRect == null) return;
+      const rect = ref.current.getBoundingClientRect();
+      if (parentRect.left > rect.left || parentRect.right < rect.right) {
+        console.log("JustDraggableTitle useEffect")
+        ref.current.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'center'
+        })
+      }
     }
-  }, [parentRect, justLayoutState, justStack.active, justId])
+  }, [justLayoutState?.lastActiveTm])
 
 
 

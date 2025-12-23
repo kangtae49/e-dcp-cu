@@ -102,11 +102,15 @@ export interface JustPayloadMoveWin {
 
 export interface JustLayoutState {
   layout: JustNode | null
+  lastActiveId: JustId | null
+  lastActiveTm: number
 }
 
 
 const initialState: JustLayoutState = {
   layout: null,
+  lastActiveId: null,
+  lastActiveTm: new Date().getTime(),
 }
 
 
@@ -117,8 +121,6 @@ export const createJustLayoutSlice = (id: string) =>
     initialState,
     reducers: {
       setLayout: (state, { payload }: PayloadAction<JustNode | null>) => { 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
         state.layout = payload
       },
       insertWin: (state, { payload }: PayloadAction<JustPayloadInsert>) => {
@@ -136,6 +138,8 @@ export const createJustLayoutSlice = (id: string) =>
         } else {
           state.layout = addTabWin(layout, branch, payload.justId)
         }
+        state.lastActiveId = payload.justId
+        state.lastActiveTm = new Date().getTime()
       },
       removeWin: (state, { payload }: PayloadAction<JustPayloadRemove>) => {
         state.layout = removeEmpty(removeWinId(
@@ -154,6 +158,8 @@ export const createJustLayoutSlice = (id: string) =>
           state.layout == null ? null : current(state.layout),
           payload.justId
         )
+        state.lastActiveId = payload.justId
+        state.lastActiveTm = new Date().getTime()
       },
       updateResize: (state, { payload }: PayloadAction<JustPayloadResize>) => {
         state.layout = updateSplitSize(
