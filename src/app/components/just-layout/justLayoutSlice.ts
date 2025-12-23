@@ -124,60 +124,60 @@ export const createJustLayoutSlice = (id: string) =>
         state.layout = payload
       },
       insertWin: (state, { payload }: PayloadAction<JustPayloadInsert>) => {
-        const layout = state.layout == null ? null : state.layout;
+        const layout = state.layout == null ? null : current(state.layout);
         state.layout = insertWinId(
-          layout,
+          layout as any,
           payload
-        )
+        ) as JustNode | null | any
       },
-      addTab: (state, { payload }: PayloadAction<JustPayloadAddTab | any>) => {
-        const layout = state.layout == null ? null : current(state.layout)
+      addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
+        const layout = state.layout == null ? null : current(state.layout) as JustNode | null | any;
         const branch = getTabBranch(layout, [])
         if (branch == null) return;
         if (hasWinId(layout, payload.justId)) {
-          state.layout = activeWinId(layout, payload.justId)
+          state.layout = activeWinId(layout, payload.justId) as JustNode | null | any
         } else {
-          state.layout = addTabWin(layout, branch, payload.justId)
+          state.layout = addTabWin(layout, branch, payload.justId) as JustNode | null | any
         }
-        state.lastActiveId = payload.justId
+        state.lastActiveId = payload.justId as JustId | null | any
         state.lastActiveTm = new Date().getTime()
       },
       removeWin: (state, { payload }: PayloadAction<JustPayloadRemove>) => {
         state.layout = removeEmpty(removeWinId(
-          state.layout == null ? null : current(state.layout),
+          state.layout == null ? null : current(state.layout) as JustNode | null | any,
           payload.justId
-        ))
+        )) as JustNode | null | any
       },
       removeAllTabs: (state, { payload }: PayloadAction<JustPayloadAllTabs>) => {
         state.layout = removeEmpty(removeAllTabs(
-          state.layout == null ? null : current(state.layout),
+          state.layout == null ? null : current(state.layout) as JustNode | null | any,
           payload.branch
-        ))
+        )) as JustNode | null | any
       },
       activeWin: (state, { payload }: PayloadAction<JustPayloadActive>) => {
         state.layout = activeWinId(
-          state.layout == null ? null : current(state.layout),
+          state.layout == null ? null : current(state.layout) as JustNode | null | any,
           payload.justId
-        )
-        state.lastActiveId = payload.justId
+        ) as JustNode | null | any
+        state.lastActiveId = payload.justId as JustId | null | any
         state.lastActiveTm = new Date().getTime()
       },
-      updateResize: (state, { payload }: PayloadAction<JustPayloadResize>) => {
+      updateResize: (state, { payload }: PayloadAction<JustPayloadResize | any>) => {
         state.layout = updateSplitSize(
-          state.layout == null ? null : current(state.layout),
+          state.layout == null ? null : current(state.layout) as JustNode | null | any,
           payload.branch,
           payload.size
-        )
+        ) as JustNode | null | any
       },
-      moveWin: (state, { payload }: PayloadAction<JustPayloadMoveWin>) => {
+      moveWin: (state, { payload }: PayloadAction<JustPayloadMoveWin | any>) => {
         state.layout = removeEmpty(moveWinId(
-          state.layout == null ? null : current(state.layout),
+          state.layout == null ? null : current(state.layout) as JustNode | null | any,
           payload.justId,
           payload.branch,
           payload.pos,
           payload.direction,
           payload.index
-        ))
+        )) as JustNode | null | any
       },
     }
   })
