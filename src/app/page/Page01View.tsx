@@ -5,7 +5,7 @@ import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawes
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {CONFIG_ID} from "@/app/config/configsSlice.ts";
-import React, {Activity, useEffect} from "react";
+import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import {
   JOB_MONITOR_ID,
@@ -20,15 +20,20 @@ import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {useDrop} from "react-dnd";
+import {NativeTypes} from "react-dnd-html5-backend";
 
 interface Props {
   justId: JustId
 }
 
-
+interface FileItem {
+  files: File[];
+}
 
 function Page01View({justId}: Props) {
   const configKey = "data\\company.xlsx";
+  const ref = useRef<HTMLDivElement>(null)
 
   const {
     state: pageState,
@@ -48,8 +53,6 @@ function Page01View({justId}: Props) {
   } = useJobMonitor(JOB_MONITOR_ID);
 
   const {state: configsState} = useConfigs(CONFIG_ID)
-
-  // const [outFile, setOutFile] = useState<string | null>(null);
 
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
     return data.map(d => {
@@ -124,16 +127,34 @@ function Page01View({justId}: Props) {
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
-  const onDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log(e.dataTransfer?.files)
-    const path = window.api.getPathForFile(e.dataTransfer?.files[0])
-    console.log('onDrop:', path)
-  }
+  // const onDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  //   console.log(e.dataTransfer?.files)
+  //   const path = window.api.getPathForFile(e.dataTransfer?.files[0])
+  //   console.log('onDrop:', path)
+  // }
+
+  const [, drop] = useDrop(() => ({
+    accept: [NativeTypes.FILE],
+    drop(item: FileItem, monitor) {
+      console.log('drop:', item)
+      const fileItem = monitor.getItem<FileItem>()
+      const path = window.api.getPathForFile(fileItem.files[0])
+      console.log(path)
+    }
+  }), [ref])
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      drop(ref);
+    }
+  }, [drop]);
+
   return (
     <div className="win-page"
-      onDrop={onDropFiles}
+         ref={ref}
+      // onDrop={onDropFiles}
     >
       <div className="page-title">
         <div className="page-icon">
