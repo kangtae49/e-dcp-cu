@@ -25,6 +25,8 @@ const createWindow = () => {
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: process.argv,
       sandbox: false,
+      // contextIsolation: false,
+      // nodeIntegration: true
     },
   });
 
@@ -60,6 +62,7 @@ app.on('ready', () => {
     const myEnv: Env = { ...process.env };
     return myEnv;
   })
+
   const watchPath = getScriptPath();
   const watcher = new FileWatcher(mainWindow, watchPath);
   watcher.startWatching();
