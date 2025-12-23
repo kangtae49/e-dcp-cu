@@ -120,16 +120,17 @@ export const createJustLayoutSlice = (id: string) =>
     name: id,
     initialState,
     reducers: {
-      setLayout: (state, { payload }: PayloadAction<JustNode | null>) => { 
+      setLayout: (state, { payload }: PayloadAction<JustNode | null | any>) => {
         state.layout = payload
       },
       insertWin: (state, { payload }: PayloadAction<JustPayloadInsert>) => {
+        const layout = state.layout == null ? null : state.layout;
         state.layout = insertWinId(
-          state.layout == null ? null : current(state.layout),
+          layout,
           payload
         )
       },
-      addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
+      addTab: (state, { payload }: PayloadAction<JustPayloadAddTab | any>) => {
         const layout = state.layout == null ? null : current(state.layout)
         const branch = getTabBranch(layout, [])
         if (branch == null) return;

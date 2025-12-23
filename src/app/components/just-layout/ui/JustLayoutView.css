@@ -72,6 +72,9 @@
     align-items: center;
     padding-right: 3px;
 }
+.just-title-menus .just-menu-item.active {
+    background-color: rgba(53, 116, 240, 0.4);
+}
 
 .just-title-menu {
     flex: 0 0 26px;
@@ -83,10 +86,10 @@
     border-radius: 3px;
     box-sizing: border-box;
 }
-
 .just-title-menu:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
+
 
 .just-title-menu svg {
     color: white;

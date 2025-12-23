@@ -172,7 +172,8 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
           </div>
         }>
           {justStack.tabs.map(justId =>
-            <MenuItem key={JustUtil.toString(justId)} className="just-menu-item">
+            <MenuItem key={JustUtil.toString(justId)}
+                      className={classNames("just-menu-item", {"active": JustUtil.isEquals(justStack.active, justId)})}>
               <div className="just-icon" onClick={() => activeWin(justId)}>{getWinInfo(justId).icon}</div>
               <div className="just-title" onClick={() => activeWin(justId)}>
                 {getWinInfo(justId).title}
