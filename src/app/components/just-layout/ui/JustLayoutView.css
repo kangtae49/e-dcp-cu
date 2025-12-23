@@ -159,7 +159,11 @@
 }
 .just-draggable-title.just-active {
     border-top: 4px solid #3574f0;
+    border-left: 1px solid #3574f0;
+    border-right: 1px solid #3574f0;
+    border-bottom: 1px solid #3574f0;
     box-sizing: border-box;
+    background-color: #111111;
 }
 .just-draggable-title .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
 .just-icon svg {
