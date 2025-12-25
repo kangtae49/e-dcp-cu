@@ -49,9 +49,9 @@ function TerminalView({lines}: Props) {
       });
 
       const fitAddon = new FitAddon();
+      term.open(containerRef.current);
       term.loadAddon(fitAddon);
       fitAddon.fit();
-      term.open(containerRef.current);
       termRef.current = term;
       fitAddonRef.current = fitAddon;
       termRef.current?.clear()

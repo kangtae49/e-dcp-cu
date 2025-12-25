@@ -184,3 +184,9 @@
     background-color: #25324d;
 }
 
+.page-chart {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+
+}

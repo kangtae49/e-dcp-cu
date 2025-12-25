@@ -1,5 +1,5 @@
 import "./chart.css"
-import {Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {
   CONFIG_ID,
 } from "@/app/config/configsSlice.ts";
@@ -68,22 +68,20 @@ function PageLineChart({title, outFile, legend}: Props) {
     <div className="page-chart">
       <div className="chart-title">{title}</div>
       <div className="chart-body">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            key={outFile}
-            // style={{ width: '100%', aspectRatio: 1.618, maxWidth: 600 }}
-            responsive
-            data={configTable.data}
-          >
-            {legend.map(l =>
-              <Line key={l.id} dataKey={l.id} name={l.name} stroke={l.color}/>
-            )}
-            <XAxis dataKey="stdrYm" />
-            <YAxis />
-            <Legend />
-            <Tooltip />
-          </LineChart>
-        </ResponsiveContainer>
+        <LineChart
+          key={outFile}
+          className="page-chart"
+          responsive
+          data={configTable.data}
+        >
+          {legend.map(l =>
+            <Line key={l.id} dataKey={l.id} name={l.name} stroke={l.color}/>
+          )}
+          <XAxis dataKey="stdrYm" />
+          <YAxis />
+          <Legend />
+          <Tooltip />
+        </LineChart>
       </div>
     </div>
   )

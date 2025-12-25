@@ -143,7 +143,6 @@ function JustWinBodyView (props: Prop) {
       drop(ref);
     }
   }, [drop]);
-  console.log('isOver', isOver);
   return (
     <div
       className={classNames("just-win-body", {"isOver": isOver})}

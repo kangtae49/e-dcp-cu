@@ -3,7 +3,6 @@ import {createJustLayoutSlice, JustId, JustLayoutActions, JustLayoutState} from 
 import {createJustLayoutThunks} from "./justLayoutThunks.ts";
 
 const useJustLayout = (layoutId: string) => {
-  console.log(layoutId)
   const {
     state: justLayoutState,
     actions: justLayoutActions,
