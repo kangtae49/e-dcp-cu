@@ -35,16 +35,27 @@ function JustWinBodyView (props: Prop) {
 
   const onDrop = (itemType: any, item: JustDragItem) => {
     console.log("onDrop(JustWinBody)", itemType, item)
+    if (!item.pos) return;
+    if (item.pos === 'stack') {
+      dispatch(
+        justLayoutActions.moveWin({
+          pos: item.pos,
+          branch: justBranch,
+          justId: item.justId,
+          index: item.index ?? -1
+        })
+      )
+    } else {
+      dispatch(
+        justLayoutActions.moveWin({
+          pos: item.pos,
+          branch: justBranch,
+          justId: item.justId,
+          direction: item.direction ?? 'row',
+        })
+      )
 
-    dispatch(
-      justLayoutActions.moveWin({
-        branch: justBranch,
-        justId: item.justId,
-        direction: item.direction ?? 'row',
-        pos: item.pos ?? 'second',
-        index: item.index ?? -1
-      })
-    )
+    }
   }
   const [{ isOver }, drop] = useDrop(
     () => ({

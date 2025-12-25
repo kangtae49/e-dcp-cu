@@ -1,13 +1,10 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {
   activeWinId, addTabWin, getTabBranch, hasWinId,
-  insertWinId,
-  moveWinId, removeAllTabs, removeEmpty,
+  moveWinIdToSplit, moveWinIdToStack, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
 } from "./layoutUtil.ts";
-
-
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
@@ -91,12 +88,28 @@ export interface JustPayloadResize {
   size: number
 }
 
-export interface JustPayloadMoveWin {
-  branch: JustBranch
+// export interface JustPayloadMoveWin {
+//   branch: JustBranch
+//   justId: JustId
+//   direction: JustDirection
+//   pos: JustPos
+//   index: number
+// }
+
+export type JustPayloadMoveWin = JustPayloadMoveWinStack | JustPayloadMoveWinSplit
+
+export interface JustPayloadMoveWinStack {
+  pos: "stack"
   justId: JustId
-  direction: JustDirection
-  pos: JustPos
+  branch: JustBranch
   index: number
+}
+export interface JustPayloadMoveWinSplit {
+  pos: "first" | "second"
+  justId: JustId
+  branch: JustBranch
+  direction: JustDirection
+  size?: number
 }
 
 export interface JustLayoutState {
@@ -122,15 +135,6 @@ export const createJustLayoutSlice = (id: string) =>
       setLayout: (state, { payload }: PayloadAction<JustNode | null>) => {
         const justState = state as any;
         justState.layout = payload
-      },
-      insertWin: (state, { payload }: PayloadAction<JustPayloadInsert>) => {
-        const justState = state as any;
-        justState.layout = insertWinId(
-          justState.layout,
-          payload
-        )
-        state.lastActiveId = payload.justId as JustId | null | any
-        state.lastActiveTm = new Date().getTime()
       },
       addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
         const justState = state as any;
@@ -177,14 +181,17 @@ export const createJustLayoutSlice = (id: string) =>
       },
       moveWin: (state, { payload }: PayloadAction<JustPayloadMoveWin>) => {
         const justState = state as any;
-        justState.layout = removeEmpty(moveWinId(
-          justState.layout,
-          payload.justId,
-          payload.branch,
-          payload.pos,
-          payload.direction,
-          payload.index
-        ))
+        if (payload.pos === 'stack') {
+          justState.layout = removeEmpty(moveWinIdToStack(
+            justState.layout,
+            payload
+          ))
+        } else {
+          justState.layout = removeEmpty(moveWinIdToSplit(
+            justState.layout,
+            payload
+          ))
+        }
       },
     }
   })

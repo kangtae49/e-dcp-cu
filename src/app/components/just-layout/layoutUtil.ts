@@ -1,8 +1,8 @@
-import type {
+import {
   JSONValue,
-  JustBranch, JustDirection, JustId,
-  JustNode, JustPayloadInsert,
-  JustPos, JustSplitDirection,
+  JustBranch, JustId,
+  JustNode, JustPayloadMoveWinSplit, JustPayloadMoveWinStack,
+  JustSplitDirection,
   JustStack,
 } from "./justLayoutSlice.ts";
 import update, {type Spec} from "immutability-helper"
@@ -11,87 +11,50 @@ import {get, set} from "lodash";
 import {stableStringify} from "@/app/components/just-layout/json-util.ts";
 
 
-
-export function insertWinId(layout: JustNode | null, payload: JustPayloadInsert): JustNode | null {
-  if (layout == null) {
-    // stack
-    return {
-      type: "stack",
-      tabs: [
-        payload.justId,
-      ],
-      active: payload.justId,
-    } as JustStack
-  }
+export function insertWinIdToStack(layout: JustNode | null, payload: JustPayloadMoveWinStack): JustNode | null {
+  if (layout == null) return layout
   const targetNode = getNodeByBranch(layout, payload.branch)
   const targetType = targetNode.type
-  if (payload.pos === 'stack' && targetType === 'stack') {
-    const targetTabs = (targetNode as JustStack).tabs
-
-    const newIndex = payload.index >= 0 ? clamp(payload.index, 0, targetTabs.length) : targetTabs.length;
-    return updateNodeOfBranch(layout, payload.branch, {
-      $set: {
-        type: "stack",
-        tabs: [
-          ...targetTabs.slice(0, newIndex),
-          payload.justId,
-          ...targetTabs.slice(newIndex),
-        ],
-        active: payload.justId,
-      }
-    })
-  } else if (payload.pos === 'second') {
-    if (targetNode.type === 'stack' && targetNode.active?.viewId === "side-menu") {
-      return updateNodeOfBranch(layout, payload.branch, {
-        $set: {
-          type: 'split-pixels',
-          direction: payload.direction,
-          first: targetNode,
-          second: {
-            type: "stack",
-            tabs: [payload.justId],
-            active: payload.justId,
-          },
-          primary: 'first',
-          size: 200,
-        }
-      })
-
-    } else {
-      return updateNodeOfBranch(layout, payload.branch, {
-        $set: {
-          type: 'split-percentage',
-          direction: payload.direction,
-          first: targetNode,
-          second: {
-            type: "stack",
-            tabs: [payload.justId],
-            active: payload.justId,
-          },
-          size: payload.size ?? 50,
-        }
-      })
-
-    }
-  } else if (payload.pos === 'first') {
-    return updateNodeOfBranch(layout, payload.branch, {
-      $set: {
-        type: "split-percentage",
-        direction: payload.direction,
-        first: {
-          type: "stack",
-          tabs: [payload.justId],
-          active: payload.justId,
-        },
-        second: targetNode,
-        size: payload.size ?? 50,
-      }
-    })
+  if (targetType !== 'stack') {
+    return layout
   }
-  console.log("unknown error pos: ", payload.pos, ", targetType: ", targetType)
-  return null
+
+  const targetTabs = targetNode.tabs
+  const newIndex = payload.index >= 0 ? clamp(payload.index, 0, targetTabs.length) : targetTabs.length;
+  return updateNodeOfBranch(layout, payload.branch, {
+    $set: {
+      type: "stack",
+      tabs: [
+        ...targetTabs.slice(0, newIndex),
+        payload.justId,
+        ...targetTabs.slice(newIndex),
+      ],
+      active: payload.justId,
+    }
+  })
 
 }
+export function insertWinIdToSplit(layout: JustNode | null, payload: JustPayloadMoveWinSplit): JustNode | null {
+  if (layout == null) return layout
+  const targetNode = getNodeByBranch(layout, payload.branch)
+
+  const otherPos = payload.pos === 'first' ? 'second' : 'first';
+  return updateNodeOfBranch(layout, payload.branch, {
+    $set: {
+      type: 'split-percentage',
+      direction: payload.direction,
+      [otherPos]: targetNode,
+      [payload.pos]: {
+        type: "stack",
+        tabs: [payload.justId],
+        active: payload.justId,
+      },
+      size: payload.size ?? 50,
+    }
+  })
+
+}
+
 
 export function removeWinId(layout: JustNode | null, justId: JustId): JustNode | null {
   if (layout == null) return null;
@@ -205,21 +168,28 @@ export function findEmptyBranch(layout: JustNode | null, branch: JustBranch): Ju
   }
 }
 
+// export function moveWinId(layout: JustNode | null, justId: JustId, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
+//   const newLayout = removeWinId(layout, justId)
+//   return insertWinId(newLayout, {
+//     justId,
+//     branch,
+//     pos,
+//     direction,
+//     index,
+//     size: 50
+//   })
+// }
 
-
-
-export function moveWinId(layout: JustNode | null, justId: JustId, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {
-  const newLayout = removeWinId(layout, justId)
-  return insertWinId(newLayout, {
-    justId,
-    branch,
-    pos,
-    direction,
-    index,
-    size: 50
-  })
-
+export function moveWinIdToStack(layout: JustNode | null, payload: JustPayloadMoveWinStack): JustNode | null {
+  const newLayout = removeWinId(layout, payload.justId)
+  return insertWinIdToStack(newLayout, payload)
 }
+
+export function moveWinIdToSplit(layout: JustNode | null, payload: JustPayloadMoveWinSplit): JustNode | null {
+  const newLayout = removeWinId(layout, payload.justId)
+  return insertWinIdToSplit(newLayout, payload)
+}
+
 
 // export function updateSplitPercentage(layout: JustNode | null, branch: JustBranch, size: number) {
 //   return updateNodeOfBranch(layout, branch, {

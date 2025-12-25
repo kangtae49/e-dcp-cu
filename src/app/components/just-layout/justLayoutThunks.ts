@@ -1,8 +1,6 @@
 import {
-  getActiveWinIds,
   getBranchByWinId,
   getBranchByNodeName,
-  getBranchRightTop,
   hasWinId, queryWinIdsByStack,
   queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch, queryDupWinIdsByWinId, JustUtil
 } from "./layoutUtil.ts";
@@ -77,27 +75,9 @@ export function createJustLayoutThunks(sliceId: string) {
         justId
       }))
     } else {
-      const activeWinIds = getActiveWinIds(sliceState?.layout ?? null);
-      const targetWinIds = activeWinIds.filter(activeWinId => activeWinId.viewId  !== 'side-menu');
-      if (targetWinIds.length === 0) {
-
-        const branch = getBranchRightTop(sliceState?.layout)
-        dispatch(justLayoutActions.insertWin({
-          branch: branch, direction: "row", index: -1, pos: "stack", justId: justId,
-        }))
-
-        // dispatch(justLayoutActions.insertWin({
-        //   branch: [], direction: "row", index: -1, pos: "second", winId: winId, size: 25,
-        // }))
-      } else {
-        const targetBranch = getBranchByWinId(sliceState?.layout ?? null, targetWinIds[0])
-        if (targetBranch !== null) {
-          dispatch(justLayoutActions.insertWin({
-            branch: targetBranch, direction: "row", index: -1, pos: "stack", justId: justId, size: 25,
-          }))
-        }
-      }
-
+      dispatch(justLayoutActions.addTab({
+        justId: justId,
+      }))
     }
   })
   const getWinIds = createSliceThunk(sliceId, ({viewId}: PayloadGetWinIds, {sliceState}) => {
@@ -127,8 +107,8 @@ export function createJustLayoutThunks(sliceId: string) {
     const targetBranch = getBranchByWinId(sliceState?.layout ?? null, justId);
     if (targetBranch === null) return;
     const justLayoutActions = getActions<JustLayoutActions>(sliceId);
-    dispatch(justLayoutActions.insertWin({
-      branch: targetBranch, direction: "row", index: -1, pos: "stack", justId: JustUtil.replaceDup(justId),
+    dispatch(justLayoutActions.addTab({
+      justId: JustUtil.replaceDup(justId),
     }))
   })
 

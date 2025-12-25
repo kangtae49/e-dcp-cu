@@ -85,7 +85,6 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
       justLayoutActions.moveWin({
         branch: justBranch,
         justId: item.justId,
-        direction: item.direction ?? 'row',
         pos: 'stack',
         index: item.index ?? -1
       })
