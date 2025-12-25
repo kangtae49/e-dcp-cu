@@ -120,12 +120,8 @@ function JustWinBodyView (props: Prop) {
           const pos = sign > 0 ? 'second' : 'first'
           item.direction = direction
           item.pos = pos
-          console.log('item: ', item, percentX, percentY)
+          // console.log('item: ', item, percentX, percentY)
 
-          // row    first  top:0  left: 0
-          // row    second top:0  left: x
-          // column first  top:0  left: 0
-          // column second top:x  left: 0
           const overlayRect = {
             top: (pos === 'second' && direction === 'column') ?  hoverBoundingRect.top + hoverBoundingRect.height/2 : hoverBoundingRect.top,
             left: (pos === 'second' && direction === 'row') ?  hoverBoundingRect.left + hoverBoundingRect.width/2 : hoverBoundingRect.left,
