@@ -26,6 +26,7 @@ export interface JobEvent {
   action: Action
   data: JobData
   timestamp: number
+  pid?: number
 }
 
 // Watch file
@@ -46,6 +47,7 @@ export interface WatchEvent {
 
 export interface ConfigTable {
   key: string,
+  timestamp?: number,
   header: string [],
   data: Record<string, string | number | boolean | null> []
 }

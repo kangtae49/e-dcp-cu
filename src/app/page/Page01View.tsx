@@ -14,7 +14,7 @@ import classNames from "classnames";
 import TerminalView from "@/app/components/terminal/TerminalView";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
-import {JobEvent, JobStatus, JobStreamData} from "@/types";
+import {JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
@@ -41,7 +41,7 @@ function Page01View({justId}: Props) {
   const {
     state: pageState,
     setCompany,
-    setLogs,
+    setEvents,
     setJobInfo,
     setStartDate,
     setEndDate,
@@ -88,9 +88,9 @@ function Page01View({justId}: Props) {
     }
 
     const events: JobEvent [] = getJobEvents(pageState.jobInfo?.jobId)
-    const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
-    const logs = streamEvents.map((event) => (event.data as JobStreamData))
-    setLogs(logs)
+    // const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
+    // const logs = streamEvents.map((event) => (event.data as JobStreamData))
+    setEvents(events)
   }, [jobMonitorState, pageState?.jobInfo]);
 
 
@@ -284,7 +284,7 @@ function Page01View({justId}: Props) {
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
             <TerminalView
                 key={`output\\${outFile}`}
-                lines={pageState?.logs ?? []}
+                events={pageState?.events ?? []}
             />
           </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>

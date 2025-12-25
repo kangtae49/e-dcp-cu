@@ -1,7 +1,7 @@
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {createPageSlice, JobInfo, PageActions, PageState, TabType} from "@/app/page/pageSlice.ts";
 import {Option} from "@/app/components/select/SelectBox.tsx";
-import {JobStreamData} from "@/types.ts";
+import {JobEvent} from "@/types.ts";
 
 function usePage(pageId: string) {
   const {
@@ -14,8 +14,8 @@ function usePage(pageId: string) {
     dispatch(pageActions.setCompany(company));
   }
 
-  const setLogs = (logs: JobStreamData[]) => {
-    dispatch(pageActions.setLogs(logs))
+  const setEvents = (events: JobEvent[]) => {
+    dispatch(pageActions.setEvents(events))
   }
 
   const setJobInfo = (jobInfo: JobInfo) => {
@@ -35,7 +35,7 @@ function usePage(pageId: string) {
   return {
     state,
     setCompany,
-    setLogs,
+    setEvents,
     setJobInfo,
     setStartDate,
     setEndDate,

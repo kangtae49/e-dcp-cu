@@ -46,7 +46,11 @@ export function getScriptSubPath(subpath: string) {
 
 
 export function readDataExcel(subpath: string): ConfigTable {
-  const fileBuffer = fs.readFileSync(getScriptSubPath(subpath));
+  const filePath = getScriptSubPath(subpath)
+  const fileBuffer = fs.readFileSync(filePath);
+  const fileStats = fs.statSync(filePath);
+  const timestamp = fileStats.mtime.getTime();
+
   const workbook = XLSX.read(fileBuffer, { type: 'buffer' });
   const sheetNames = workbook.SheetNames;
   const sheet = workbook.Sheets[sheetNames[0]]
@@ -76,6 +80,7 @@ export function readDataExcel(subpath: string): ConfigTable {
 
   return {
     key: subpath,
+    timestamp,
     header,
     data
   }
@@ -123,11 +128,13 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
       shell: false,
     }
   );
+  const pid = child.pid;
 
   runningProcesses.set(jobId, child);
   dispatchJobEvent(window, {
     action: 'JOB_STATUS',
     jobId,
+    pid,
     data: {status: 'RUNNING'},
     timestamp: Date.now()
   });
@@ -139,6 +146,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
+      pid,
       data: {message: decodedMessage, messageType: 'STDOUT'},
       timestamp: Date.now()
     });
@@ -151,6 +159,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
+      pid,
       data: {message: decodedMessage, messageType: 'STDERR'},
       timestamp: Date.now()
     });
@@ -164,6 +173,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
     dispatchJobEvent(window, {
       action: 'JOB_STATUS',
       jobId,
+      pid,
       data: {status},
       timestamp: Date.now()
     });
@@ -175,6 +185,7 @@ export function startScript(window: BrowserWindow, jobId: string, subpath: strin
     dispatchJobEvent(window, {
       action: 'JOB_ERROR',
       jobId,
+      pid,
       data: {message: `Process Execution err: ${err.message}` },
       timestamp: Date.now()
     });
@@ -194,7 +205,7 @@ export function stopScript(window: BrowserWindow, jobId: string) {
     });
     return;
   }
-
+  const pid = p.pid;
   try {
     p.kill('SIGTERM');
 
@@ -206,6 +217,7 @@ export function stopScript(window: BrowserWindow, jobId: string) {
     dispatchJobEvent(window, {
       action: 'JOB_STATUS',
       jobId,
+      pid,
       data: {status: 'STOPPED'},
       timestamp: Date.now()
     });
@@ -216,6 +228,7 @@ export function stopScript(window: BrowserWindow, jobId: string) {
     dispatchJobEvent(window, {
       action: 'JOB_ERROR',
       jobId,
+      pid,
       data: {message},
       timestamp: Date.now()
     });

@@ -3,6 +3,7 @@ import {
   CONFIG_ID,
 } from "@/app/config/configsSlice.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
+import {format} from "date-fns";
 
 function WatchListener(): null {
 
@@ -24,9 +25,9 @@ function WatchListener(): null {
         console.log('!!!!!!!!!!!!!')
         setTimeout(() => {
           window.api.readDataExcel(watchFile.key)
-            .then((res) => {
+            .then((configTable) => {
               updateConfigs({
-                [watchFile.key]: res
+                [watchFile.key]: configTable
               })
             })
         }, 100)
