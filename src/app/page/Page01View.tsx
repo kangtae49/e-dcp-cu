@@ -20,8 +20,10 @@ import useConfigs from "@/app/config/useConfigs.ts";
 import usePage from "@/app/page/usePage.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
-import {useDrop} from "react-dnd";
+import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
+import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
+import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 
 interface Props {
   justId: JustId
@@ -34,6 +36,7 @@ interface FileItem {
 function Page01View({justId}: Props) {
   const configKey = "data\\company.xlsx";
   const ref = useRef<HTMLDivElement>(null)
+  const refGrid = useRef<HTMLDivElement>(null)
 
   const {
     state: pageState,
@@ -145,11 +148,53 @@ function Page01View({justId}: Props) {
     }
   }), [ref])
 
+  const [, drag] = useDrag({
+    type: JUST_DRAG_SOURCE,
+    item: () => {
+      const item: JustDragItem = {
+        // direction: 'row',
+        // index: -1,
+        // justBranch: [],
+        justId: {
+          viewId: "setting-config",
+          params: {
+            title: outFile,
+            file: `output\\${outFile}`
+          }
+        },
+        // pos: "first"
+        // file: `output\\${outFile}`,
+      }
+      // const filePath = `output\\${outFile}`;
+      // setTimeout(() => {
+      //   window.api.startDrag(`output\\${outFile}`)
+      // }, 50)
+      return item;
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      console.log('drag end', item, monitor);
+    }
+  })
+
+  // const onDragStart = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   window.api.startDrag(`output\\${outFile}`)
+  // }, [outFile])
+
   useLayoutEffect(() => {
     if (ref.current) {
       drop(ref);
     }
   }, [drop]);
+
+  useLayoutEffect(() => {
+    if (refGrid.current) {
+      drag(refGrid);
+    }
+  }, [drag]);
 
   return (
     <div className="win-page"
@@ -213,7 +258,10 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('GRAPH')}>
             <Icon icon={faChartLine} />graph
           </div>
-          <div className={classNames(
+          <div
+            ref={refGrid}
+            // onDragStart={onDragStart}
+            className={classNames(
             "tab-title",
                 {
                   "active": pageState?.tab === "GRID",

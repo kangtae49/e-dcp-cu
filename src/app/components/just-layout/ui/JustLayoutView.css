@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     background-color: #2b2d30;
-    --title-bg-color: #1e1f22;
+    --title-bg-color: #191a1c;
     --title-font-color: rgb(255, 255, 255, 0.7);
     --splitter-border-color1: #1e1f22;
     --splitter-border-color2: #1e1f22;
@@ -158,18 +158,27 @@
     box-sizing: border-box;
 }
 .just-draggable-title.just-active {
-    border-top: 4px solid #3574f0;
-    border-left: 1px solid #3574f0;
-    border-right: 1px solid #3574f0;
-    border-bottom: 1px solid #3574f0;
+    border-top: 4px solid #008080;
+    border-left: 1px solid #43454a;
+    border-right: 1px solid #43454a;
+    border-bottom: 1px solid #43454a;
     box-sizing: border-box;
-    background-color: #111111;
+    background-color: #2b2d30;
+    color: white;
+}
+.just-draggable-title:hover {
+    background-color: #2b2d30;
 }
 .just-draggable-title .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
 .just-icon svg {
     width: 16px; height: 16px;
     color: rgb(255, 255, 255, 0.3);
 }
+
+.just-close:hover svg {
+    color: white;
+}
+
 .just-draggable-title .just-title {
     flex: 1;
     height: 100%;

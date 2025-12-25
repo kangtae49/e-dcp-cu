@@ -17,6 +17,7 @@ const config: ForgeConfig = {
     icon: path.join(__dirname,'src/assets/icon'),
     extraResource: [
       'src-py',
+      'src/assets/icon.ico'
     ]
   },
   rebuildConfig: {},

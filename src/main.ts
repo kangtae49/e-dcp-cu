@@ -1,9 +1,13 @@
-import { app, BrowserWindow, ipcMain  } from 'electron';
+import { app, BrowserWindow  } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
-import {getAppResourcePath, getScriptPath, readDataExcel, startDataFile, startScript, stopScript} from "./api_core";
+import {
+  getIconSubPath,
+  getScriptPath,
+  registerHandlers,
+} from "./api_core";
 import {FileWatcher} from "./file_watcher.ts";
-import {Env} from "@/types.ts";
+
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -20,7 +24,8 @@ const createWindow = () => {
     width: 800,
     height: 600,
     autoHideMenuBar: true,
-    icon: path.join(__dirname, 'assets/icon.ico'),
+    // icon: path.join(__dirname, 'assets/icon.ico'),
+    icon: getIconSubPath('icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: process.argv,
@@ -52,16 +57,18 @@ app.on('ready', () => {
   // path.dirname()
   // const cur_path = await getCurPath(process.argv, app.isPackaged);
   const mainWindow = createWindow()
-  ipcMain.handle('echo', async (_event, message: string) => message);
-  ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
-  ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));
-  ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
-  ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
-  ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
-  ipcMain.handle('get-env', () => {
-    const myEnv: Env = { ...process.env };
-    return myEnv;
-  })
+  registerHandlers(mainWindow);
+  // ipcMain.handle('echo', async (_event, message: string) => message);
+  // ipcMain.handle('get-dirname', () => __dirname);
+  // ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
+  // ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));
+  // ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
+  // ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
+  // ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
+  // ipcMain.handle('get-env', () => {
+  //   const myEnv: Env = { ...process.env };
+  //   return myEnv;
+  // })
 
   const watchPath = getScriptPath();
   const watcher = new FileWatcher(mainWindow, watchPath);
@@ -72,6 +79,10 @@ app.on('ready', () => {
   });
 
 });
+
+
+// ipcMain.on('ondragstart', (event, item: DragStartItem) => {
+
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

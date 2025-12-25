@@ -10,11 +10,11 @@ import {
   type JustLayoutState,
   type JustStack,
 } from "../justLayoutSlice.ts";
-import JustDraggableTitle, {type DragItem} from "./JustDraggableTitle";
+import JustDraggableTitle, {type JustDragItem} from "./JustDraggableTitle";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {CloseWinFn, GetWinInfoFn, JUST_DRAG_SOURCE, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
@@ -79,22 +79,22 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
 
 
 
-  const onDrop = (itemType: any, item: DragItem) => {
+  const onDrop = (itemType: any, item: JustDragItem) => {
     console.log("onDrop(JustWinTitle)", itemType, item)
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,
         justId: item.justId,
-        direction: item.direction,
+        direction: item.direction ?? 'row',
         pos: 'stack',
-        index: item.index
+        index: item.index ?? -1
       })
     )
   }
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['DRAG-SOURCE-JUST-TITLE'],
+      accept: [JUST_DRAG_SOURCE],
       canDrop: () => {
         let canDrop = true;
         if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
@@ -107,7 +107,7 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),
-      drop(_item: DragItem, monitor) {
+      drop(_item: JustDragItem, monitor) {
         // console.log("drop item", item, monitor.getItem())
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined

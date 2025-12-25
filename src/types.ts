@@ -53,3 +53,7 @@ export interface ConfigTable {
 export interface Env {
   [key: string]: string | undefined;
 }
+
+export interface DragStartItem {
+  file: string
+}

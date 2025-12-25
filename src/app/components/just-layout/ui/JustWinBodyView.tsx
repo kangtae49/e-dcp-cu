@@ -1,6 +1,6 @@
 
 import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {
   createJustLayoutSlice,
   type JustBranch,
@@ -8,10 +8,10 @@ import {
   type JustLayoutState,
   type JustStack,
 } from "../justLayoutSlice.ts";
-import {type DragItem} from "./JustDraggableTitle.tsx";
+import {type JustDragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef, useState} from "react";
-import {GetWinInfoFn} from "..";
+import {GetWinInfoFn, JUST_DRAG_SOURCE} from "..";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
@@ -33,22 +33,22 @@ function JustWinBodyView (props: Prop) {
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
 
-  const onDrop = (itemType: any, item: DragItem) => {
+  const onDrop = (itemType: any, item: JustDragItem) => {
     console.log("onDrop(JustWinBody)", itemType, item)
 
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,
         justId: item.justId,
-        direction: item.direction,
-        pos: item.pos,
-        index: item.index
+        direction: item.direction ?? 'row',
+        pos: item.pos ?? 'second',
+        index: item.index ?? -1
       })
     )
   }
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['DRAG-SOURCE-JUST-TITLE'],
+      accept: [JUST_DRAG_SOURCE],
       canDrop: () => {
         let canDrop = true;
         if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
@@ -61,7 +61,7 @@ function JustWinBodyView (props: Prop) {
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),
-      drop(_item: DragItem, monitor) {
+      drop(_item: JustDragItem, monitor) {
         if (!ref.current) {
           return undefined
         }
@@ -71,7 +71,7 @@ function JustWinBodyView (props: Prop) {
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined
       },
-      hover(item: DragItem, monitor) {
+      hover(item: JustDragItem, monitor) {
         if (!ref.current) {
           return
         }
@@ -135,7 +135,7 @@ function JustWinBodyView (props: Prop) {
   console.log('isOver', isOver);
   return (
     <div
-      className={classnames("just-win-body", {"isOver": isOver})}
+      className={classNames("just-win-body", {"isOver": isOver})}
       ref={ref}
     >
       {justStack.tabs.map(justId =>

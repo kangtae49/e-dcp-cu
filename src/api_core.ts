@@ -1,11 +1,15 @@
-import {app, BrowserWindow, shell} from 'electron'
+import {app, BrowserWindow, ipcMain, shell} from 'electron'
 import path from 'node:path';
 import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {ConfigTable, JobEvent, JobStatus} from "./types.ts";
+import {ConfigTable, Env, JobEvent, JobStatus} from "./types.ts";
 import iconv from 'iconv-lite';
+
+
+// const START_DRAG_ICON = nativeImage.createFromPath(getIconSubPath('icon.ico'))
+const START_DRAG_ICON = getIconSubPath('icon.ico')
 
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
@@ -16,6 +20,16 @@ export function getAppResourcePath() {
   } else {
     return app.getAppPath()
   }
+}
+
+export function getIconSubPath(subpath: string) {
+  if (app.isPackaged) {
+    // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
+    return path.join(path.dirname(app.getAppPath()), subpath)
+  } else {
+    return path.join(app.getAppPath(), 'src/assets', subpath)
+  }
+
 }
 
 export function getResourceSubPath(subpath: string) {
@@ -206,4 +220,48 @@ export function stopScript(window: BrowserWindow, jobId: string) {
       timestamp: Date.now()
     });
   }
+}
+
+export const registerHandlers = (mainWindow: BrowserWindow) => {
+  ipcMain.handle('echo', async (_event, message: string) => message);
+  ipcMain.handle('get-dirname', () => __dirname);
+  ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
+  ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));
+  ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
+  ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
+  ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
+  ipcMain.handle('get-env', () => {
+    const myEnv: Env = { ...process.env };
+    return myEnv;
+  })
+  ipcMain.on('ondragstart', (event, filePath: string) => {
+    try {
+      // console.log(filePath, item)
+      // const icon = getIconSubPath(item.icon)
+      const icon = START_DRAG_ICON
+      const file = getScriptSubPath(filePath)
+      // const files = item.files ? item.files.map(getScriptSubPath) : []
+      console.log(file, icon)
+      if (!fs.existsSync(file)) {
+        console.error('Not Exists file: ', file);
+        return;
+      }
+      event.sender.startDrag({
+        file,
+        icon,
+      });
+
+      // setImmediate(() => {
+      //   if (event.sender.isDestroyed()) return;
+      //
+      //     event.sender.startDrag({
+      //       file,
+      //       icon,
+      //     });
+      // });
+    } catch (e) {
+      console.error('Native drag failed:', e);
+    }
+
+  });
 }
