@@ -3,7 +3,6 @@ import chokidar, { FSWatcher } from 'chokidar';
 import {WatchEvent, WatchFileData, WatchStatus} from "./types.ts";
 import path from "node:path";
 import * as fs from "node:fs";
-import {getScriptSubPath} from "./api_core.ts";
 
 export class FileWatcher {
   private watcher: FSWatcher | null = null;
