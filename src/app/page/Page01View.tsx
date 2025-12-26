@@ -24,7 +24,6 @@ import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
-import {isLockScriptSubPath} from "@/api_core.ts";
 
 interface Props {
   justId: JustId
