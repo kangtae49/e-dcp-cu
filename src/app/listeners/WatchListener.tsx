@@ -3,7 +3,6 @@ import {
   CONFIG_ID,
 } from "@/app/config/configsSlice.ts";
 import useConfigs from "@/app/config/useConfigs.ts";
-// import {format} from "date-fns";
 
 function WatchListener(): null {
 
@@ -22,15 +21,14 @@ function WatchListener(): null {
       const watchFile = watchEvent.data;
       console.log(watchFile)
       if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
-        console.log('!!!!!!!!!!!!!')
-        setTimeout(() => {
-          window.api.readDataExcel(watchFile.key)
-            .then((configTable) => {
-              updateConfigs({
-                [watchFile.key]: configTable
-              })
+        console.log('watchFile', watchFile.key)
+
+        window.api.readDataExcel(watchFile.key)
+          .then((configTable) => {
+            updateConfigs({
+              [watchFile.key]: configTable
             })
-        }, 100)
+          })
       } else if (watchFile.status === 'DELETED') {
         updateConfigs({
           [watchFile.key]: {

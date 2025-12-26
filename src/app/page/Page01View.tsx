@@ -35,6 +35,7 @@ interface FileItem {
 
 function Page01View({justId}: Props) {
   const configKey = "data\\company.xlsx";
+  const pagesDir = "pages";
   const ref = useRef<HTMLDivElement>(null)
   const refGrid = useRef<HTMLDivElement>(null)
 
@@ -57,6 +58,8 @@ function Page01View({justId}: Props) {
 
   const {state: configsState} = useConfigs(CONFIG_ID)
 
+  const [outFile, setOutFile] = React.useState<string>('');
+
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
     return data.map(d => {
       return {value: d.cdVlId, label: d.cdVlNm ? d.cdVlNm.toString() : ''}
@@ -66,10 +69,10 @@ function Page01View({justId}: Props) {
   const config = configsState?.configs?.[configKey];
   const companyList = toOptions(config?.data ?? []);
 
-  const jobInfo = pageState?.jobInfo;
-  const outFile = jobInfo?.status === 'DONE'
-    ? `${jobInfo.args.join('_')}.xlsx`
-    : null;
+  // const jobInfo = pageState?.jobInfo;
+  // const outFile = jobInfo?.status === 'DONE'
+  //   ? `${jobInfo.args.slice(1).join('_')}.xlsx`
+  //   : '';
 
   useEffect(() => {
     if (companyList.length > 0 && !pageState?.company) {
@@ -130,6 +133,17 @@ function Page01View({justId}: Props) {
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
+  useEffect(() => {
+    if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return ;
+    const startYm = format(pageState.startDate, "yyyyMM");
+    const endYm = format(pageState.endDate, "yyyyMM");
+    const companyVal = pageState.company.value;
+    const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
+    setOutFile(`${args}.xlsx`)
+  }, [pageState])
+
+
+
   // const onDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
   //   e.preventDefault();
   //   e.stopPropagation();
@@ -159,7 +173,7 @@ function Page01View({justId}: Props) {
           viewId: "setting-config",
           params: {
             title: outFile,
-            file: `output\\${outFile}`
+            file: `${pagesDir}\\${outFile}`,
           }
         },
         // pos: "first"
@@ -283,22 +297,22 @@ function Page01View({justId}: Props) {
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
             <TerminalView
-                key={`output\\${outFile}`}
+                key={`${pagesDir}\\${outFile}`}
                 events={pageState?.events ?? []}
             />
           </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
             <OutputGrid
-                key={`output\\${outFile}`}
+                key={`${pagesDir}\\${outFile}`}
                 title={outFile ?? ''}
-                outFile={`output\\${outFile}`}
+                outFile={`${pagesDir}\\${outFile}`}
             />
           </Activity>
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
             <PageLineChart
-                key={`output\\${outFile}`}
+                key={`${pagesDir}\\${outFile}`}
                 title={outFile ?? ''}
-                outFile={`output\\${outFile}`}
+                outFile={`${pagesDir}\\${outFile}`}
                 legend={[
                   {
                     id: "cpstrtRlest",
