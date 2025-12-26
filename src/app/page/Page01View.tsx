@@ -24,6 +24,7 @@ import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
+import {isLockScriptSubPath} from "@/api_core.ts";
 
 interface Props {
   justId: JustId
@@ -132,9 +133,17 @@ function Page01View({justId}: Props) {
   const handleCompany = (option: Option) => {
     setCompany(option)
   }
-  const searchPage01 = () => {
+  const searchPage01 = async () => {
 
     if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return;
+
+    const isLock = await window.api.isLockScriptSubPath(outPath);
+    if (isLock) {
+      alert(`Close Excel: ${outPath}`)
+      window.api.startDataFile(outPath).then()
+      return
+    }
+
     const startYm = format(pageState.startDate, "yyyyMM");
     const endYm = format(pageState.endDate, "yyyyMM");
     const companyVal = pageState.company.value;

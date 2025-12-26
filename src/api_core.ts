@@ -44,6 +44,15 @@ export function getScriptSubPath(subpath: string) {
   return path.join(getScriptPath(), subpath)
 }
 
+export function isLockScriptSubPath(subpath: string) {
+  const filePath = path.join(getScriptPath(), subpath);
+  const fileDir = path.dirname(filePath);
+  const fileName = path.basename(filePath);
+  const lockFileName = `~$${fileName}`;
+  const lockFilePath = path.join(fileDir, lockFileName);
+  return fs.existsSync(lockFilePath)
+}
+
 
 export function readDataExcel(subpath: string): ConfigTable {
   const filePath = getScriptSubPath(subpath)
@@ -243,6 +252,7 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
+  ipcMain.handle('is-lock-script-path', (_event, subpath: string) => isLockScriptSubPath(subpath))
   ipcMain.handle('get-env', () => {
     const myEnv: Env = { ...process.env };
     return myEnv;

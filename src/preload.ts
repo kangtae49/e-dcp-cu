@@ -1,6 +1,6 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import {contextBridge, ipcRenderer, webUtils } from 'electron'
+import electron, {contextBridge, ipcRenderer, webUtils } from 'electron'
 import {ConfigTable, DragStartItem, Env, JobEvent, WatchEvent} from "@/types.ts";
 import * as Electron from "electron";
 
@@ -18,7 +18,7 @@ export interface Api {
   startDataFile(subpath: string): Promise<void>,
   startScript(jobId: string, subpath: string, args: string[]): Promise<void>,
   stopScript(jobId: string): Promise<void>,
-
+  isLockScriptSubPath(subpath: string): Promise<boolean>,
   startDrag(item: DragStartItem): void,
   // startDrag(filePath: string): void,
 
@@ -48,6 +48,9 @@ const api: Api = {
   },
   stopScript(jobId: string) {
     return ipcRenderer.invoke('stop-script', jobId)
+  },
+  isLockScriptSubPath(subpath) {
+    return electron.ipcRenderer.invoke("is-lock-script-path", subpath);
   },
   startDrag(item: DragStartItem) {
     ipcRenderer.send('ondragstart', item)
