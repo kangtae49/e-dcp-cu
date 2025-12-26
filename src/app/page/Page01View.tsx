@@ -56,9 +56,12 @@ function Page01View({justId}: Props) {
     clearEvents,
   } = useJobMonitor(JOB_MONITOR_ID);
 
-  const {state: configsState} = useConfigs(CONFIG_ID)
+  const {
+    state: configsState,
+    updateConfigs,
+  } = useConfigs(CONFIG_ID)
 
-  const [outFile, setOutFile] = React.useState<string>('');
+  // const [outFile, setOutFile] = React.useState<string>('');
 
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
     return data.map(d => {
@@ -68,6 +71,25 @@ function Page01View({justId}: Props) {
 
   const config = configsState?.configs?.[configKey];
   const companyList = toOptions(config?.data ?? []);
+
+
+
+  const startYm = pageState?.startDate ? format(pageState.startDate, "yyyyMM") : format(new Date(), "yyyyMM");
+  const endYm = pageState?.endDate ? format(pageState.endDate, "yyyyMM") : format(new Date(), "yyyyMM");
+  const companyVal = pageState?.company ? pageState.company.value : companyList[0]?.value;
+  const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
+  const outFile = `${args}.xlsx`
+  const outPath = `${pagesDir}\\${outFile}`
+
+
+  useEffect(() => {
+    window.api.readDataExcel(outPath)
+      .then((configTable) => {
+        updateConfigs({
+          [outPath]: configTable
+        })
+      })
+  }, [outPath])
 
   // const jobInfo = pageState?.jobInfo;
   // const outFile = jobInfo?.status === 'DONE'
@@ -95,9 +117,6 @@ function Page01View({justId}: Props) {
     // const logs = streamEvents.map((event) => (event.data as JobStreamData))
     setEvents(events)
   }, [jobMonitorState, pageState?.jobInfo]);
-
-
-
 
 
   const onChangeStartDate = (date: string | null) => {
@@ -133,14 +152,14 @@ function Page01View({justId}: Props) {
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
-  useEffect(() => {
-    if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return ;
-    const startYm = format(pageState.startDate, "yyyyMM");
-    const endYm = format(pageState.endDate, "yyyyMM");
-    const companyVal = pageState.company.value;
-    const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
-    setOutFile(`${args}.xlsx`)
-  }, [pageState])
+  // useEffect(() => {
+  //   if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return ;
+  //   const startYm = format(pageState.startDate, "yyyyMM");
+  //   const endYm = format(pageState.endDate, "yyyyMM");
+  //   const companyVal = pageState.company.value;
+  //   const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
+  //   setOutFile(`${args}.xlsx`)
+  // }, [pageState])
 
 
 
@@ -173,7 +192,7 @@ function Page01View({justId}: Props) {
           viewId: "setting-config",
           params: {
             title: outFile,
-            file: `${pagesDir}\\${outFile}`,
+            file: outPath,
           }
         },
         // pos: "first"
@@ -209,6 +228,21 @@ function Page01View({justId}: Props) {
       drag(refGrid);
     }
   }, [drag]);
+
+  // useEffect(() => {
+  //   if(!pageState) return;
+  //   if (!pageState.startDate) {
+  //     setStartDate(format(new Date(), "yyyyMM"))
+  //   }
+  //   if (!pageState.endDate) {
+  //     setEndDate(format(new Date(), "yyyyMM"))
+  //   }
+  //   if (!pageState.company) {
+  //     setCompany(companyList[0])
+  //   }
+  // }, [pageState])
+
+
 
   return (
     <div className="win-page"
@@ -297,7 +331,7 @@ function Page01View({justId}: Props) {
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
             <TerminalView
-                key={`${pagesDir}\\${outFile}`}
+                key={outPath}
                 events={pageState?.events ?? []}
             />
           </Activity>
@@ -305,14 +339,14 @@ function Page01View({justId}: Props) {
             <OutputGrid
                 key={`${pagesDir}\\${outFile}`}
                 title={outFile ?? ''}
-                outFile={`${pagesDir}\\${outFile}`}
+                outFile={outPath}
             />
           </Activity>
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
             <PageLineChart
-                key={`${pagesDir}\\${outFile}`}
+                key={outPath}
                 title={outFile ?? ''}
-                outFile={`${pagesDir}\\${outFile}`}
+                outFile={outPath}
                 legend={[
                   {
                     id: "cpstrtRlest",
