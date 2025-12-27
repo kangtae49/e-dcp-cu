@@ -139,7 +139,7 @@ function JustDraggableTitle(props: Prop) {
       const targetWinId = justId;
 
       const curTabs = justStack.tabs.filter(tabId => !JustUtil.isEquals(tabId, sourceWinId))
-      let targetIndex = curTabs.indexOf(targetWinId)
+      let targetIndex = JustUtil.indexOf(curTabs, targetWinId)
       if (hoverClientX > hoverMiddleX) {
         targetIndex += 1
       }

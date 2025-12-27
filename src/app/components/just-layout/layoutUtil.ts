@@ -60,9 +60,11 @@ export function removeWinId(layout: JustNode | null, justId: JustId): JustNode |
   if (layout == null) return null;
   const justStack = getNodeByWinId(layout, justId) as unknown as JustStack | null
   if (justStack == null) return layout;
+  const curIdx = justStack.active ? JustUtil.indexOf(justStack.tabs, justStack.active) : 0
+
   const newTabs = justStack.tabs.filter((tab: JustId) => !JustUtil.isEquals(tab, justId))
   const active = (newTabs.length > 0 && justStack.active !== null)
-    ? newTabs[clamp(justStack.tabs.indexOf(justStack.active), 0, newTabs.length-1)]
+    ? newTabs[clamp(curIdx-1, 0, newTabs.length-1)]
     : null
   return updateNodeOfWinId(layout, justId, {
     $set: {
@@ -432,6 +434,10 @@ export class JustUtil {
   static isEquals(justId1: JustId | null, justId2: JustId | null): boolean {
     if (justId1 == null || justId2 == null) return false
     return JustUtil.toString(justId1) === JustUtil.toString(justId2)
+  }
+
+  static indexOf(tab: JustId[], justId: JustId): number {
+    return tab.map(JustUtil.toString).indexOf(JustUtil.toString(justId))
   }
 
   static includes(tab: JustId[], justId: JustId): boolean {
