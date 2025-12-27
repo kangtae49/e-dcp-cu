@@ -12,12 +12,12 @@ interface Props {
 function ConfigView({justId}: Props) {
 
   console.log('ConfigView', justId)
-  const configKey = JustUtil.getParamString(justId, 'file');
+  const dataKey = JustUtil.getParamString(justId, 'file');
   const configTitle = JustUtil.getParamString(justId, 'title');
 
   const clickConfigKey = () => {
-    console.log(configKey)
-    openSetting(configKey)
+    console.log(dataKey)
+    openSetting(dataKey)
   }
 
   const openSetting = (key: string) => {
@@ -33,7 +33,7 @@ function ConfigView({justId}: Props) {
       </div>
       <div className="config-table">
         <ConfigGrid
-          configKey={configKey}
+          dataKey={dataKey}
         />
       </div>
     </div>

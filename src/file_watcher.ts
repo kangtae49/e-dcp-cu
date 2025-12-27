@@ -26,22 +26,23 @@ export class FileWatcher {
       ignored: [
         (currentPath) => {
 
-          if (!fs.existsSync(currentPath)) {
-            return true;
-          }
+          // if (!fs.existsSync(currentPath)) {
+          //   return true;
+          // }
           try {
             if (fs.lstatSync(currentPath).isDirectory()) {
               return false
             }
-          } catch (e) {
-            console.log('chokidar.watch ignored', e.toString())
+          } catch (_err) {
+            // nothing : deleted file
           }
 
           const fileName = path.basename(currentPath);
           // const dirName = path.dirname(currentPath);
           // const tmpFileName = `~$${fileName}`;
           // const tmpPath = path.join(dirName, tmpFileName);
-          return !(path.extname(fileName) === '.xlsx' && !fileName.startsWith("~$"));
+          // return !(path.extname(fileName) === '.xlsx' && !fileName.startsWith("~$"));
+          return !(path.extname(fileName) === '.xlsx');
         }
       ],
       persistent: true,
@@ -68,7 +69,7 @@ export class FileWatcher {
   }
 
   private sendWatchEvent(status: WatchStatus, filePath: string, mtime?: number) {
-
+    console.log(`[FileEvent] ${status}: ${filePath}`);
     const key = path.relative(this.watchPath, filePath);
     const eventData: WatchFileData = {
       status,
@@ -82,7 +83,7 @@ export class FileWatcher {
       data: eventData
     }
     this.window.webContents.send("watch-event", watchEvent);
-    console.log(`[FileEvent] ${status}: ${filePath}`);
+
   }
 
   /*

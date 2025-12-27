@@ -19,9 +19,8 @@ function DemoView() {
 
   const readConfig = () => {
     window.api.readDataExcel('data\\설정1.xlsx')
-      .then(res => {
+    .then(res => {
       console.log(res)
-
     })
   }
 

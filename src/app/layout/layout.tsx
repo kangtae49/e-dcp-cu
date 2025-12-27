@@ -8,7 +8,7 @@ import DemoView from "@/app/demo/DemoView.tsx";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
-import {CONFIG_KEYS} from "@/app/config/configsSlice.ts";
+import {CONFIG_KEYS} from "@/app/config/gridDataSlice.ts";
 import ConfigView from "@/app/config/ui/ConfigView.tsx";
 import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
@@ -89,8 +89,8 @@ CONFIG_KEYS.forEach((justId: JustId) => {
   viewMap[justId.viewId as ViewId] = (justId: JustId) => ({
     title: JustUtil.getParamString(justId, 'title'),
     icon: <Jdenticon size="30" value={"setting-config"} />,
-  view: <ConfigView justId={justId} />
-});
+    view: <ConfigView justId={justId} />
+  });
 })
 
 export {viewMap};

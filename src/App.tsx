@@ -5,9 +5,9 @@ import JustToolBar from "@/app/tool-bar/JustToolBar";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
 import {
-  CONFIG_ID,
+  GRID_DATA_ID,
   CONFIG_KEYS,
-} from "@/app/config/configsSlice";
+} from "@/app/config/gridDataSlice.ts";
 import React, {useEffect} from "react";
 // import {
 //   initialLayoutValue,
@@ -20,7 +20,7 @@ import React, {useEffect} from "react";
 import {WinInfo} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
-import useConfigs from "@/app/config/useConfigs.ts";
+import useGridData from "@/app/config/useGridData.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
@@ -35,16 +35,16 @@ function App() {
 
   const {toggleWin} = useJustLayout(LAYOUT_ID);
 
-  const {updateConfigs} = useConfigs(CONFIG_ID)
+  const {updateGridData} = useGridData(GRID_DATA_ID)
 
   useEffect(() => {
     CONFIG_KEYS.forEach((justId: JustId) => {
       const file: string = JustUtil.getParamString(justId, 'file');
       window.api.readDataExcel(file)
-        .then(res => {
-          updateConfigs({
-            [res.key]: res
-          })
+        .then(gridData => {
+          if (gridData) {
+            updateGridData(gridData)
+          }
         })
     })
 

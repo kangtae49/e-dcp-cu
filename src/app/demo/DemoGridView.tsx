@@ -4,11 +4,11 @@ import {faPenToSquare} from "@fortawesome/free-solid-svg-icons"
 import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
 
 function DemoGridView() {
-  const configKey = "data\\company.xlsx";
+  const dataKey = "data\\company.xlsx";
 
 
   const clickEdit = () => {
-    window.api.startDataFile(configKey)
+    window.api.startDataFile(dataKey)
   }
 
   return (
@@ -17,7 +17,7 @@ function DemoGridView() {
         DemoGridView <Icon icon={faPenToSquare} onClick={() => clickEdit()}/>
       </div>
       <div style={{flex: 1, minHeight: 0, overflow: "auto"}}>
-        <ConfigGrid configKey={configKey}/>
+        <ConfigGrid dataKey={dataKey} />
       </div>
     </div>
   )

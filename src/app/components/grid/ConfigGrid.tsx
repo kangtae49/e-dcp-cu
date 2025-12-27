@@ -2,33 +2,33 @@ import "./ConfigGrid.css"
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {
-  CONFIG_ID,
-} from "@/app/config/configsSlice.ts";
+  GRID_DATA_ID,
+} from "@/app/config/gridDataSlice.ts";
 import throttle from "lodash/throttle";
-import {ConfigTable} from "@/types.ts";
-import useConfigs from "@/app/config/useConfigs.ts";
+import {GridData} from "@/types.ts";
+import useGridData from "@/app/config/useGridData.ts";
 
 interface Props {
-  configKey: string
+  dataKey: string
 }
 
 const getColumns = (header: string[], columnSize: Record<string, number>): Column[] => [
   { columnId: " ", width: 50, resizable: true, },
   ...header.map(h => ({ columnId: h, width: columnSize?.[h] ?? 150, resizable: true, })),
 ]
-function ConfigGrid({configKey}: Props) {
+function ConfigGrid({dataKey}: Props) {
 
-  const {state: configsState} = useConfigs(CONFIG_ID)
+  const {state: configsState} = useGridData(GRID_DATA_ID)
 
   const ref = useRef<ReactGrid>(null)
 
-  const defaultConfigTable: ConfigTable = {key: configKey, header: [], data: []}
+  const defaultConfigTable: GridData = {key: dataKey, header: [], data: []}
 
-  const configTable = configsState?.configs[configKey] ?? defaultConfigTable;
+  const configTable = configsState?.gridDataMap[dataKey] ?? defaultConfigTable;
 
   const [columnsSize, setColumnsSize] = useState({});
 
-  const getTableRows = (table: ConfigTable): Row[] => {
+  const getTableRows = (table: GridData): Row[] => {
     return [
       getTableHeader(table.header),
       ...getTableBody(table)
@@ -45,7 +45,7 @@ function ConfigGrid({configKey}: Props) {
     }
   }
 
-  const getTableBody = (table: ConfigTable): Row [] => {
+  const getTableBody = (table: GridData): Row [] => {
     return table.data.map<Row>((row: any, idx: number) => ({
       rowId: idx,
       cells: [
@@ -85,11 +85,11 @@ function ConfigGrid({configKey}: Props) {
 
   const rows = getTableRows(configTable);
   const columns = getColumns(configTable.header, columnsSize);
-  console.log('configTable:', configKey, configTable)
+  console.log('configTable:', dataKey, configTable)
   return (
     <div className="just-grid" onScroll={handleScroll}>
       <ReactGrid
-        key={configKey}
+        key={dataKey}
         ref={ref}
         rows={rows}
         columns={columns}

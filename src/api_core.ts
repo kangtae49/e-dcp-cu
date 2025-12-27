@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {ConfigTable, Env, JobEvent, JobStatus} from "./types.ts";
+import {GridData, Env, JobEvent, JobStatus} from "./types.ts";
 import iconv from 'iconv-lite';
 
 
@@ -54,8 +54,17 @@ export function isLockScriptSubPath(subpath: string) {
 }
 
 
-export function readDataExcel(subpath: string): ConfigTable {
+export function readDataExcel(subpath: string): GridData | null {
   const filePath = getScriptSubPath(subpath)
+
+  if (!fs.existsSync(filePath)) {
+    return null
+  }
+
+  if (isLockScriptSubPath(filePath)) {
+    return null
+  }
+
   const fileBuffer = fs.readFileSync(filePath);
   const fileStats = fs.statSync(filePath);
   const timestamp = fileStats.mtime.getTime();

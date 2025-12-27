@@ -4,7 +4,7 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import {CONFIG_ID} from "@/app/config/configsSlice.ts";
+import {GRID_DATA_ID} from "@/app/config/gridDataSlice.ts";
 import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import {
@@ -16,7 +16,7 @@ import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
-import useConfigs from "@/app/config/useConfigs.ts";
+import useGridData from "@/app/config/useGridData.ts";
 import usePage from "@/app/page/usePage.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
@@ -34,7 +34,7 @@ interface FileItem {
 }
 
 function Page01View({justId}: Props) {
-  const configKey = "data\\company.xlsx";
+  const dataKey = "data\\company.xlsx";
   const pagesDir = "pages";
   const ref = useRef<HTMLDivElement>(null)
   const refGrid = useRef<HTMLDivElement>(null)
@@ -57,9 +57,9 @@ function Page01View({justId}: Props) {
   } = useJobMonitor(JOB_MONITOR_ID);
 
   const {
-    state: configsState,
-    updateConfigs,
-  } = useConfigs(CONFIG_ID)
+    state: gridDataState,
+    updateGridData,
+  } = useGridData(GRID_DATA_ID)
 
   // const [outFile, setOutFile] = React.useState<string>('');
 
@@ -69,7 +69,7 @@ function Page01View({justId}: Props) {
     })
   }
 
-  const config = configsState?.configs?.[configKey];
+  const config = gridDataState?.gridDataMap?.[dataKey];
   const companyList = toOptions(config?.data ?? []);
 
 
@@ -84,10 +84,10 @@ function Page01View({justId}: Props) {
 
   useEffect(() => {
     window.api.readDataExcel(outPath)
-      .then((configTable) => {
-        updateConfigs({
-          [outPath]: configTable
-        })
+      .then((gridData) => {
+        if (gridData) {
+          updateGridData(gridData)
+        }
       })
   }, [outPath])
 
