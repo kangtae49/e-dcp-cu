@@ -3,10 +3,10 @@ import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {
   GRID_DATA_ID,
-} from "@/app/config/gridDataSlice.ts";
+} from "@/app/grid/gridDataSlice.ts";
 import throttle from "lodash/throttle";
 import {GridData} from "@/types.ts";
-import useGridData from "@/app/config/useGridData.ts";
+import useGridData from "@/app/grid/useGridData.ts";
 
 interface Props {
   dataKey: string

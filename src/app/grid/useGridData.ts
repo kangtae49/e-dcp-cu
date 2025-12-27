@@ -1,5 +1,5 @@
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {GridDataActions, GridDataState, createGridDataSlice} from "@/app/config/gridDataSlice.ts";
+import {GridDataActions, GridDataState, createGridDataSlice} from "@/app/grid/gridDataSlice.ts";
 import {GridData} from "@/types.ts";
 
 function useGridData(configId: string) {

@@ -1,5 +1,5 @@
 import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
-import "./ConfigView.css"
+import "./GridView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
@@ -9,7 +9,7 @@ interface Props {
   justId: JustId
 }
 
-function ConfigView({justId}: Props) {
+function GridView({justId}: Props) {
 
   console.log('ConfigView', justId)
   const dataKey = JustUtil.getParamString(justId, 'file');
@@ -21,7 +21,7 @@ function ConfigView({justId}: Props) {
   }
 
   const openSetting = (key: string) => {
-    window.api.startDataFile(key)
+    window.api.startDataFile(key).then()
   }
 
   return (
@@ -40,5 +40,5 @@ function ConfigView({justId}: Props) {
   )
 }
 
-export default ConfigView;
+export default GridView;
 

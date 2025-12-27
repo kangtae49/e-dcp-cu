@@ -1,8 +1,8 @@
 import {useEffect} from "react";
 import {
   GRID_DATA_ID,
-} from "@/app/config/gridDataSlice.ts";
-import useGridData from "@/app/config/useGridData.ts";
+} from "@/app/grid/gridDataSlice.ts";
+import useGridData from "@/app/grid/useGridData.ts";
 import pathUtils from "@/utils/pathUtils.ts";
 
 function WatchListener(): null {

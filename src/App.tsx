@@ -7,7 +7,7 @@ import WatchListener from "@/app/listeners/WatchListener";
 import {
   GRID_DATA_ID,
   CONFIG_KEYS,
-} from "@/app/config/gridDataSlice.ts";
+} from "@/app/grid/gridDataSlice.ts";
 import React, {useEffect} from "react";
 // import {
 //   initialLayoutValue,
@@ -20,7 +20,7 @@ import React, {useEffect} from "react";
 import {WinInfo} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
-import useGridData from "@/app/config/useGridData.ts";
+import useGridData from "@/app/grid/useGridData.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";

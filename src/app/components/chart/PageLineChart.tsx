@@ -2,9 +2,9 @@ import "./chart.css"
 import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import {
   GRID_DATA_ID,
-} from "@/app/config/gridDataSlice.ts";
+} from "@/app/grid/gridDataSlice.ts";
 import {GridData} from "@/types.ts";
-import useGridData from "@/app/config/useGridData.ts";
+import useGridData from "@/app/grid/useGridData.ts";
 
 interface DataKey {
   id: string

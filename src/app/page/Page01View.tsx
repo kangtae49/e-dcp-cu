@@ -1,10 +1,10 @@
 import "./PageView.css"
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import {GRID_DATA_ID} from "@/app/config/gridDataSlice.ts";
+import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
 import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import {
@@ -16,7 +16,7 @@ import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
-import useGridData from "@/app/config/useGridData.ts";
+import useGridData from "@/app/grid/useGridData.ts";
 import usePage from "@/app/page/usePage.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
@@ -287,7 +287,11 @@ function Page01View({justId}: Props) {
               </div>
             </div>
             <div className="search-box">
-              <div className="search-icon-btn" onClick={() => searchPage01()}>
+              <div className={classNames(
+                "search-icon-btn",
+                )}
+                onClick={() => searchPage01()}
+              >
                 <div className="search-icon">
                   {pageState?.jobInfo !== null && pageState?.jobInfo.status === 'RUNNING' ?
                     <div className="spinner"></div>
@@ -298,6 +302,14 @@ function Page01View({justId}: Props) {
                 <div className="search-btn-label">
                   검색
                 </div>
+                {
+                  gridDataState?.gridDataMap?.[outPath]?.isLocked &&
+                  <div className="badge-wrap">
+                    <div className="badge" style={{top: "-13px", left: "-5px"}}>
+                      <Icon icon={faLock} />
+                    </div>
+                  </div>
+                }
               </div>
             </div>
           </div>
