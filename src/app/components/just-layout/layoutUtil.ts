@@ -1,5 +1,4 @@
 import {
-  JSONValue,
   JustBranch, JustId,
   JustNode, JustPayloadMoveWinSplit, JustPayloadMoveWinStack,
   JustSplitDirection,
@@ -437,8 +436,8 @@ export class JustUtil {
   static getParamString(justId: JustId, key: string): string {
     return justId.params?.[key]?.toString() ?? ""
   }
-  static getParam(justId: JustId, key: string): JSONValue {
-    return justId.params?.[key]
+  static getParam<T>(justId: JustId, key: string): T | undefined {
+    return justId.params?.[key] as T | undefined
   }
 
   static isEquals(justId1: JustId | null, justId2: JustId | null): boolean {

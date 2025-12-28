@@ -11,11 +11,10 @@ interface Props {
 
 function GridView({justId}: Props) {
 
-  console.log('ConfigView', justId)
   const dataKey = JustUtil.getParamString(justId, 'file');
-  const configTitle = JustUtil.getParamString(justId, 'title');
+  const title = JustUtil.getParamString(justId, 'title');
 
-  const clickConfigKey = () => {
+  const clickTitle = () => {
     console.log(dataKey)
     openSetting(dataKey)
   }
@@ -25,13 +24,13 @@ function GridView({justId}: Props) {
   }
 
   return (
-    <div className="config">
-      <div className="config-key">
-        <div className="config-title" onClick={clickConfigKey}>
-          <Icon icon={faPenToSquare} /> {configTitle}
+    <div className="grid-view">
+      <div className="grid-head">
+        <div className="grid-title" onClick={clickTitle}>
+          <Icon icon={faPenToSquare} /> {title}
         </div>
       </div>
-      <div className="config-table">
+      <div className="grid-container">
         <ConfigGrid
           dataKey={dataKey}
         />

@@ -12,18 +12,18 @@ import {
 } from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
-import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import usePage from "@/app/page/usePage.ts";
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JSONValue, JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
+import BaseLineChart, {LegendItem} from "@/app/components/chart/BaseLineChart.tsx";
 
 interface Props {
   justId: JustId
@@ -36,8 +36,22 @@ interface FileItem {
 function Page01View({justId}: Props) {
   const dataKey = "data\\company.xlsx";
   const pagesDir = "pages";
+  const xAxisCol =  "stdrYm";
+  const legend: LegendItem [] = [
+    {
+      id: "cpstrtRlest",
+      name: "cpstrtRlest",
+      color: "#ca2828"
+    },
+    {
+      id: "cpstrtVlscrt",
+      name: "cpstrtVlscrt",
+      color: "#1140bd"
+    }
+  ]
   const ref = useRef<HTMLDivElement>(null)
   const refGrid = useRef<HTMLDivElement>(null)
+  const refChart = useRef<HTMLDivElement>(null)
 
   const {
     state: pageState,
@@ -189,7 +203,7 @@ function Page01View({justId}: Props) {
     }
   }), [ref])
 
-  const [, drag] = useDrag({
+  const [, dragGrid] = useDrag({
     type: JUST_DRAG_SOURCE,
     item: () => {
       const item: JustDragItem = {
@@ -197,10 +211,44 @@ function Page01View({justId}: Props) {
         // index: -1,
         // justBranch: [],
         justId: {
-          viewId: "setting-config",
+          viewId: "grid-view",
           params: {
             title: outFile,
             file: outPath,
+          }
+        },
+        // pos: "first"
+        // file: `output\\${outFile}`,
+      }
+      // const filePath = `output\\${outFile}`;
+      // setTimeout(() => {
+      //   window.api.startDrag(`output\\${outFile}`)
+      // }, 50)
+      return item;
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      console.log('drag end', item, monitor);
+    }
+  })
+
+
+  const [, dragChart] = useDrag({
+    type: JUST_DRAG_SOURCE,
+    item: () => {
+      const item: JustDragItem = {
+        // direction: 'row',
+        // index: -1,
+        // justBranch: [],
+        justId: {
+          viewId: "chart-view",
+          params: {
+            title: outFile,
+            file: outPath,
+            xAxisCol: xAxisCol,
+            legend: legend as unknown as JSONValue,
           }
         },
         // pos: "first"
@@ -233,9 +281,15 @@ function Page01View({justId}: Props) {
 
   useLayoutEffect(() => {
     if (refGrid.current) {
-      drag(refGrid);
+      dragGrid(refGrid);
     }
-  }, [drag]);
+  }, [dragGrid]);
+
+  useLayoutEffect(() => {
+    if (refChart.current) {
+      dragChart(refChart);
+    }
+  }, [dragChart]);
 
   // useEffect(() => {
   //   if(!pageState) return;
@@ -317,7 +371,9 @@ function Page01View({justId}: Props) {
       </div>
       <div className="page-body">
         <div className="tabs">
-          <div className={classNames(
+          <div
+            ref={refChart}
+            className={classNames(
             "tab-title",
                 {
                   "active": pageState?.tab === "GRAPH",
@@ -363,21 +419,11 @@ function Page01View({justId}: Props) {
             />
           </Activity>
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
-            <PageLineChart
-                key={outPath}
-                title={outFile ?? ''}
-                outFile={outPath}
-                legend={[
-                  {
-                    id: "cpstrtRlest",
-                    name: "cpstrtRlest",
-                    color: "#ca2828"
-                  }, {
-                    id: "cpstrtVlscrt",
-                    name: "cpstrtVlscrt",
-                    color: "#1140bd"
-                  }
-                ]}
+            <BaseLineChart
+              key={`${pagesDir}\\${outFile}`}
+              dataKey={`${pagesDir}\\${outFile}`}
+              xAxisCol={xAxisCol}
+              legend={legend}
             />
           </Activity>
         </div>

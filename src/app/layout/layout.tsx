@@ -8,10 +8,9 @@ import DemoView from "@/app/demo/DemoView.tsx";
 import DemoGridView from "@/app/demo/DemoGridView.tsx";
 import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
-import {CONFIG_KEYS} from "@/app/grid/gridDataSlice.ts";
 import GridView from "@/app/grid/ui/GridView.tsx";
 import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import ChartView from "@/app/chart/ui/ChartView.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -20,7 +19,8 @@ export const INIT_SIDE_MENU_SIZE = 200
 
 export type ViewId = "side-menu"
   | "page01"
-  | "demo" | "demo-grid" | "demo-line-chart" | "about" | "setting-config"
+  | "demo" | "demo-grid" | "demo-line-chart" | "about" | "grid-view"
+  | "chart-view"
 
 
 export interface SideMenuItem {
@@ -49,29 +49,39 @@ const viewMap = {
       title: "자산통계정보",
       canDup: true,
       icon: <Jdenticon size="30" value={justId.viewId} />,
-    view: <Page01View justId={justId} />
-  })
+      view: <Page01View justId={justId} />
+    })
   },
-    "demo": () => ({
+  "demo": () => ({
     title: "Demo",
     icon: <Jdenticon size="30" value="demo" />,
     view: <DemoView />
   }),
-    "demo-grid": () => ({
+  "demo-grid": () => ({
     title: "Demo Grid",
     icon: <Jdenticon size="30" value="demo-grid" />,
     view: <DemoGridView />
   }),
-    "demo-line-chart": () => ({
+  "demo-line-chart": () => ({
     title: "Demo Line Chart",
     icon: <Jdenticon size="30" value="demo-line-chart" />,
     view: <DemoLineChartView />
   }),
-    "about": () => ({
+  "about": () => ({
     title: "About",
     icon: <Jdenticon size="30" value="about" />,
     view: <AboutView  />
   }),
+  "chart-view": (justId: JustId) => ({
+    title: justId.params?.['title'] ?? '',
+    icon: <Jdenticon size="30" value="chart-view" />,
+    view: <ChartView justId={justId}/>
+  }),
+  "grid-view": (justId: JustId) => ({
+    title: justId.params?.['title'] ?? '',
+    icon: <Jdenticon size="30" value="grid-view" />,
+    view: <GridView justId={justId}/>
+  })
 
   // "setting-config": (winId: string) => {
   //   const winObjId = fromWinId(winId);
@@ -84,14 +94,14 @@ const viewMap = {
 } as Record<ViewId, GetWinInfoFn>;
 
 
-CONFIG_KEYS.forEach((justId: JustId) => {
-
-  viewMap[justId.viewId as ViewId] = (justId: JustId) => ({
-    title: JustUtil.getParamString(justId, 'title'),
-    icon: <Jdenticon size="30" value={"setting-config"} />,
-    view: <GridView justId={justId} />
-  });
-})
+// CONFIG_KEYS.forEach((justId: JustId) => {
+//
+//   viewMap[justId.viewId as ViewId] = (justId: JustId) => ({
+//     title: JustUtil.getParamString(justId, 'title'),
+//     icon: <Jdenticon size="30" value={"setting-config"} />,
+//     view: <GridView justId={justId} />
+//   });
+// })
 
 export {viewMap};
 
