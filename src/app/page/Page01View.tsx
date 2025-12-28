@@ -11,7 +11,7 @@ import {
   JOB_MONITOR_ID,
 } from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
-import TerminalView from "@/app/components/terminal/TerminalView";
+import Terminal from "@/app/components/terminal/Terminal.tsx";
 import PageLineChart from "@/app/components/chart/PageLineChart";
 import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus} from "@/types";
@@ -350,7 +350,7 @@ function Page01View({justId}: Props) {
         </div>
         <div className="tab-body">
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
-            <TerminalView
+            <Terminal
                 key={outPath}
                 events={pageState?.events ?? []}
             />

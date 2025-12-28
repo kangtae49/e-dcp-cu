@@ -1,4 +1,4 @@
-import "./TerminalView.css"
+import "./Terminal.css"
 import {useEffect, useRef} from "react";
 import {Terminal as XTerm} from "@xterm/xterm"
 import '@xterm/xterm/css/xterm.css';
@@ -11,7 +11,7 @@ interface Props {
   events: JobEvent[]
 }
 
-function TerminalView({events}: Props) {
+function Terminal({events}: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
@@ -122,6 +122,6 @@ function TerminalView({events}: Props) {
   )
 }
 
-export default TerminalView
+export default Terminal
 
 
