@@ -63,14 +63,19 @@ export function removeWinId(layout: JustNode | null, justId: JustId): JustNode |
   const curIdx = justStack.active ? JustUtil.indexOf(justStack.tabs, justStack.active) : 0
 
   const newTabs = justStack.tabs.filter((tab: JustId) => !JustUtil.isEquals(tab, justId))
-  const active = (newTabs.length > 0 && justStack.active !== null)
-    ? newTabs[clamp(curIdx-1, 0, newTabs.length-1)]
-    : null
+  let newActive: JustId | null;
+  if (justStack.active !== null && JustUtil.includes(newTabs, justStack.active)) {
+    newActive = justStack.active
+  } else {
+    newActive = (newTabs.length > 0 && justStack.active !== null)
+      ? newTabs[clamp(curIdx-1, 0, newTabs.length-1)]
+      : null
+  }
   return updateNodeOfWinId(layout, justId, {
     $set: {
       ...justStack,
       tabs: newTabs,
-      active: active,
+      active: newActive,
     }
   })
 }
@@ -286,13 +291,18 @@ export function getTabBranch(layout: JustNode | null, curBranch: JustBranch): Ju
   return null
 }
 
-export function addTabWin(layout: JustNode | null, branch: JustBranch, justId: JustId): JustNode | null {
+export function addTabWin(layout: JustNode | null, branch: JustBranch, justId: JustId, index: number): JustNode | null {
   if( layout === null) return null
   const node = getNodeByBranch(layout, branch)
   if (node.type !== 'stack') return layout
+  const idx = index < 0 ? node.tabs.length : clamp(index, 0, node.tabs.length)
   return updateNodeOfBranch(layout, branch, {
     $merge: {
-      tabs: [...node.tabs, justId],
+      tabs: [
+        ...node.tabs.slice(0, idx),
+        justId,
+        ...node.tabs.slice(idx)
+      ],
       active: justId,
     }
   })

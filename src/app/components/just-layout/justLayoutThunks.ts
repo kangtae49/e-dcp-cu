@@ -1,8 +1,7 @@
 import {
-  getBranchByWinId,
   getBranchByNodeName,
   hasWinId, queryWinIdsByStack,
-  queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch, queryDupWinIdsByWinId, JustUtil
+  queryWinIdsByViewId, buildSpecFromUpdateSpec, updateNode, getNodeAtBranch, queryDupWinIdsByWinId
 } from "./layoutUtil.ts";
 import {createSliceThunk} from "@/store/hooks.ts";
 import {getActions} from "@/store";
@@ -33,9 +32,6 @@ interface PayloadOpenWinMenu {
   justId: JustId
 }
 
-interface PayloadCloneWin {
-  justId: JustId
-}
 
 export function createJustLayoutThunks(sliceId: string) {
   const toggleSideMenu = createSliceThunk(sliceId, (_, {dispatch, sliceState}) => {
@@ -103,14 +99,6 @@ export function createJustLayoutThunks(sliceId: string) {
       dispatch(openWin({justId: newJustId}))
     }
   })
-  const cloneWin = createSliceThunk(sliceId, ({justId}: PayloadCloneWin, {dispatch, sliceState}) => {
-    const targetBranch = getBranchByWinId(sliceState?.layout ?? null, justId);
-    if (targetBranch === null) return;
-    const justLayoutActions = getActions<JustLayoutActions>(sliceId);
-    dispatch(justLayoutActions.addTab({
-      justId: JustUtil.replaceDup(justId),
-    }))
-  })
 
   return {
     toggleSideMenu,
@@ -120,7 +108,6 @@ export function createJustLayoutThunks(sliceId: string) {
     getWinIds,
     getDupWinIds,
     getWinIdsByBranch,
-    cloneWin,
   }
 }
 

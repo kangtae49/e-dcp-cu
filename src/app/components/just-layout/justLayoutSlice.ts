@@ -1,6 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {
-  activeWinId, addTabWin, getTabBranch, hasWinId,
+  activeWinId, addTabWin, getBranchByWinId, getNodeAtBranch, getTabBranch, hasWinId, JustUtil,
   moveWinIdToSplit, moveWinIdToStack, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
@@ -70,6 +70,10 @@ export interface JustPayloadInsert {
 }
 export interface JustPayloadAddTab {
   justId: JustId
+}
+export interface JustPayloadCloneTab {
+  justId: JustId
+  cloneJustId: JustId
 }
 
 export interface JustPayloadRemove {
@@ -143,9 +147,23 @@ export const createJustLayoutSlice = (id: string) =>
         if (hasWinId(justState.layout, payload.justId)) {
           justState.layout = activeWinId(justState.layout, payload.justId)
         } else {
-          justState.layout = addTabWin(justState.layout, branch, payload.justId)
+          justState.layout = addTabWin(justState.layout, branch, payload.justId, -1)
         }
         justState.lastActiveId = payload.justId
+        justState.lastActiveTm = new Date().getTime()
+      },
+      cloneTab: (state, { payload }: PayloadAction<JustPayloadCloneTab>) => {
+        const justState = state as any;
+        // const stackNode = getNodeByWinId(justState.layout, payload.justId)
+        const branch = getBranchByWinId(justState.layout, payload.justId)
+        if (branch == null) return;
+        const stackNode = getNodeAtBranch(justState.layout, branch)
+        let newIndex: number = 0;
+        if (stackNode?.type === 'stack' && stackNode.active != null) {
+          newIndex = JustUtil.indexOf(stackNode.tabs, stackNode.active)
+        }
+        justState.layout = addTabWin(justState.layout, branch, payload.cloneJustId, newIndex)
+        justState.lastActiveId = payload.cloneJustId
         justState.lastActiveTm = new Date().getTime()
       },
       removeWin: (state, { payload }: PayloadAction<JustPayloadRemove>) => {

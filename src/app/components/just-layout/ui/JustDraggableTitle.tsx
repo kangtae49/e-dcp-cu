@@ -52,7 +52,7 @@ function JustDraggableTitle(props: Prop) {
   const {
     state: justLayoutState,
     actions: justLayoutActions,
-    thunks: justLayoutThunks,
+    // thunks: justLayoutThunks,
     dispatch,
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
@@ -70,9 +70,11 @@ function JustDraggableTitle(props: Prop) {
   }
 
   const cloneWin = (justId: JustId) => {
+    const cloneJustId = JustUtil.replaceDup(justId)
     dispatch(
-      justLayoutThunks.cloneWin({
-        justId
+      justLayoutActions.cloneTab({
+        justId,
+        cloneJustId
       })
     )
   }
