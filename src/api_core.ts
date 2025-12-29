@@ -259,11 +259,8 @@ export function getEnv() {
 
 export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
   try {
-    // console.log(filePath, item)
-    // const icon = getIconSubPath(item.icon)
     const icon = START_DRAG_IMG
     const file = getScriptSubPath(item.file)
-    // const files = item.files ? item.files.map(getScriptSubPath) : []
     console.log(file, icon)
     if (!fs.existsSync(file)) {
       console.error('Not Exists file: ', file);
@@ -274,14 +271,6 @@ export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
       icon,
     });
 
-    // setImmediate(() => {
-    //   if (event.sender.isDestroyed()) return;
-    //
-    //     event.sender.startDrag({
-    //       file,
-    //       icon,
-    //     });
-    // });
   } catch (e) {
     console.error('Native drag failed:', e);
   }

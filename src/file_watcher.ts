@@ -26,9 +26,6 @@ export class FileWatcher {
       ignored: [
         (currentPath) => {
 
-          // if (!fs.existsSync(currentPath)) {
-          //   return true;
-          // }
           try {
             if (fs.lstatSync(currentPath).isDirectory()) {
               return false
@@ -38,10 +35,6 @@ export class FileWatcher {
           }
 
           const fileName = path.basename(currentPath);
-          // const dirName = path.dirname(currentPath);
-          // const tmpFileName = `~$${fileName}`;
-          // const tmpPath = path.join(dirName, tmpFileName);
-          // return !(path.extname(fileName) === '.xlsx' && !fileName.startsWith("~$"));
           return !(path.extname(fileName) === '.xlsx');
         }
       ],
@@ -86,26 +79,4 @@ export class FileWatcher {
 
   }
 
-  /*
-  private copyToPage(tmpPath: string) {
-    if (!fs.existsSync(tmpPath)) {
-      return;
-    }
-    const pageDir = getScriptSubPath('pages')
-    const tmpName = path.basename(tmpPath)
-    const pageName = tmpName.split('_').slice(1).join('_')
-    const pagePath = path.join(pageDir, pageName)
-    // const tmpPageName = `~$${pageName}`
-    // const tmpPagePath = path.join(pageDir, tmpPageName)
-    if (fs.existsSync(pagePath)) {
-      fs.unlinkSync(pagePath)
-    }
-    fs.mkdirSync(pageDir, {recursive: true})
-    fs.renameSync(tmpPath, pagePath)
-
-    // fs.copyFileSync(tmpPath, tmpPagePath)
-    // fs.renameSync(tmpPagePath, pagePath)
-    // fs.unlinkSync(tmpPath)
-  }
-   */
 }

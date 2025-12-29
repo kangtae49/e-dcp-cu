@@ -18,7 +18,7 @@ const config: ForgeConfig = {
     extraResource: [
       'src-py',
       'src/assets/icon.ico',
-      'src/assets/download.svg'
+      'src/assets/download.png'
     ]
   },
   rebuildConfig: {},
