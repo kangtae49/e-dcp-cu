@@ -66,3 +66,7 @@ export interface DialogResult {
   file?: string
   message: string
 }
+
+export interface FileItem {
+  files: File[];
+}

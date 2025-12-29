@@ -1,7 +1,7 @@
 import "./PageView.css"
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock, faDownload} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock, faDownload, faPenToSquare} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
@@ -12,7 +12,7 @@ import {
 } from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
-import {JobEvent, JobStatus} from "@/types";
+import {FileItem, JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import usePage from "@/app/page/usePage.ts";
@@ -29,9 +29,7 @@ interface Props {
   justId: JustId
 }
 
-interface FileItem {
-  files: File[];
-}
+
 
 function Page01View({justId}: Props) {
   const dataKey = "data\\company.xlsx";
@@ -185,6 +183,11 @@ function Page01View({justId}: Props) {
     window.api.openSaveDialog(outPath, outPath).then()
   }
 
+  const clickOpenFile = (e: React.MouseEvent) => {
+    e.preventDefault()
+    window.api.startDataFile(outPath).then()
+  }
+
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
@@ -275,7 +278,6 @@ function Page01View({justId}: Props) {
   return (
     <div className="win-page"
          ref={ref}
-         // onDrop={onDropFiles}
     >
       <div className="page-title">
         <div className="page-icon">
@@ -376,6 +378,13 @@ function Page01View({justId}: Props) {
               onClick={clickDownload}
             >
               <Icon icon={faDownload} />
+            </div>
+          </div>
+          <div>
+            <div
+              onClick={clickOpenFile}
+            >
+              <Icon icon={faPenToSquare} />
             </div>
           </div>
         </div>

@@ -5,6 +5,8 @@
     background-color: #ede9e9;
     height: 100%;
     box-sizing: border-box;
+    --icon-color: #f4a261;
+    --icon-hover-scale: scale(1.2);
     /*background: linear-gradient(*/
     /*    to bottom,*/
     /*    #e8f4ff 0%,*/
@@ -234,9 +236,7 @@
 .fa-lock {
 }
 
-.fa-download {
-    color: #174aae;
-}
-.fa-download:hover {
-    ;
-}
+.fa-download { color: var(--icon-color); }
+.fa-download:hover { transform: var(--icon-hover-scale); }
+.fa-pen-to-square { color: var(--icon-color); }
+.fa-pen-to-square:hover { transform: var(--icon-hover-scale); }
