@@ -311,6 +311,17 @@ export const openSaveDialog = async (subpath: string, defaultName: string): Prom
   }
 }
 
+export function uploadFile (sourcePath: string, subpath: string) {
+  if (!fs.existsSync(sourcePath)) {
+    return
+  }
+  const targetPath = getScriptSubPath(subpath);
+  if (fs.existsSync(targetPath)) {
+    fs.unlinkSync(targetPath)
+  }
+  fs.copyFileSync(sourcePath, targetPath)
+}
+
 export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('echo', async (_event, message: string) => message);
   ipcMain.handle('get-dirname', () => __dirname);
@@ -322,5 +333,6 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('is-lock-script-path', (_event, subpath: string) => isLockScriptSubPath(subpath))
   ipcMain.handle('get-env', () => getEnv())
   ipcMain.handle('open-save-dialog', (_event, subpath: string, defaultName: string) => openSaveDialog(subpath, defaultName))
+  ipcMain.handle('upload-file', (_, sourcePath: string, subpath: string) => uploadFile(sourcePath, subpath))
   ipcMain.on('ondragstart', onDragStart);
 }

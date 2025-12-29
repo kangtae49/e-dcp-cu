@@ -151,8 +151,8 @@ function Page01View({justId}: Props) {
 
     if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return;
 
-    const isLock = await window.api.isLockScriptSubPath(outPath);
-    if (isLock) {
+    // const isLock = await window.api.isLockScriptSubPath(outPath);
+    if (gridDataState?.gridDataMap?.[outPath]?.isLocked) {
       alert(`Close Excel: ${outPath}`)
       window.api.startDataFile(outPath).then()
       return
@@ -185,23 +185,21 @@ function Page01View({justId}: Props) {
     window.api.openSaveDialog(outPath, outPath).then()
   }
 
-  // const onDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
-  //   console.log(e.dataTransfer?.files)
-  //   const path = window.api.getPathForFile(e.dataTransfer?.files[0])
-  //   console.log('onDrop:', path)
-  // }
-
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
       console.log('drop:', item)
+      if (gridDataState?.gridDataMap?.[outPath]?.isLocked) {
+        alert(`Close Excel: ${outPath}`)
+        window.api.startDataFile(outPath).then()
+        return
+      }
+
       const fileItem = monitor.getItem<FileItem>()
       const path = window.api.getPathForFile(fileItem.files[0])
-      console.log(path)
+      window.api.uploadFile(path, outPath).then()
     }
-  }), [ref])
+  }), [ref, gridDataState?.gridDataMap?.[outPath]?.isLocked])
 
   const [, dragGrid] = useDrag({
     type: JUST_DRAG_SOURCE,
@@ -277,7 +275,7 @@ function Page01View({justId}: Props) {
   return (
     <div className="win-page"
          ref={ref}
-      // onDrop={onDropFiles}
+         // onDrop={onDropFiles}
     >
       <div className="page-title">
         <div className="page-icon">

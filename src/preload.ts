@@ -10,6 +10,7 @@ export interface Api {
   getArgs: () => string [],
   getEnv: () => Promise<Env>,
   openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>,
+  uploadFile: (sourcePath: string, subpath: string) => Promise<void>,
 
   getResourcePath(): Promise<string>,
   // getResourceSubPath(subpath: string): Promise<string>,
@@ -36,6 +37,9 @@ const api: Api = {
   },
   openSaveDialog: (subpath: string, defaultName: string): Promise<DialogResult> => {
     return ipcRenderer.invoke('open-save-dialog', subpath, defaultName);
+  },
+  uploadFile: (sourcePath, subpath): Promise<void> => {
+    return ipcRenderer.invoke('upload-file', sourcePath, subpath);
   },
   getResourcePath: (): Promise<string> => {
     return ipcRenderer.invoke('get-app-resource-path');
