@@ -7,6 +7,8 @@
 
     padding: 5px;
     box-sizing: border-box;
+    --icon-color: #f4a261;
+    --icon-hover-scale: scale(1.2);
 }
 
 .grid-view .grid-head {
@@ -22,4 +24,7 @@
 }
 
 
-.grid-view svg { color: #f4a261 }
+.fa-download { color: var(--icon-color); }
+.fa-download:hover { transform: var(--icon-hover-scale); }
+.fa-pen-to-square { color: var(--icon-color); }
+.fa-pen-to-square:hover { transform: var(--icon-hover-scale); }
