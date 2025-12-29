@@ -1,15 +1,16 @@
-import {app, BrowserWindow, ipcMain, shell} from 'electron'
+import {app, BrowserWindow, ipcMain, shell, dialog, type IpcMainEvent} from 'electron'
 import path from 'node:path';
 import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {GridData, Env, JobEvent, JobStatus} from "./types.ts";
+import {GridData, Env, JobEvent, JobStatus, DragStartItem, DialogResult} from "./types.ts";
 import iconv from 'iconv-lite';
+// import nativeImage = Electron.nativeImage;
 
 
-// const START_DRAG_ICON = nativeImage.createFromPath(getIconSubPath('icon.ico'))
-const START_DRAG_ICON = getIconSubPath('icon.ico')
+// const START_DRAG_IMG = nativeImage.createFromPath(getIconSubPath('download.png'))
+const START_DRAG_IMG = getIconSubPath('download.png')
 
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
@@ -93,8 +94,6 @@ export function readDataExcel(subpath: string): GridData | null {
   //   raw: true,
   //   defval: null,
   // }) as Record<string, string | number | boolean | null> [];
-
-
 
   return {
     key: subpath,
@@ -253,6 +252,65 @@ export function stopScript(window: BrowserWindow, jobId: string) {
   }
 }
 
+export function getEnv() {
+  const myEnv: Env = { ...process.env };
+  return myEnv;
+}
+
+export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
+  try {
+    // console.log(filePath, item)
+    // const icon = getIconSubPath(item.icon)
+    const icon = START_DRAG_IMG
+    const file = getScriptSubPath(item.file)
+    // const files = item.files ? item.files.map(getScriptSubPath) : []
+    console.log(file, icon)
+    if (!fs.existsSync(file)) {
+      console.error('Not Exists file: ', file);
+      return;
+    }
+    event.sender.startDrag({
+      file,
+      icon,
+    });
+
+    // setImmediate(() => {
+    //   if (event.sender.isDestroyed()) return;
+    //
+    //     event.sender.startDrag({
+    //       file,
+    //       icon,
+    //     });
+    // });
+  } catch (e) {
+    console.error('Native drag failed:', e);
+  }
+}
+
+
+export const openSaveDialog = async (subpath: string, defaultName: string): Promise<DialogResult> => {
+  const { filePath, canceled } = await dialog.showSaveDialog({
+    title: 'Save',
+    defaultPath: defaultName,
+    buttonLabel: 'Save',
+    filters: [
+      { name: 'Excel Files', extensions: ['xlsx'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  });
+
+  if (canceled || !filePath) {
+    return { success: false, message: 'Cancel' };
+  }
+
+  try {
+    fs.copyFileSync(getScriptSubPath(subpath), filePath)
+    return { success: true, file: filePath, message: 'Success' };
+  } catch (err) {
+    return { success: false, message: err.message };
+  }
+}
+
 export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('echo', async (_event, message: string) => message);
   ipcMain.handle('get-dirname', () => __dirname);
@@ -262,38 +320,7 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
   ipcMain.handle('is-lock-script-path', (_event, subpath: string) => isLockScriptSubPath(subpath))
-  ipcMain.handle('get-env', () => {
-    const myEnv: Env = { ...process.env };
-    return myEnv;
-  })
-  ipcMain.on('ondragstart', (event, filePath: string) => {
-    try {
-      // console.log(filePath, item)
-      // const icon = getIconSubPath(item.icon)
-      const icon = START_DRAG_ICON
-      const file = getScriptSubPath(filePath)
-      // const files = item.files ? item.files.map(getScriptSubPath) : []
-      console.log(file, icon)
-      if (!fs.existsSync(file)) {
-        console.error('Not Exists file: ', file);
-        return;
-      }
-      event.sender.startDrag({
-        file,
-        icon,
-      });
-
-      // setImmediate(() => {
-      //   if (event.sender.isDestroyed()) return;
-      //
-      //     event.sender.startDrag({
-      //       file,
-      //       icon,
-      //     });
-      // });
-    } catch (e) {
-      console.error('Native drag failed:', e);
-    }
-
-  });
+  ipcMain.handle('get-env', () => getEnv())
+  ipcMain.handle('open-save-dialog', (_event, subpath: string, defaultName: string) => openSaveDialog(subpath, defaultName))
+  ipcMain.on('ondragstart', onDragStart);
 }

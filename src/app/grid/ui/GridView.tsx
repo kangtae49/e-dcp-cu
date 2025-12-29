@@ -1,4 +1,4 @@
-import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
+import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import "./GridView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
@@ -31,7 +31,7 @@ function GridView({justId}: Props) {
         </div>
       </div>
       <div className="grid-container">
-        <ConfigGrid
+        <JustGrid
           dataKey={dataKey}
         />
       </div>

@@ -1,7 +1,7 @@
 import "@silevis/reactgrid/styles.css";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons"
-import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
+import JustGrid from "@/app/components/grid/JustGrid.tsx";
 
 function DemoGridView() {
   const dataKey = "data\\company.xlsx";
@@ -17,7 +17,7 @@ function DemoGridView() {
         DemoGridView <Icon icon={faPenToSquare} onClick={() => clickEdit()}/>
       </div>
       <div style={{flex: 1, minHeight: 0, overflow: "auto"}}>
-        <ConfigGrid dataKey={dataKey} />
+        <JustGrid dataKey={dataKey} />
       </div>
     </div>
   )

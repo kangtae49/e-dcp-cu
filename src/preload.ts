@@ -1,8 +1,7 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import electron, {contextBridge, ipcRenderer, webUtils } from 'electron'
-import {GridData, DragStartItem, Env, JobEvent, WatchEvent} from "@/types.ts";
-import * as Electron from "electron";
+import {contextBridge, ipcRenderer, webUtils } from 'electron'
+import {GridData, DragStartItem, Env, JobEvent, WatchEvent, DialogResult} from "@/types.ts";
 
 
 
@@ -10,6 +9,7 @@ export interface Api {
   echo(message: string): Promise<string>,
   getArgs: () => string [],
   getEnv: () => Promise<Env>,
+  openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>,
 
   getResourcePath(): Promise<string>,
   // getResourceSubPath(subpath: string): Promise<string>,
@@ -34,6 +34,9 @@ const api: Api = {
   getEnv: () => {
     return ipcRenderer.invoke('get-env');
   },
+  openSaveDialog: (subpath: string, defaultName: string): Promise<DialogResult> => {
+    return ipcRenderer.invoke('open-save-dialog', subpath, defaultName);
+  },
   getResourcePath: (): Promise<string> => {
     return ipcRenderer.invoke('get-app-resource-path');
   },
@@ -50,15 +53,11 @@ const api: Api = {
     return ipcRenderer.invoke('stop-script', jobId)
   },
   isLockScriptSubPath(subpath) {
-    return electron.ipcRenderer.invoke("is-lock-script-path", subpath);
+    return ipcRenderer.invoke("is-lock-script-path", subpath);
   },
   startDrag(item: DragStartItem) {
     ipcRenderer.send('ondragstart', item)
   },
-  // startDrag(filePath: string) {
-  //   ipcRenderer.send('ondragstart', filePath)
-  // },
-
   onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void) {
     ipcRenderer.removeAllListeners('job-event');
     ipcRenderer.on('job-event', callback)

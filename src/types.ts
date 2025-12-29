@@ -60,3 +60,9 @@ export interface Env {
 export interface DragStartItem {
   file: string
 }
+
+export interface DialogResult {
+  success: boolean,
+  file?: string
+  message: string
+}

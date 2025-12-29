@@ -1,4 +1,4 @@
-import "./ConfigGrid.css"
+import "./grid.css"
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {
@@ -16,7 +16,7 @@ const getColumns = (header: string[], columnSize: Record<string, number>): Colum
   { columnId: " ", width: 50, resizable: true, },
   ...header.map(h => ({ columnId: h, width: columnSize?.[h] ?? 150, resizable: true, })),
 ]
-function ConfigGrid({dataKey}: Props) {
+function JustGrid({dataKey}: Props) {
 
   const {state: configsState} = useGridData(GRID_DATA_ID)
 
@@ -103,5 +103,5 @@ function ConfigGrid({dataKey}: Props) {
   )
 }
 
-export default ConfigGrid;
+export default JustGrid;
 

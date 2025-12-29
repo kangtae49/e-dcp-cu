@@ -1,7 +1,7 @@
 import "./PageView.css"
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock} from "@fortawesome/free-solid-svg-icons"
+import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock, faDownload} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
@@ -12,7 +12,6 @@ import {
 } from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
-import OutputGrid from "@/app/components/grid/OutputGrid";
 import {JobEvent, JobStatus} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
@@ -23,7 +22,8 @@ import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
-import BaseLineChart, {LegendItem} from "@/app/components/chart/BaseLineChart.tsx";
+import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
+import JustGrid from "@/app/components/grid/JustGrid.tsx";
 
 interface Props {
   justId: JustId
@@ -91,8 +91,9 @@ function Page01View({justId}: Props) {
   const startYm = pageState?.startDate ? format(pageState.startDate, "yyyyMM") : format(new Date(), "yyyyMM");
   const endYm = pageState?.endDate ? format(pageState.endDate, "yyyyMM") : format(new Date(), "yyyyMM");
   const companyVal = pageState?.company ? pageState.company.value : companyList[0]?.value;
-  const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
-  const outFile = `${args}.xlsx`
+  const condition = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm]
+  const filename = condition.join("_")
+  const outFile = `${filename}.xlsx`
   const outPath = `${pagesDir}\\${outFile}`
 
 
@@ -157,10 +158,6 @@ function Page01View({justId}: Props) {
       return
     }
 
-    const startYm = format(pageState.startDate, "yyyyMM");
-    const endYm = format(pageState.endDate, "yyyyMM");
-    const companyVal = pageState.company.value;
-
     if (pageState.jobInfo !== null && pageState.jobInfo.status === 'RUNNING') return;
     console.log('searchPage01')
 
@@ -169,21 +166,24 @@ function Page01View({justId}: Props) {
     }
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
-    const args = [jobId, justId.viewId, companyVal?.toString() ?? '', startYm, endYm];
+    const args = [jobId, ...condition];
     setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
-  // useEffect(() => {
-  //   if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return ;
-  //   const startYm = format(pageState.startDate, "yyyyMM");
-  //   const endYm = format(pageState.endDate, "yyyyMM");
-  //   const companyVal = pageState.company.value;
-  //   const args = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm].join("_")
-  //   setOutFile(`${args}.xlsx`)
-  // }, [pageState])
+  const dragDownload = (e: React.DragEvent) => {
+    console.log('onDragDownload', outPath)
+    e.preventDefault()
+    window.api.startDrag({
+      file: outPath
+    })
+  }
 
-
+  const clickDownload = (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('clickDownload', outPath)
+    window.api.openSaveDialog(outPath, outPath).then()
+  }
 
   // const onDropFiles = (e: React.DragEvent<HTMLDivElement>) => {
   //   e.preventDefault();
@@ -207,9 +207,6 @@ function Page01View({justId}: Props) {
     type: JUST_DRAG_SOURCE,
     item: () => {
       const item: JustDragItem = {
-        // direction: 'row',
-        // index: -1,
-        // justBranch: [],
         justId: {
           viewId: "grid-view",
           params: {
@@ -217,13 +214,7 @@ function Page01View({justId}: Props) {
             file: outPath,
           }
         },
-        // pos: "first"
-        // file: `output\\${outFile}`,
       }
-      // const filePath = `output\\${outFile}`;
-      // setTimeout(() => {
-      //   window.api.startDrag(`output\\${outFile}`)
-      // }, 50)
       return item;
     },
     collect: (monitor) => ({
@@ -239,9 +230,6 @@ function Page01View({justId}: Props) {
     type: JUST_DRAG_SOURCE,
     item: () => {
       const item: JustDragItem = {
-        // direction: 'row',
-        // index: -1,
-        // justBranch: [],
         justId: {
           viewId: "chart-view",
           params: {
@@ -251,13 +239,7 @@ function Page01View({justId}: Props) {
             legend: legend as unknown as JSONValue,
           }
         },
-        // pos: "first"
-        // file: `output\\${outFile}`,
       }
-      // const filePath = `output\\${outFile}`;
-      // setTimeout(() => {
-      //   window.api.startDrag(`output\\${outFile}`)
-      // }, 50)
       return item;
     },
     collect: (monitor) => ({
@@ -290,20 +272,6 @@ function Page01View({justId}: Props) {
       dragChart(refChart);
     }
   }, [dragChart]);
-
-  // useEffect(() => {
-  //   if(!pageState) return;
-  //   if (!pageState.startDate) {
-  //     setStartDate(format(new Date(), "yyyyMM"))
-  //   }
-  //   if (!pageState.endDate) {
-  //     setEndDate(format(new Date(), "yyyyMM"))
-  //   }
-  //   if (!pageState.company) {
-  //     setCompany(companyList[0])
-  //   }
-  // }, [pageState])
-
 
 
   return (
@@ -403,29 +371,49 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('LOG')}>
             <Icon icon={faTerminal} />log
           </div>
+          <div>
+            <div
+              draggable={true}
+              onDragStart={dragDownload}
+              onClick={clickDownload}
+            >
+              <Icon icon={faDownload} />
+            </div>
+          </div>
         </div>
         <div className="tab-body">
-          <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
-            <Terminal
-                key={outPath}
-                events={pageState?.events ?? []}
-            />
-          </Activity>
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
-            <OutputGrid
-                key={`${pagesDir}\\${outFile}`}
-                title={outFile ?? ''}
-                outFile={outPath}
-            />
+            <div className="content">
+              <JustGrid
+                key={outPath}
+                dataKey={outPath}
+              />
+            </div>
+            {/*<OutputGrid*/}
+            {/*    key={outPath}*/}
+            {/*    title={outFile ?? ''}*/}
+            {/*    outFile={outPath}*/}
+            {/*/>*/}
           </Activity>
           <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
-            <BaseLineChart
-              key={`${pagesDir}\\${outFile}`}
-              dataKey={`${pagesDir}\\${outFile}`}
-              xAxisCol={xAxisCol}
-              legend={legend}
-            />
+            <div className="content">
+              <JustLineChart
+                key={outPath}
+                dataKey={outPath}
+                xAxisCol={xAxisCol}
+                legend={legend}
+              />
+            </div>
           </Activity>
+          <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
+            <div className="content">
+              <Terminal
+                key={outPath}
+                events={pageState?.events ?? []}
+              />
+            </div>
+          </Activity>
+
         </div>
       </div>
 

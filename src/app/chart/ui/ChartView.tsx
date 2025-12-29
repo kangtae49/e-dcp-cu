@@ -3,7 +3,7 @@ import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
-import BaseLineChart, {LegendItem} from "@/app/components/chart/BaseLineChart.tsx";
+import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 
 interface Props {
   justId: JustId
@@ -31,7 +31,7 @@ function ChartView({ justId }: Props) {
         </div>
       </div>
       <div className="chart-container">
-        <BaseLineChart dataKey={dataKey} legend={legend} xAxisCol={xAxisCol} />
+        <JustLineChart dataKey={dataKey} legend={legend} xAxisCol={xAxisCol} />
       </div>
     </div>
   )

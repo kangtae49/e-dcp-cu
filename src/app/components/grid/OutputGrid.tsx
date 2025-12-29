@@ -1,7 +1,7 @@
 import "./OutputGrid.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
-import ConfigGrid from "@/app/components/grid/ConfigGrid.tsx";
+import JustGrid from "@/app/components/grid/JustGrid.tsx";
 
 interface Props {
   outFile: string
@@ -21,7 +21,7 @@ function OutputGrid({outFile, title}: Props) {
         </div>
       </div>
       <div className="output-grid-table">
-        <ConfigGrid key={outFile} dataKey={outFile} />
+        <JustGrid key={outFile} dataKey={outFile} />
       </div>
     </div>
   )
