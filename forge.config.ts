@@ -8,6 +8,7 @@ import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
 import path from "path";
+import * as fs from "node:fs";
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -17,9 +18,30 @@ const config: ForgeConfig = {
     icon: path.join(__dirname,'src/assets/icon'),
     extraResource: [
       'src-py',
-      'src/assets/icon.ico',
-      'src/assets/download.png'
-    ]
+      'src/assets',
+      // 'src/assets/icon.ico',
+      // 'src/assets/download.png'
+    ],
+  },
+  hooks: {
+    postPackage: async (forgeConfig, options) => {
+      const outPath = options.outputPaths[0];
+      const localesPath = path.join(outPath, 'locales');
+      if (fs.existsSync(localesPath)) {
+        const files = fs.readdirSync(localesPath);
+        const keep = ['ko.pak', 'en-US.pak', 'en-GB.pak'];
+
+        files.forEach(file => {
+          if (file.endsWith('.pak') && !keep.includes(file)) {
+            try {
+              fs.unlinkSync(path.join(localesPath, file));
+            } catch (err) {
+              console.error(`fail: ${file}`, err);
+            }
+          }
+        });
+      }
+    }
   },
   rebuildConfig: {},
   makers: [

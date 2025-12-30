@@ -75,7 +75,7 @@ const viewMap: Record<ViewId, WinInfo> = {
   "page01": {
     title: (justId) => justId.title,
     canDup: true,
-    icon: <Jdenticon size="30" value={page01Id} />,
+    icon: <Jdenticon size="30" value={page01Id.viewId} />,
     getView: (justId) => {
       return (
         <Page01View justId={justId!} />

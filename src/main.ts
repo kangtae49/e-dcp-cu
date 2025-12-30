@@ -25,7 +25,7 @@ const createWindow = () => {
     height: 600,
     autoHideMenuBar: true,
     // icon: path.join(__dirname, 'assets/icon.ico'),
-    icon: getIconSubPath('icon.ico'),
+    icon: getIconSubPath('assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       additionalArguments: process.argv,

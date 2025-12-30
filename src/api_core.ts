@@ -11,7 +11,7 @@ import * as os from "node:os";
 
 
 // const START_DRAG_IMG = nativeImage.createFromPath(getIconSubPath('download.png'))
-const START_DRAG_IMG = getIconSubPath('download.png')
+const START_DRAG_IMG = getIconSubPath('assets/download.png')
 
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
@@ -42,7 +42,7 @@ export function getIconSubPath(subpath: string) {
     // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
     return path.join(path.dirname(app.getAppPath()), subpath)
   } else {
-    return path.join(app.getAppPath(), 'src/assets', subpath)
+    return path.join(app.getAppPath(), 'src', subpath)
   }
 
 }
