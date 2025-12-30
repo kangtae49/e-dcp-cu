@@ -44,7 +44,6 @@ export interface JustSplitBase {
   first: JustNode
   second: JustNode
   size: number
-  show: boolean
   minSize?: number
 }
 

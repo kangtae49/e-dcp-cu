@@ -14,7 +14,6 @@ import classNames from "classnames";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
-  // viewMap: Record<string, WinInfo>
   layoutId: string
   getWinInfo: GetWinInfoFn
   initialValue: JustNode

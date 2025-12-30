@@ -72,7 +72,7 @@ function JustToolBar() {
             CONFIG_KEYS.map((justId) =>
               <MenuItem key={JustUtil.toString(justId)} className="just-menu-item" onClick={() => openWin(justId)}>
                 <div className="just-icon">
-                  <Jdenticon size="25" value={justId.viewId} />
+                  {viewMap[justId.viewId as ViewId].icon}
                 </div>
                 <div className="just-title">
                   {justId.title}

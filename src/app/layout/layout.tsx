@@ -1,6 +1,6 @@
 import {WinInfo} from "@/app/components/just-layout/index.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import {faCircleQuestion, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
+import {faCircleQuestion, faCircleInfo, faChartLine, faTableList} from "@fortawesome/free-solid-svg-icons";
 import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
 import Jdenticon from "react-jdenticon";
 import Page01View from "@/app/page/Page01View.tsx";
@@ -9,6 +9,7 @@ import GridView from "@/app/grid/ui/GridView.tsx";
 import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
 import ChartView from "@/app/chart/ui/ChartView.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
+import React from "react";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -92,7 +93,7 @@ const viewMap: Record<ViewId, WinInfo> = {
   },
   "chart-view": {
     title: (justId) => justId.title,
-    icon: <Jdenticon size="30" value="chart-view" />,
+    icon: <Icon icon={faChartLine} />,
     getView: (justId) => {
       return (
         <ChartView justId={justId}/>
@@ -101,7 +102,7 @@ const viewMap: Record<ViewId, WinInfo> = {
   },
   "grid-view": {
     title: (justId) => justId.title,
-    icon: <Jdenticon size="30" value="grid-view" />,
+    icon: <Icon icon={faTableList} />,
     getView: (justId) => {
       return (
         <GridView justId={justId}/>
@@ -158,7 +159,6 @@ export const sideMenuLayout: JustNode = {
   primary: 'first',
   primaryDefaultSize: 200,
   size: 200,
-  show: true,
   // minSize: 38,
   first: {
     type: 'stack',
@@ -169,7 +169,6 @@ export const sideMenuLayout: JustNode = {
     type: 'split-percentage',
     direction: 'column',
     size: 50,
-    show: true,
     first: {
       type: 'stack',
       tabs: [page01Id],
@@ -190,7 +189,6 @@ const layoutToolbar: JustNode  = {
   primary: 'first',
   primaryDefaultSize: 40,
   size: 40,
-  show: true,
   noSplitter: true,
   first: {
     type: 'stack',
