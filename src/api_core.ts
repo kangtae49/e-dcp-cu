@@ -4,8 +4,9 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {GridData, Env, JobEvent, JobStatus, DragStartItem, DialogResult} from "./types.ts";
+import {GridData, Env, JobEvent, JobStatus, DragStartItem, DialogResult, Versions} from "./types.ts";
 import iconv from 'iconv-lite';
+import * as os from "node:os";
 // import nativeImage = Electron.nativeImage;
 
 
@@ -21,6 +22,19 @@ export function getAppResourcePath() {
   } else {
     return app.getAppPath()
   }
+}
+
+export function getVersions(): Versions {
+  return {
+    app: app.getVersion(),
+    electron: process.versions.electron,
+    chrome: process.versions.chrome,
+    node: process.versions.node,
+    v8: process.versions.v8,
+    osType: os.type(),
+    osArch: os.arch(),
+    osRelease: os.release(),
+  };
 }
 
 export function getIconSubPath(subpath: string) {
@@ -313,6 +327,7 @@ export function uploadFile (sourcePath: string, subpath: string) {
 
 export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('echo', async (_event, message: string) => message);
+  ipcMain.handle('get-versions', () => getVersions());
   ipcMain.handle('get-dirname', () => __dirname);
   ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
   ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));

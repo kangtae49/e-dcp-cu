@@ -1,12 +1,18 @@
 import './AboutView.css'
 import useOnload from "../../hooks/useOnload.ts";
 import IconLogo from "../../assets/icon.svg?react"
+import {useState} from "react";
+import {Versions} from "@/types.ts";
 
 export default function AboutView() {
   const {onLoad} = useOnload();
+  const [versions, setVersions] = useState<Versions | null>(null)
 
   onLoad(() => {
     console.log("onLoad")
+    window.api.getVersions().then(res => {
+      setVersions(res)
+    })
   })
 
   return (
@@ -17,7 +23,14 @@ export default function AboutView() {
           <IconLogo />
         </div>
         <div className="content">
-          <h2>DcpCu v0.1.0</h2>
+          <h2>DcpCu v{versions?.app}</h2>
+          <div className="versions">
+            <div className="ver">Electron: {versions?.electron}</div>
+            <div className="ver">Chrome: {versions?.chrome}</div>
+            <div className="ver">Node: {versions?.node}</div>
+            <div className="ver">V8: {versions?.v8}</div>
+            <div className="ver">OS: {versions?.osType} {versions?.osArch} {versions?.osRelease}</div>
+          </div>
         </div>
       </div>
     </div>

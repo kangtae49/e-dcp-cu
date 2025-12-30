@@ -1,12 +1,13 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import {contextBridge, ipcRenderer, webUtils } from 'electron'
-import {GridData, DragStartItem, Env, JobEvent, WatchEvent, DialogResult} from "@/types.ts";
+import {GridData, DragStartItem, Env, JobEvent, WatchEvent, DialogResult, Versions} from "@/types.ts";
 
 
 
 export interface Api {
   echo(message: string): Promise<string>,
+  getVersions: () => Promise<Versions>,
   getArgs: () => string [],
   getEnv: () => Promise<Env>,
   openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>,
@@ -30,6 +31,9 @@ export interface Api {
 const api: Api = {
   echo: (message: string): Promise<string> => {
     return ipcRenderer.invoke('echo', message);
+  },
+  getVersions: (): Promise<Versions> => {
+    return ipcRenderer.invoke('get-versions')
   },
   getArgs: () => process.argv,
   getEnv: () => {

@@ -70,3 +70,14 @@ export interface DialogResult {
 export interface FileItem {
   files: File[];
 }
+
+export interface Versions {
+  app: string,
+  electron: string,
+  chrome: string,
+  node: string,
+  v8: string,
+  osType: string,
+  osArch: string,
+  osRelease: string,
+}

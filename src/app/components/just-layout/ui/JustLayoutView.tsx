@@ -34,13 +34,6 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
   onLoad(() => {
     dispatch(justLayoutActions.setLayout(initialValue))
 
-    // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
-    // dispatch(justLayoutActions.removeWin({ branch: [], winId: "winId01" }))
-    // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId01", direction: 'row', pos: 'first' }))
-    // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId02", direction: 'column', pos: 'second' }))
-    // dispatch(justLayoutActions.insertWin({ branch: [], winId: "winId03", direction: 'row', pos: 'first' }))
-    // dispatch(justLayoutActions.insertWin({ branch: ['second', 'second'], winId: "winId04", direction: 'row', pos: 'stack' }))
-
   })
 
   return (
