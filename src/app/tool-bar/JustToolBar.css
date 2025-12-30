@@ -12,7 +12,8 @@
     row-gap: 5px;
     align-items: center;
     justify-content: center;
-
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .just-tool-bar .just-tool-center {

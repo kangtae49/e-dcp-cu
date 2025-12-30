@@ -12,6 +12,10 @@ interface PayloadToggleWin {
   nodeName: string
 }
 
+interface PayloadGetSize {
+  nodeName: string
+}
+
 interface PayloadOpenWin {
   justId: JustId
 }
@@ -59,9 +63,23 @@ export function createJustLayoutThunks(sliceId: string) {
         size: newSize
       }
     })
-    const newLayout = updateNode(node, updateSpec)
+    const newLayout = updateNode(layout, updateSpec)
     if (newLayout == null) return;
     dispatch(justLayoutActions.setLayout(newLayout))
+  })
+
+  const getSizeByNodeName = createSliceThunk(sliceId, ({nodeName}: PayloadGetSize, {sliceState}) => {
+    const layout = sliceState?.layout;
+    const branch = getBranchByNodeName(layout, nodeName, [])
+    if (branch == null) return null;
+    const node = getNodeAtBranch(layout, branch)
+    if (node == null) return null;
+    if (node.type === 'split-pixels' || node.type === 'split-percentage') {
+      return node.size;
+    } else {
+      return null;
+    }
+
   })
 
   const openWin = createSliceThunk(sliceId, ({justId}: PayloadOpenWin, {dispatch, sliceState}) => {
@@ -103,6 +121,7 @@ export function createJustLayoutThunks(sliceId: string) {
   return {
     toggleSideMenu,
     toggleWin,
+    getSizeByNodeName,
     openWin,
     openWinMenu,
     getWinIds,

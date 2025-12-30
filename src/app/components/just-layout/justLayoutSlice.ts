@@ -56,6 +56,7 @@ export interface JustSplitPixels extends JustSplitBase {
   name: string
   primary: JustSplitDirection
   primaryDefaultSize: number
+  noSplitter?: boolean
 }
 
 export type JustPos = JustSplitDirection | 'stack'

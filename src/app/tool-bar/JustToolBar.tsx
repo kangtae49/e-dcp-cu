@@ -15,8 +15,8 @@ import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} 
 function JustToolBar() {
 
   const {
-    state: justLayoutState,
     toggleWin,
+    getSizeByNodeName,
     addTabWin
   } = useJustLayout(LAYOUT_ID)
 
@@ -28,10 +28,10 @@ function JustToolBar() {
   const openWin = (justId: JustId) => {
     addTabWin(justId)
   }
-
-  const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
-    ? justLayoutState.layout.size
-    : INIT_SIDE_MENU_SIZE;
+  const size = getSizeByNodeName(SIDE_MENU_NODE_NAME) ?? INIT_SIDE_MENU_SIZE;
+  // const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
+  //   ? justLayoutState.layout.size
+  //   : INIT_SIDE_MENU_SIZE;
 
   return (
     <div className="just-tool-bar">

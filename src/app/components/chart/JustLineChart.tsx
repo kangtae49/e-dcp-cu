@@ -20,7 +20,6 @@ function JustLineChart({dataKey, legend, xAxisCol}: Props) {
   const {state: gridDataState} = useGridData(GRID_DATA_ID)
   const defaultGridData: GridData = {key: dataKey, header: [], data: []}
   const gridData = gridDataState?.gridDataMap[dataKey] ?? defaultGridData;
-  console.log('BaseLineChart:', dataKey, legend, xAxisCol)
   return (
     <LineChart
       key={dataKey}

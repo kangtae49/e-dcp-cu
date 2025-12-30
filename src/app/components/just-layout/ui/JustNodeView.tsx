@@ -93,16 +93,18 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getW
               onDoubleClickTitle={onDoubleClickTitle}
             />
           </div>
-
-          <JustSplit
-            layoutId={layoutId}
-            node={node}
-            justBranch={justBranch}
-            containerRef={refNode}
-            onChange={onResize}
-            onRelease={onResize}
-          />
-
+          {
+            !(node.type === 'split-pixels' && node.noSplitter === true)
+            &&
+            <JustSplit
+              layoutId={layoutId}
+              node={node}
+              justBranch={justBranch}
+              containerRef={refNode}
+              onChange={onResize}
+              onRelease={onResize}
+            />
+          }
           <div
                className={classNames("just-second", {
                  "just-primary": !(node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first')),

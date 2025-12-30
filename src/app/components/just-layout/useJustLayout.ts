@@ -21,10 +21,15 @@ const useJustLayout = (layoutId: string) => {
     dispatch(justLayoutActions.addTab({justId: dupWinId}))
   }
 
+  const getSizeByNodeName = (nodeName: string): number | null => {
+    return dispatch(justLayoutTrunks.getSizeByNodeName({nodeName}))
+  }
+
   const state = justLayoutState
   return {
     state,
     toggleWin,
+    getSizeByNodeName,
     addTabWin
   }
 }

@@ -1,7 +1,6 @@
 import './App.css'
 
 import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
-import JustToolBar from "@/app/tool-bar/JustToolBar";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
 import {
@@ -68,7 +67,7 @@ function App() {
       <WatchListener />
       <div className="just-app">
         <div className="just-container">
-          <JustToolBar />
+          {/*<JustToolBar />*/}
           <JustLayoutView
             layoutId={LAYOUT_ID}
             getWinInfo={getWinInfo}

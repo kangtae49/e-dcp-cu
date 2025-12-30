@@ -11,13 +11,16 @@ import AboutView from "@/app/about/AboutView.tsx";
 import GridView from "@/app/grid/ui/GridView.tsx";
 import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
 import ChartView from "@/app/chart/ui/ChartView.tsx";
+import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
+
+export const TOOLBAR_NODE_NAME = "toolbar"
 export const SIDE_MENU_NODE_NAME = "side-menu"
 export const INIT_SIDE_MENU_SIZE = 200
 
-export type ViewId = "side-menu"
+export type ViewId = "toolbar" | "side-menu"
   | "page01"
   | "demo" | "demo-grid" | "demo-line-chart" | "about" | "grid-view"
   | "chart-view"
@@ -35,6 +38,14 @@ export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
 ]
 
 const viewMap = {
+  "toolbar": () => ({
+    title: "Toolbar",
+    icon: <div />,
+    view: <JustToolBar />,
+    canDrag: false,
+    canDrop: false,
+    showTitle: false,
+  }),
   "side-menu": () => ({
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
@@ -105,11 +116,13 @@ const viewMap = {
 
 export {viewMap};
 
+const toolbarId = {viewId: 'toolbar'};
 const sideMenuId = {viewId: 'side-menu'};
 const demoGridId = {viewId: 'demo-grid'};
 const aboutId = {viewId: 'about'};
 
-export const initialLayoutValue: JustNode = {
+
+export const sideMenuLayout: JustNode = {
   type: 'split-pixels',
   direction: 'row',
   name: SIDE_MENU_NODE_NAME,
@@ -140,4 +153,24 @@ export const initialLayoutValue: JustNode = {
     }
   },
 }
+
+const layoutToolbar: JustNode  = {
+  type: 'split-pixels',
+  direction: 'row',
+  name: TOOLBAR_NODE_NAME,
+  primary: 'first',
+  primaryDefaultSize: 40,
+  size: 40,
+  show: true,
+  noSplitter: true,
+  first: {
+    type: 'stack',
+    tabs: [toolbarId],
+    active: toolbarId
+  },
+  second: sideMenuLayout
+}
+
+export const initialLayoutValue: JustNode = layoutToolbar
+
 
