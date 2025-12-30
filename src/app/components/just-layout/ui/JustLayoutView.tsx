@@ -11,7 +11,7 @@ import {
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "./JustNodeView.tsx";
 import classNames from "classnames";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   // viewMap: Record<string, WinInfo>
