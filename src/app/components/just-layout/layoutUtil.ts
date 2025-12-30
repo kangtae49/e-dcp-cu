@@ -454,13 +454,13 @@ export class JustUtil {
   }
 
   static withoutDup(justId: JustId): JustId {
-    const { params, viewId } = justId
-    return { params, viewId }
+    const { params, viewId, title } = justId
+    return { params, viewId, title }
   }
 
   static replaceDup(justId: JustId): JustId {
-    const { params, viewId } = justId
-    return { params, viewId, dupId: `${new Date().getTime()}`}
+    const { params, viewId, title } = justId
+    return { params, viewId, title, dupId: `${new Date().getTime()}`}
   }
 
 }

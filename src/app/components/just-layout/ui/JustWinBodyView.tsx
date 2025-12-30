@@ -146,7 +146,7 @@ function JustWinBodyView (props: Prop) {
     >
       {justStack.tabs.map(justId =>
         <Activity key={JustUtil.toString(justId)} mode={JustUtil.isEquals(justStack.active, justId) ? 'visible' : 'hidden'}>
-          {getWinInfo(justId).view}
+          {getWinInfo(justId).getView(justId)}
         </Activity>
       )}
 

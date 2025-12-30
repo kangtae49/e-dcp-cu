@@ -27,7 +27,7 @@ import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 function getWinInfo(justId: JustId): WinInfo {
   const viewId = justId.viewId as ViewId;
-  return viewMap[viewId](justId)
+  return viewMap[viewId]
 }
 
 function App() {

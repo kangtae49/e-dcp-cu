@@ -9,7 +9,14 @@ import {CONFIG_KEYS} from "@/app/grid/gridDataSlice.ts";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
-import {INIT_SIDE_MENU_SIZE, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout.tsx";
+import {
+  aboutId,
+  INIT_SIDE_MENU_SIZE,
+  LAYOUT_ID,
+  SIDE_MENU_ID_LIST,
+  SIDE_MENU_NODE_NAME, ViewId,
+  viewMap
+} from "@/app/layout/layout.tsx";
 
 
 function JustToolBar() {
@@ -68,12 +75,21 @@ function JustToolBar() {
                   <Jdenticon size="25" value={justId.viewId} />
                 </div>
                 <div className="just-title">
-                  {JustUtil.getParamString(justId, 'title')}
+                  {justId.title}
                 </div>
                 <div className="just-icon" />
               </MenuItem>
             )
           }
+          <MenuItem className="just-menu-item" onClick={() => openWin(aboutId)}>
+            <div className="just-icon">
+              {viewMap[aboutId.viewId as ViewId].icon}
+            </div>
+            <div className="just-title">
+              {aboutId.title}
+            </div>
+            <div className="just-icon" />
+          </MenuItem>
         </Menu>
       </div>
 

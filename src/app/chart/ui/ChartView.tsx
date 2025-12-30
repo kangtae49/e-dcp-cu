@@ -10,7 +10,7 @@ interface Props {
 }
 function ChartView({ justId }: Props) {
   const dataKey = JustUtil.getParamString(justId, 'file');
-  const title = JustUtil.getParamString(justId, 'title');
+  const title = justId.title;
   const xAxisCol = JustUtil.getParamString(justId, 'xAxisCol');
   const legend= JustUtil.getParam<LegendItem []>(justId, 'legend') ?? [];
 

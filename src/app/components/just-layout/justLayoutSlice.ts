@@ -19,6 +19,7 @@ export type JSONObject = { [key: string]: JSONValue };
 // export type JustId = JSONObject | string | number;
 
 export interface JustId extends JSONObject {
+  title: string
   viewId: string
   dupId?: string
   params?: Record<string, JSONValue>

@@ -210,8 +210,8 @@ function Page01View({justId}: Props) {
       const item: JustDragItem = {
         justId: {
           viewId: "grid-view",
+          title: outFile,
           params: {
-            title: outFile,
             file: outPath,
           }
         },
@@ -233,8 +233,8 @@ function Page01View({justId}: Props) {
       const item: JustDragItem = {
         justId: {
           viewId: "chart-view",
+          title: outFile,
           params: {
-            title: outFile,
             file: outPath,
             xAxisCol: xAxisCol,
             legend: legend as unknown as JSONValue,

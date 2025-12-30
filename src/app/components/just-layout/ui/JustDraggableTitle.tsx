@@ -204,7 +204,7 @@ function JustDraggableTitle(props: Prop) {
            onClick={(e) => clickTitle(e, justId)}
            onDoubleClick={(e) => dblClickTitle(e, justId)}
       >
-        {winInfo.title}
+        {typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId)}
       </div>
 
       {(winInfo.showClose ?? true) &&

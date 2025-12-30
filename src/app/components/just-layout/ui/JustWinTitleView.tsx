@@ -142,6 +142,14 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
     };
   }, []);
 
+  const getTitle = (justId: JustId) => {
+    const title = getWinInfo(justId).title
+    if (typeof title === 'string') {
+      return title
+    } else {
+      return title(justId)
+    }
+  }
 
   return (
     <div
@@ -175,7 +183,7 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
                       className={classNames("just-menu-item", {"active": JustUtil.isEquals(justStack.active, justId)})}>
               <div className="just-icon" onClick={() => activeWin(justId)}>{getWinInfo(justId).icon}</div>
               <div className="just-title" onClick={() => activeWin(justId)}>
-                {getWinInfo(justId).title}
+                {getTitle(justId)}
               </div>
 
               {(getWinInfo(justId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {

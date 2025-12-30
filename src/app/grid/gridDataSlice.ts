@@ -11,7 +11,7 @@ export interface GridDataState {
 }
 
 export const CONFIG_KEYS: JustId[] = [
-  {viewId: "grid-view", params: {title: "업체명", file: "data\\company.xlsx"}}
+  {viewId: "grid-view", title: "업체명", params: {file: "data\\company.xlsx"}}
 ]
 
 export type GridDataMap = Record<string, GridData>

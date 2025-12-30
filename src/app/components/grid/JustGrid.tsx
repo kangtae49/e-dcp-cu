@@ -1,4 +1,5 @@
 import "./grid.css"
+import "@silevis/reactgrid/styles.css";
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import {

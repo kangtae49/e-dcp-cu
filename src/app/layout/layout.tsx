@@ -1,12 +1,9 @@
-import {GetWinInfoFn} from "@/app/components/just-layout/index.ts";
+import {WinInfo} from "@/app/components/just-layout/index.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import {faCircleQuestion} from "@fortawesome/free-solid-svg-icons";
+import {faCircleQuestion, faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
 import Jdenticon from "react-jdenticon";
 import Page01View from "@/app/page/Page01View.tsx";
-import DemoView from "@/app/demo/DemoView.tsx";
-import DemoGridView from "@/app/demo/DemoGridView.tsx";
-import DemoLineChartView from "@/app/demo/DemoLineChartView.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
 import GridView from "@/app/grid/ui/GridView.tsx";
 import {JustId, JustNode} from "@/app/components/just-layout/justLayoutSlice.ts";
@@ -22,77 +19,110 @@ export const INIT_SIDE_MENU_SIZE = 200
 
 export type ViewId = "toolbar" | "side-menu"
   | "page01"
-  | "demo" | "demo-grid" | "demo-line-chart" | "about" | "grid-view"
+  | "about"
+  | "grid-view"
   | "chart-view"
+  // | "demo" | "demo-grid" | "demo-line-chart"
 
 
 export interface SideMenuItem {
   menuId: JustId,
   menuName: string
 }
+export const toolbarId: JustId = {viewId: 'toolbar', title: 'Toolbar'};
+export const sideMenuId: JustId = {viewId: 'side-menu', title: 'Menu'};
+// export const demoGridId: JustId = {viewId: 'demo-grid'};
+export const aboutId: JustId = {viewId: 'about', title: 'About'};
+
+export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
+
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
-  {menuId: {viewId: 'page01'}, menuName: "자산통계정보"},
-  {menuId: {viewId: 'demo'}, menuName: "Demo"},
-  {menuId: {viewId: 'demo-grid'}, menuName: "Demo Grid"},
-  {menuId: {viewId: 'demo-line-chart'}, menuName: "Demo Line Chart"},
+  {menuId: page01Id, menuName: page01Id.title},
+  // {menuId: {viewId: 'demo'}, menuName: "Demo"},
+  // {menuId: {viewId: 'demo-grid'}, menuName: "Demo Grid"},
+  // {menuId: {viewId: 'demo-line-chart'}, menuName: "Demo Line Chart"},
 ]
 
-const viewMap = {
-  "toolbar": () => ({
+
+
+const viewMap: Record<ViewId, WinInfo> = {
+  "toolbar": {
     title: "Toolbar",
-    icon: <div />,
-    view: <JustToolBar />,
+    icon: <div/>,
     canDrag: false,
     canDrop: false,
     showTitle: false,
-  }),
-  "side-menu": () => ({
+    getView: () => {
+      return (
+        <JustToolBar/>
+      )
+    }
+  },
+  "side-menu": {
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
-    view: <SideMenu />,
     canDrag: false,
     canDrop: false,
     showTitle: false,
-  // showClose: false,
-  }),
-  "page01": (justId: JustId) => {
-    return ({
-      title: "자산통계정보",
-      canDup: true,
-      icon: <Jdenticon size="30" value={justId.viewId} />,
-      view: <Page01View justId={justId} />
-    })
+    // showClose: false,
+    getView: () => {
+      return (
+        <SideMenu />
+      )
+    }
   },
-  "demo": () => ({
-    title: "Demo",
-    icon: <Jdenticon size="30" value="demo" />,
-    view: <DemoView />
-  }),
-  "demo-grid": () => ({
-    title: "Demo Grid",
-    icon: <Jdenticon size="30" value="demo-grid" />,
-    view: <DemoGridView />
-  }),
-  "demo-line-chart": () => ({
-    title: "Demo Line Chart",
-    icon: <Jdenticon size="30" value="demo-line-chart" />,
-    view: <DemoLineChartView />
-  }),
-  "about": () => ({
+  "page01": {
+    title: (justId) => justId.title,
+    canDup: true,
+    icon: <Jdenticon size="30" value={page01Id} />,
+    getView: (justId) => {
+      return (
+        <Page01View justId={justId!} />
+      )
+    }
+  },
+  "about": {
     title: "About",
-    icon: <Jdenticon size="30" value="about" />,
-    view: <AboutView  />
-  }),
-  "chart-view": (justId: JustId) => ({
-    title: justId.params?.['title'] ?? '',
+    icon: <Icon icon={faCircleInfo} />,
+    getView: () => {
+      return (
+        <AboutView />
+      )
+    }
+  },
+  "chart-view": {
+    title: (justId) => justId.title,
     icon: <Jdenticon size="30" value="chart-view" />,
-    view: <ChartView justId={justId}/>
-  }),
-  "grid-view": (justId: JustId) => ({
-    title: justId.params?.['title'] ?? '',
+    getView: (justId) => {
+      return (
+        <ChartView justId={justId}/>
+      )
+    }
+  },
+  "grid-view": {
+    title: (justId) => justId.title,
     icon: <Jdenticon size="30" value="grid-view" />,
-    view: <GridView justId={justId}/>
-  })
+    getView: (justId) => {
+      return (
+        <GridView justId={justId}/>
+      )
+    }
+  },
+  // "demo": () => ({
+  //   title: "Demo",
+  //   icon: <Jdenticon size="30" value="demo" />,
+  //   view: <DemoView />
+  // }),
+  // "demo-grid": () => ({
+  //   title: "Demo Grid",
+  //   icon: <Jdenticon size="30" value="demo-grid" />,
+  //   view: <DemoGridView />
+  // }),
+  // "demo-line-chart": () => ({
+  //   title: "Demo Line Chart",
+  //   icon: <Jdenticon size="30" value="demo-line-chart" />,
+  //   view: <DemoLineChartView />
+  // }),
 
   // "setting-config": (winId: string) => {
   //   const winObjId = fromWinId(winId);
@@ -102,7 +132,9 @@ const viewMap = {
   //     view: <ConfigView winObjId={winObjId} />
   //   })
   // },
-} as Record<ViewId, GetWinInfoFn>;
+}
+// as Record<ViewId, WinInfo>;
+// } as Record<ViewId, GetWinInfoFn>;
 
 
 // CONFIG_KEYS.forEach((justId: JustId) => {
@@ -116,10 +148,7 @@ const viewMap = {
 
 export {viewMap};
 
-const toolbarId = {viewId: 'toolbar'};
-const sideMenuId = {viewId: 'side-menu'};
-const demoGridId = {viewId: 'demo-grid'};
-const aboutId = {viewId: 'about'};
+
 
 
 export const sideMenuLayout: JustNode = {
@@ -143,8 +172,8 @@ export const sideMenuLayout: JustNode = {
     show: true,
     first: {
       type: 'stack',
-      tabs: [demoGridId],
-      active: demoGridId
+      tabs: [page01Id],
+      active: page01Id
     },
     second: {
       type: 'stack',

@@ -1,5 +1,5 @@
-import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import "./GridView.css"
+import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
@@ -23,7 +23,7 @@ function GridView({justId}: Props) {
   } = useGridData(GRID_DATA_ID)
 
   const dataKey = JustUtil.getParamString(justId, 'file');
-  const title = JustUtil.getParamString(justId, 'title');
+  const title = justId.title;
 
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()
