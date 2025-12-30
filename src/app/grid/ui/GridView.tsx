@@ -17,6 +17,7 @@ interface Props {
 
 function GridView({justId}: Props) {
   const ref = useRef<HTMLDivElement>(null)
+
   const {
     state: gridDataState,
   } = useGridData(GRID_DATA_ID)
@@ -28,6 +29,14 @@ function GridView({justId}: Props) {
     e.preventDefault()
     console.log(dataKey)
     window.api.startDataFile(dataKey).then()
+  }
+
+  const dragDownload = (e: React.DragEvent) => {
+    console.log('onDragDownload', dataKey)
+    e.preventDefault()
+    window.api.startDrag({
+      file: dataKey
+    })
   }
 
   const clickDownload = (e: React.MouseEvent) => {
@@ -53,16 +62,23 @@ function GridView({justId}: Props) {
   }), [ref, gridDataState?.gridDataMap?.[dataKey]?.isLocked])
 
 
+
   useLayoutEffect(() => {
     if (ref.current) {
       drop(ref);
     }
   }, [drop]);
 
+
+
   return (
     <div ref={ref} className="grid-view">
       <div className="grid-head">
-        <div onClick={clickDownload}>
+        <div
+          draggable={true}
+          onDragStart={dragDownload}
+          onClick={clickDownload}
+        >
           <Icon icon={faDownload} />
         </div>
         <div onClick={clickOpenFile}>
