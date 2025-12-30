@@ -161,7 +161,7 @@ export const createJustLayoutSlice = (id: string) =>
         const stackNode = getNodeAtBranch(justState.layout, branch)
         let newIndex: number = 0;
         if (stackNode?.type === 'stack' && stackNode.active != null) {
-          newIndex = JustUtil.indexOf(stackNode.tabs, stackNode.active) + 1
+          newIndex = JustUtil.indexOf(stackNode.tabs, payload.justId) + 1
         }
         justState.layout = addTabWin(justState.layout, branch, payload.cloneJustId, newIndex)
         justState.lastActiveId = payload.cloneJustId
