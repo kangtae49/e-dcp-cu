@@ -240,3 +240,5 @@
 .fa-download:hover { transform: var(--icon-hover-scale); }
 .fa-pen-to-square { color: var(--icon-color); }
 .fa-pen-to-square:hover { transform: var(--icon-hover-scale); }
+.fa-circle-stop { color: var(--icon-color); }
+.fa-circle-stop:hover { transform: var(--icon-hover-scale); }

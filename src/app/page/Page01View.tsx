@@ -1,7 +1,10 @@
 import "./PageView.css"
 import Jdenticon from "react-jdenticon";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock, faDownload, faPenToSquare} from "@fortawesome/free-solid-svg-icons"
+import {
+  faMagnifyingGlass, faChartLine, faTerminal, faTableList, faLock,
+  faDownload, faPenToSquare, faCircleStop
+} from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
@@ -65,7 +68,7 @@ function Page01View({justId}: Props) {
     state: jobMonitorState,
     getJobStatus,
     getJobEvents,
-    clearEvents,
+    // clearEvents,
   } = useJobMonitor(JOB_MONITOR_ID);
 
   const {
@@ -73,7 +76,6 @@ function Page01View({justId}: Props) {
     updateGridData,
   } = useGridData(GRID_DATA_ID)
 
-  // const [outFile, setOutFile] = React.useState<string>('');
 
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
     return data.map(d => {
@@ -159,9 +161,9 @@ function Page01View({justId}: Props) {
     if (pageState.jobInfo !== null && pageState.jobInfo.status === 'RUNNING') return;
     console.log('searchPage01')
 
-    if (pageState.jobInfo) {
-      clearEvents(pageState.jobInfo?.jobId)
-    }
+    // if (pageState.jobInfo) {
+    //   clearEvents(pageState.jobInfo?.jobId)
+    // }
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
     const args = [jobId, ...condition];
@@ -186,6 +188,13 @@ function Page01View({justId}: Props) {
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()
     window.api.startDataFile(outPath).then()
+  }
+
+  const clickStropScript = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (pageState?.jobInfo?.jobId) {
+      window.api.stopScript(pageState?.jobInfo?.jobId).then()
+    }
   }
 
   const [, drop] = useDrop(() => ({
@@ -387,6 +396,16 @@ function Page01View({justId}: Props) {
               <Icon icon={faPenToSquare} />
             </div>
           </div>
+          { (pageState?.jobInfo !== null && pageState?.jobInfo.status === 'RUNNING') &&
+          <div>
+            <div
+              onClick={clickStropScript}
+            >
+              <Icon icon={faCircleStop} />
+            </div>
+          </div>
+          }
+
         </div>
         <div className="tab-body">
           <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
@@ -415,7 +434,7 @@ function Page01View({justId}: Props) {
           <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
             <div className="content">
               <Terminal
-                key={outPath}
+                key={pageState?.jobInfo?.jobId ?? ''}
                 events={pageState?.events ?? []}
               />
             </div>
