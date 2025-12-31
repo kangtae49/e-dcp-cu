@@ -16,6 +16,8 @@ import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
   layoutId: string
+  dndType: string
+  dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
   // viewMap: Record<string, WinInfo>
@@ -25,7 +27,7 @@ interface Prop {
 function JustWinBodyView (props: Prop) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const { layoutId, getWinInfo, justBranch, justStack } = props;
+  const { layoutId, dndType, dndAccept, getWinInfo, justBranch, justStack } = props;
   const [overlayRect, setOverlayRect] = useState<{ top: number, left: number, width: number, height: number }|null>(null)
   const {
     // state: justLayoutState,
@@ -59,7 +61,7 @@ function JustWinBodyView (props: Prop) {
   }
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: [JUST_DRAG_SOURCE],
+      accept: dndAccept,
       canDrop: () => {
         let canDrop = true;
         if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {

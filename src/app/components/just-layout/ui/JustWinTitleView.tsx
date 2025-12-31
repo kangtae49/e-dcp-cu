@@ -21,6 +21,8 @@ import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
   layoutId: string
+  dndType: string
+  dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
   getWinInfo: GetWinInfoFn
@@ -30,7 +32,7 @@ interface Prop {
   // viewMap: Record<string, WinInfo>
 }
 
-function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
+function JustWinTitleView({layoutId, dndType, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
@@ -93,7 +95,7 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: [JUST_DRAG_SOURCE],
+      accept: dndAccept,
       canDrop: () => {
         let canDrop = true;
         if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
@@ -161,6 +163,8 @@ function JustWinTitleView({layoutId, justBranch, justStack, getWinInfo, closeWin
           <JustDraggableTitle
             key={[...justBranch, JustUtil.toString(justId)].join(",")}
             layoutId={layoutId}
+            dndType={dndType}
+            dndAccept={dndAccept}
             rect={rect}
             justId={justId}
             justBranch={justBranch}

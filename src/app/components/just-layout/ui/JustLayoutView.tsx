@@ -11,12 +11,14 @@ import {
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "./JustNodeView.tsx";
 import classNames from "classnames";
-import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {CloseWinFn, GetWinInfoFn, JUST_DRAG_SOURCE, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   layoutId: string
   getWinInfo: GetWinInfoFn
   initialValue: JustNode
+  dndType?: string
+  dndAccept?: string[]
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
   onDoubleClickTitle?: OnDoubleClickTitleFn
@@ -24,7 +26,7 @@ interface Props {
 
 
 
-export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
+export function JustLayoutView({layoutId, dndType, dndAccept, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
   const {onLoad} = useOnload();
   const {
     state: justLayoutState,
@@ -44,6 +46,8 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
       )}>
         {justLayoutState && <JustNodeView
             layoutId={layoutId}
+            dndType={dndType ?? JUST_DRAG_SOURCE}
+            dndAccept={dndAccept ?? [dndType ?? JUST_DRAG_SOURCE]}
             node={justLayoutState.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}

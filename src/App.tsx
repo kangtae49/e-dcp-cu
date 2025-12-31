@@ -21,7 +21,14 @@ import {removeReducer} from "@/store";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
-import {initialLayoutValue, LAYOUT_ID, SIDE_MENU_NODE_NAME, ViewId, viewMap} from "@/app/layout/layout.tsx";
+import {
+  initialLayoutValue, LAYOUT_DND_ACCEPT,
+  LAYOUT_DND_TYPE,
+  LAYOUT_ID,
+  SIDE_MENU_NODE_NAME,
+  ViewId,
+  viewMap
+} from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 
@@ -70,6 +77,8 @@ function App() {
           {/*<JustToolBar />*/}
           <JustLayoutView
             layoutId={LAYOUT_ID}
+            dndType={LAYOUT_DND_TYPE}
+            dndAccept={LAYOUT_DND_ACCEPT}
             getWinInfo={getWinInfo}
             initialValue={initialLayoutValue}
             closeWin={closeWin}

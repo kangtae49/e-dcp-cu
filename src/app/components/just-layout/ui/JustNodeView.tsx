@@ -18,13 +18,15 @@ interface Props {
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
+  dndType: string
+  dndAccept: string[]
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
   onDoubleClickTitle?: OnDoubleClickTitleFn
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
+export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
@@ -59,6 +61,8 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getW
       {node?.type === 'stack' && (
         <JustWinView
           layoutId={layoutId}
+          dndType={dndType}
+          dndAccept={dndAccept}
           justStack={node}
           justBranch={justBranch}
           getWinInfo={getWinInfo}
@@ -85,6 +89,8 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getW
           >
             <JustNodeView
               layoutId={layoutId}
+              dndType={dndType}
+              dndAccept={dndAccept}
               node={node.first}
               justBranch={[...justBranch, "first"]}
               getWinInfo={getWinInfo}
@@ -114,6 +120,8 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, node, justBranch, getW
           >
             <JustNodeView
               layoutId={layoutId}
+              dndType={dndType}
+              dndAccept={dndAccept}
               node={node.second}
               justBranch={[...justBranch, "second"]}
               getWinInfo={getWinInfo}

@@ -27,6 +27,8 @@ export interface JustDragItem {
 
 interface Prop {
   layoutId: string
+  dndType: string
+  dndAccept: string[]
   justBranch: JustBranch
   justId: JustId
   winInfo: WinInfo
@@ -40,6 +42,7 @@ interface Prop {
 function JustDraggableTitle(props: Prop) {
   const {
     layoutId,
+    dndType, dndAccept,
     winInfo, justBranch, justId, justStack,
     closeWin,
     onClickTitle,
@@ -101,7 +104,7 @@ function JustDraggableTitle(props: Prop) {
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: JUST_DRAG_SOURCE,
+      type: dndType,
       canDrag: winInfo.canDrag ?? true,
       item: {
         justBranch,
@@ -115,7 +118,7 @@ function JustDraggableTitle(props: Prop) {
   )
 
   const [, drop] = useDrop<JustDragItem, void, { handlerId: any | null }> ({
-    accept: JUST_DRAG_SOURCE,
+    accept: dndAccept,
     canDrop: () => winInfo.canDrop ?? true,
     collect(monitor) {
       return {
