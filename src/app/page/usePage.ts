@@ -1,7 +1,6 @@
 import {useDynamicSlice} from "@/store/hooks.ts";
 import {createPageSlice, JobInfo, PageActions, PageState, TabType} from "@/app/page/pageSlice.ts";
 import {Option} from "@/app/components/select/SelectBox.tsx";
-import {JobEvent} from "@/types.ts";
 
 function usePage(pageId: string) {
   const {
