@@ -30,6 +30,10 @@ function useJobMonitor(monitorId: string) {
     dispatch(jobMonitorActions.clearEvents({jobId}))
   }
 
+  const isRunning = (jobId: string): boolean => {
+    return dispatch(jobMonitorThunks.isRunning({jobId}))
+  }
+
   return {
     state,
     getJobStatus,
@@ -37,6 +41,7 @@ function useJobMonitor(monitorId: string) {
     setStatus,
     addEvent,
     clearEvents,
+    isRunning,
   }
 }
 

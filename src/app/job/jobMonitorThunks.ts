@@ -7,6 +7,9 @@ interface PayloadGetJobStatus {
 interface PayloadGetJobEvents {
   jobId: string
 }
+interface PayloadGetIsRunning {
+  jobId: string
+}
 
 export function createJobMonitorThunks(sliceId: string) {
   return {
@@ -16,6 +19,9 @@ export function createJobMonitorThunks(sliceId: string) {
     }),
     getJobEvents: createSliceThunk(sliceId, ({jobId}: PayloadGetJobEvents , {sliceState}): JobEvent [] => {
       return sliceState.events[jobId] ?? []
+    }),
+    isRunning: createSliceThunk(sliceId, ({jobId}: PayloadGetIsRunning , {sliceState}): boolean => {
+      return sliceState.status[jobId] === 'RUNNING'
     }),
   }
 }

@@ -68,6 +68,7 @@ function Page01View({justId}: Props) {
     state: jobMonitorState,
     getJobStatus,
     getJobEvents,
+    isRunning,
     // clearEvents,
   } = useJobMonitor(JOB_MONITOR_ID);
 
@@ -158,7 +159,7 @@ function Page01View({justId}: Props) {
       return
     }
 
-    if (pageState.jobInfo !== null && pageState.jobInfo.status === 'RUNNING') return;
+    if (pageState.jobInfo !== null && isRunning(pageState.jobInfo.jobId)) return;
     console.log('searchPage01')
 
     // if (pageState.jobInfo) {
@@ -324,7 +325,7 @@ function Page01View({justId}: Props) {
                 onClick={() => searchPage01()}
               >
                 <div className="search-icon">
-                  {pageState?.jobInfo !== null && pageState?.jobInfo.status === 'RUNNING' ?
+                  {(pageState?.jobInfo && isRunning(pageState.jobInfo.jobId)) ?
                     <div className="spinner"></div>
                     :
                     <Icon icon={faMagnifyingGlass} />
@@ -396,7 +397,7 @@ function Page01View({justId}: Props) {
               <Icon icon={faPenToSquare} />
             </div>
           </div>
-          { (pageState?.jobInfo !== null && pageState?.jobInfo.status === 'RUNNING') &&
+          { (pageState?.jobInfo && isRunning(pageState.jobInfo.jobId)) &&
           <div>
             <div
               onClick={clickStropScript}
