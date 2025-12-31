@@ -15,7 +15,7 @@ import {
 } from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
-import {FileItem, JobEvent, JobStatus} from "@/types";
+import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import usePage from "@/app/page/usePage.ts";
@@ -57,7 +57,6 @@ function Page01View({justId}: Props) {
   const {
     state: pageState,
     setCompany,
-    setEvents,
     setJobInfo,
     setStartDate,
     setEndDate,
@@ -65,11 +64,7 @@ function Page01View({justId}: Props) {
   } = usePage(JustUtil.toString(justId));
 
   const {
-    state: jobMonitorState,
-    getJobStatus,
-    getJobEvents,
-    isRunning,
-    // clearEvents,
+    state: jobState,
   } = useJobMonitor(JOB_MONITOR_ID);
 
   const {
@@ -97,6 +92,7 @@ function Page01View({justId}: Props) {
   const outFile = `${filename}.xlsx`
   const outPath = `${pagesDir}\\${outFile}`
 
+  const jobStatus = jobState?.status[pageState?.jobInfo?.jobId ?? '']
 
   useEffect(() => {
     window.api.readDataExcel(outPath)
@@ -107,33 +103,11 @@ function Page01View({justId}: Props) {
       })
   }, [outPath])
 
-  // const jobInfo = pageState?.jobInfo;
-  // const outFile = jobInfo?.status === 'DONE'
-  //   ? `${jobInfo.args.slice(1).join('_')}.xlsx`
-  //   : '';
-
   useEffect(() => {
     if (companyList.length > 0 && !pageState?.company) {
       setCompany(companyList[0]);
     }
   }, [companyList, pageState?.company]);
-
-
-  useEffect(() => {
-    if (!pageState?.jobInfo) return;
-
-    const status: JobStatus | null = getJobStatus(pageState.jobInfo.jobId)
-    if (status !== null && pageState.jobInfo.status !== status) {
-      console.log('jobStatus:', status)
-      setJobInfo({...pageState.jobInfo, status})
-    }
-
-    const events: JobEvent [] = getJobEvents(pageState.jobInfo?.jobId)
-    // const streamEvents = events.filter((event) => event.action === 'JOB_STREAM')
-    // const logs = streamEvents.map((event) => (event.data as JobStreamData))
-    setEvents(events)
-  }, [jobMonitorState, pageState?.jobInfo]);
-
 
   const onChangeStartDate = (date: string | null) => {
     console.log('onChangeStartDate:', date)
@@ -159,16 +133,13 @@ function Page01View({justId}: Props) {
       return
     }
 
-    if (pageState.jobInfo !== null && isRunning(pageState.jobInfo.jobId)) return;
+    if (jobStatus === 'RUNNING') return;
     console.log('searchPage01')
 
-    // if (pageState.jobInfo) {
-    //   clearEvents(pageState.jobInfo?.jobId)
-    // }
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
     const args = [jobId, ...condition];
-    setJobInfo({jobId, status: 'RUNNING', path: scriptPath, args})
+    setJobInfo({jobId, path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
@@ -325,7 +296,7 @@ function Page01View({justId}: Props) {
                 onClick={() => searchPage01()}
               >
                 <div className="search-icon">
-                  {(pageState?.jobInfo && isRunning(pageState.jobInfo.jobId)) ?
+                  {jobStatus === 'RUNNING' ?
                     <div className="spinner"></div>
                     :
                     <Icon icon={faMagnifyingGlass} />
@@ -397,7 +368,7 @@ function Page01View({justId}: Props) {
               <Icon icon={faPenToSquare} />
             </div>
           </div>
-          { (pageState?.jobInfo && isRunning(pageState.jobInfo.jobId)) &&
+          { jobStatus === 'RUNNING' &&
           <div>
             <div
               onClick={clickStropScript}
@@ -436,7 +407,7 @@ function Page01View({justId}: Props) {
             <div className="content">
               <Terminal
                 key={pageState?.jobInfo?.jobId ?? ''}
-                events={pageState?.events ?? []}
+                jobId={pageState?.jobInfo?.jobId ?? ''}
               />
             </div>
           </Activity>

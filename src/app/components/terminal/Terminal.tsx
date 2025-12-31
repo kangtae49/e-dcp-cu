@@ -4,17 +4,24 @@ import {Terminal as XTerm} from "@xterm/xterm"
 import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
 import {JobEvent, JobStreamData} from "@/types.ts";
-// import {FORMAT_HMS_MS} from "@/constants.ts";
-// import {format} from "date-fns";
+import useJobMonitor from "@/app/job/useJobMonitor.ts";
+import {JOB_MONITOR_ID} from "@/app/job/jobMonitorSlice.ts";
 
 interface Props {
-  events: JobEvent[]
+  jobId: string
 }
 
-function Terminal({events}: Props) {
+function Terminal({jobId}: Props) {
+
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
+
+  const {
+    state: jobMonitorState,
+  } = useJobMonitor(JOB_MONITOR_ID);
+
+  const events: JobEvent [] = jobMonitorState?.events[jobId] ?? []
 
   const writeLine = (term: XTerm, event: JobEvent) => {
     if(event.action === 'JOB_STREAM') {
@@ -100,8 +107,9 @@ function Terminal({events}: Props) {
   }, []);
 
   useEffect(() => {
-    termRef?.current?.clear()
-
+    if (!termRef?.current) return;
+    if (!fitAddonRef.current) return;
+    termRef.current.clear()
     events
       .forEach((event) => {
       if (termRef.current) {
@@ -109,9 +117,13 @@ function Terminal({events}: Props) {
       }
     })
 
-    fitAddonRef.current?.fit();
-    termRef?.current?.scrollToBottom()
-  }, [events.length]);
+    // fitAddonRef.current.fit();
+
+    console.log('scroll to bottom')
+    // termRef?.current.scrollToBottom()
+  }, [jobMonitorState?.events[jobId]?.length]);
+
+
 
   return (
     <div

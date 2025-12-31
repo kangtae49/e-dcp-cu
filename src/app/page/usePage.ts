@@ -14,9 +14,6 @@ function usePage(pageId: string) {
     dispatch(pageActions.setCompany(company));
   }
 
-  const setEvents = (events: JobEvent[]) => {
-    dispatch(pageActions.setEvents(events))
-  }
 
   const setJobInfo = (jobInfo: JobInfo) => {
     dispatch(pageActions.setJobInfo(jobInfo))
@@ -35,7 +32,6 @@ function usePage(pageId: string) {
   return {
     state,
     setCompany,
-    setEvents,
     setJobInfo,
     setStartDate,
     setEndDate,

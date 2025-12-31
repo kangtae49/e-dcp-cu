@@ -7,16 +7,15 @@ function useJobMonitor(monitorId: string) {
   const {
     state,
     actions: jobMonitorActions,
-    thunks: jobMonitorThunks,
     dispatch
   } = useDynamicSlice<JobMonitorState, JobMonitorActions>(monitorId, createJobMonitorSlice, createJobMonitorThunks)
 
-  const getJobStatus = (jobId: string): JobStatus | null => {
-    return dispatch(jobMonitorThunks.getJobStatus({jobId}))
-  }
-  const getJobEvents = (jobId: string): JobEvent[] => {
-    return dispatch(jobMonitorThunks.getJobEvents({jobId}))
-  }
+  // const getJobStatus = (jobId: string): JobStatus | null => {
+  //   return dispatch(jobMonitorThunks.getJobStatus({jobId}))
+  // }
+  // const getJobEvents = (jobId: string): JobEvent[] => {
+  //   return dispatch(jobMonitorThunks.getJobEvents({jobId}))
+  // }
 
   const setStatus = (jobId: string, status: JobStatus) => {
     dispatch(jobMonitorActions.setStatus({jobId, status}))
@@ -30,18 +29,14 @@ function useJobMonitor(monitorId: string) {
     dispatch(jobMonitorActions.clearEvents({jobId}))
   }
 
-  const isRunning = (jobId: string): boolean => {
-    return dispatch(jobMonitorThunks.isRunning({jobId}))
-  }
 
   return {
     state,
-    getJobStatus,
-    getJobEvents,
+    // getJobStatus,
+    // getJobEvents,
     setStatus,
     addEvent,
     clearEvents,
-    isRunning,
   }
 }
 
