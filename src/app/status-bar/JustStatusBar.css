@@ -1,0 +1,7 @@
+.just-status-bar {
+    height: 100%;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.82);
+    border-top: 1px solid #1e1f22;
+    box-sizing: border-box;
+}

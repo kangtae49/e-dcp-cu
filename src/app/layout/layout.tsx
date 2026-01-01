@@ -76,9 +76,9 @@ export const viewMap: Record<ViewId, WinInfo> = {
     canDrag: false,
     canDrop: false,
     showTitle: false,
-    getView: () => {
+    getView: (justId) => {
       return (
-        <JustStatusBar/>
+        <JustStatusBar justId={justId}/>
       )
     }
   },
@@ -252,21 +252,7 @@ export const layoutSideMenu: JustNode = {
 }
 
 
-// export const jobMonitorLayout: JustNode = {
-//   type: 'split-pixels',
-//   direction: 'column',
-//   name: JOB_MONITOR_NODE_NAME,
-//   primary: 'second',
-//   primaryDefaultSize: 100,
-//   size: 0,
-//   first: sideMenuLayout,
-//   second: {
-//     type: 'stack',
-//     tabs: [jobMonitorId],
-//     active: jobMonitorId
-//
-//   }
-// }
+
 
 const layoutUtilBar: JustSplitPixels = {
   type: 'split-pixels',
@@ -313,8 +299,8 @@ const layoutBottomPanel: JustSplitPixels  = {
   first: layoutToolBar,
   second: {
     type: 'stack',
-    tabs: [statusBarId],
-    active: statusBarId
+    tabs: [],
+    active: null
   },
 }
 
@@ -324,7 +310,7 @@ const layoutStatusBar: JustSplitPixels  = {
   name: STATUS_BAR_NODE_NAME,
   primary: 'second',
   primaryDefaultSize: 40,
-  size: 0,
+  size: 34,
   noSplitter: true,
   first: layoutBottomPanel,
   second: {

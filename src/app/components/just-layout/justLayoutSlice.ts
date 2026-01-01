@@ -211,6 +211,8 @@ export const createJustLayoutSlice = (id: string) =>
             payload
           ))
         }
+        justState.lastActiveId = payload.justId as JustId | null | any
+        justState.lastActiveTm = new Date().getTime()
       },
     }
   })

@@ -440,7 +440,7 @@ export class JustUtil {
     return justId.params?.[key] as T | undefined
   }
 
-  static isEquals(justId1: JustId | null, justId2: JustId | null): boolean {
+  static isEquals(justId1: JustId | null | undefined, justId2: JustId | null | undefined): boolean {
     if (justId1 == null || justId2 == null) return false
     return JustUtil.toString(justId1) === JustUtil.toString(justId2)
   }

@@ -191,7 +191,8 @@ function JustDraggableTitle(props: Prop) {
         "just-title-menus",
         {
           "dragging": isDragging,
-          "just-active": justStack.active === justId
+          "just-active": JustUtil.isEquals(justStack.active, justId),
+          "last-active": JustUtil.isEquals(justLayoutState?.lastActiveId, justId)
         }
       )}
       ref={ref}

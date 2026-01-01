@@ -169,6 +169,11 @@
 .just-draggable-title:hover {
     background-color: #2b2d30;
 }
+
+.just-draggable-title.last-active {
+    background-color: #121f4a;
+}
+
 .just-draggable-title .just-icon { display: flex; flex: 0 0 25px; align-items: center; justify-content: center}
 .just-icon svg {
     width: 16px; height: 16px;
