@@ -22,7 +22,8 @@ import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {
-  initialLayoutValue, LAYOUT_DND_ACCEPT,
+  initialLayoutValue,
+  LAYOUT_DND_ACCEPT,
   LAYOUT_DND_TYPE,
   LAYOUT_ID,
   SIDE_MENU_NODE_NAME,

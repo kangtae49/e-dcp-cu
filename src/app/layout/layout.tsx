@@ -14,6 +14,7 @@ import JobMonitorView from "@/app/job/ui/JobMonitorView.tsx";
 import JustStatusBar from "@/app/status-bar/JustStatusBar.tsx";
 import JustUtilBar from "@/app/util-bar/JustUtilBar.tsx";
 import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
+import JobListView from "@/app/job/ui/JobListView.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -33,6 +34,7 @@ export const SIDE_MENU_NODE_NAME = "SIDE_MENU_NODE"
 export const JOB_MONITOR_NODE_NAME = "JOB_MONITOR_NODE"
 
 export const INIT_SIDE_MENU_SIZE = 200
+export const INIT_BOTTOM_PANEL_SIZE = 200
 
 export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
   | "side-menu"
@@ -40,6 +42,7 @@ export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
   | "about"
   | "grid-view"
   | "chart-view"
+  | "job-list-view"
   | "job-monitor-view"
   // | "demo" | "demo-grid" | "demo-line-chart"
 
@@ -58,7 +61,8 @@ export const aboutId: JustId = {viewId: 'about', title: 'About'};
 
 export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 
-export const jobMonitorId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor'};
+export const jobListViewId: JustId = {viewId: 'job-list-view', title: 'Job List'};
+// export const jobMonitorId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor'};
 
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   {menuId: page01Id, menuName: page01Id.title},
@@ -168,7 +172,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
       )
     }
   },
-  "job-monitor-view": {
+  "job-list-view": {
     title: "Job Monitor",
     icon: <Icon icon={faTerminal} />,
     canDrag: false,
@@ -176,10 +180,20 @@ export const viewMap: Record<ViewId, WinInfo> = {
     showTitle: false,
     getView: (justId) => {
       return (
+        <JobListView justId={justId}/>
+      )
+    }
+
+  },
+  "job-monitor-view": {
+    title: "Job Monitor",
+    icon: <Icon icon={faTerminal} />,
+    getView: (justId) => {
+      return (
         <JobMonitorView justId={justId}/>
       )
     }
-  }
+  },
   // "demo": () => ({
   //   title: "Demo",
   //   icon: <Jdenticon size="30" value="demo" />,
@@ -232,12 +246,15 @@ export const layoutSideMenu: JustNode = {
   first: {
     type: 'stack',
     tabs: [sideMenuId],
-    active: sideMenuId
+    active: sideMenuId,
+    hideTitle: true,
   },
   second: {
     type: 'split-percentage',
     direction: 'column',
     size: 50,
+    dndType: LAYOUT_DND_TYPE,
+    dndAccept: LAYOUT_DND_ACCEPT,
     first: {
       type: 'stack',
       tabs: [page01Id],
@@ -270,8 +287,37 @@ const layoutUtilBar: JustSplitPixels = {
   }
 }
 
+const layoutJobMonitor: JustSplitPixels = {
+  type: 'split-pixels',
+  direction: 'row',
+  name: JOB_MONITOR_NODE_NAME,
+  primary: 'first',
+  primaryDefaultSize: 200,
+  size: 200,
+  noSplitter: false,
+  first: {
+    type: 'stack',
+    tabs: [jobListViewId],
+    active: jobListViewId
+  },
+  second: {
+    type: 'stack',
+    tabs: [],
+    active: null
+  }
+}
 
-
+const layoutBottomPanel: JustSplitPixels  = {
+  type: 'split-pixels',
+  direction: 'column',
+  name: BOTTOM_PANEL_NODE_NAME,
+  primary: 'second',
+  primaryDefaultSize: INIT_BOTTOM_PANEL_SIZE,
+  size: 0,
+  noSplitter: false,
+  first: layoutUtilBar,
+  second: layoutJobMonitor,
+}
 const layoutToolBar: JustSplitPixels  = {
   type: 'split-pixels',
   direction: 'row',
@@ -285,23 +331,7 @@ const layoutToolBar: JustSplitPixels  = {
     tabs: [toolBarId],
     active: toolBarId
   },
-  second: layoutUtilBar
-}
-
-const layoutBottomPanel: JustSplitPixels  = {
-  type: 'split-pixels',
-  direction: 'column',
-  name: BOTTOM_PANEL_NODE_NAME,
-  primary: 'second',
-  primaryDefaultSize: 40,
-  size: 0,
-  noSplitter: true,
-  first: layoutToolBar,
-  second: {
-    type: 'stack',
-    tabs: [],
-    active: null
-  },
+  second: layoutBottomPanel
 }
 
 const layoutStatusBar: JustSplitPixels  = {
@@ -312,7 +342,7 @@ const layoutStatusBar: JustSplitPixels  = {
   primaryDefaultSize: 40,
   size: 34,
   noSplitter: true,
-  first: layoutBottomPanel,
+  first: layoutToolBar,
   second: {
     type: 'stack',
     tabs: [statusBarId],

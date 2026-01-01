@@ -3,7 +3,7 @@ import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
 import classNames from 'classnames';
 import {
   createJustLayoutSlice,
-  type JustBranch,
+  type JustBranch, JustId,
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
@@ -30,7 +30,7 @@ function JustWinBodyView (props: Prop) {
   const { layoutId, dndType, dndAccept, getWinInfo, justBranch, justStack } = props;
   const [overlayRect, setOverlayRect] = useState<{ top: number, left: number, width: number, height: number }|null>(null)
   const {
-    // state: justLayoutState,
+    state: justLayoutState,
     actions: justLayoutActions
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
   const dispatch = useAppDispatch();
@@ -143,7 +143,13 @@ function JustWinBodyView (props: Prop) {
   }, [drop]);
   return (
     <div
-      className={classNames("just-win-body", {"isOver": isOver})}
+      className={classNames(
+        "just-win-body",
+        {
+          "isOver": isOver,
+          "last-active": JustUtil.isEquals(justStack.active, justLayoutState?.lastActiveId)
+        })
+      }
       ref={ref}
     >
       {justStack.tabs.map(justId =>

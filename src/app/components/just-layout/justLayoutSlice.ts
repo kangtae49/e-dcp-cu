@@ -33,6 +33,9 @@ export interface JustStack {
   type: 'stack'
   tabs: JustId[]
   active: JustId | null
+  hideTitle?: boolean
+  dndType?: string
+  dndAccept?: string[]
 }
 
 export type JustSplitType = JustSplitPercentage | JustSplitPixels;
@@ -49,6 +52,9 @@ export interface JustSplitBase {
 
 export interface JustSplitPercentage extends JustSplitBase {
   type: 'split-percentage'
+  hideTitle?: boolean
+  dndType?: string
+  dndAccept?: string[]
 }
 
 export interface JustSplitPixels extends JustSplitBase {
