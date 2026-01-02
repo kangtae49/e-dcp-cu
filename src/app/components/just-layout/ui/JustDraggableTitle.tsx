@@ -12,7 +12,7 @@ import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {useDynamicSlice} from "@/store/hooks.ts";
-import {CloseWinFn, JUST_DRAG_SOURCE, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
+import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";

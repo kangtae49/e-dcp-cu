@@ -103,7 +103,7 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined
       },
-      hover(item: JustDragItem, monitor) {
+      hover(item: JustDragItem, _) {
         if (!ref.current) {
           return
         }

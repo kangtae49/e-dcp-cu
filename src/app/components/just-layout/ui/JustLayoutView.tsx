@@ -35,9 +35,8 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
     dispatch(justLayoutActions.setLayout(initialValue))
 
   })
-  const dndType = JUST_DRAG_SOURCE
-  const dndAccept = [JUST_DRAG_SOURCE]
-  const hideTitle: boolean | undefined = undefined
+  // const dndAccept = [JUST_DRAG_SOURCE]
+  // const hideTitle: boolean | undefined = undefined
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={classNames(
@@ -46,8 +45,8 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
       )}>
         {justLayoutState && <JustNodeView
             layoutId={layoutId}
-            hideTitle={hideTitle ?? justLayoutState.layout?.hideTitle}
-            dndAccept={dndAccept ?? justLayoutState.layout?.dndAccept}
+            hideTitle={justLayoutState.layout?.hideTitle}
+            dndAccept={justLayoutState.layout?.dndAccept ?? []}
             node={justLayoutState.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}

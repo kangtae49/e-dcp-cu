@@ -3,7 +3,7 @@ import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
 import classNames from 'classnames';
 import {
   createJustLayoutSlice,
-  type JustBranch, JustId,
+  type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
   type JustStack,
@@ -11,7 +11,7 @@ import {
 import {type JustDragItem} from "./JustDraggableTitle.tsx";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef, useState} from "react";
-import {GetWinInfoFn, JUST_DRAG_SOURCE} from "..";
+import {GetWinInfoFn} from "..";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
