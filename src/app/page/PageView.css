@@ -195,6 +195,7 @@
     border-radius: 3px;
     font-size: 14px;
     color: #bcccdc;
+    /*color: #f4a261;*/
 }
 
 .page-body .tabs .tab-title.active {
@@ -244,4 +245,8 @@
 .fa-circle-stop:hover { transform: var(--icon-hover-scale); }
 .fa-terminal { color: var(--icon-color); }
 .fa-terminal:hover { transform: var(--icon-hover-scale); }
+.fa-chart-line { color: var(--icon-color); }
+.fa-chart-line:hover { transform: var(--icon-hover-scale); }
+.fa-table-list { color: var(--icon-color); }
+.fa-table-list:hover { transform: var(--icon-hover-scale); }
 
