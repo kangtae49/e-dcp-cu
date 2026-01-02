@@ -1,6 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {
-  activeWinId, addTabWin, getBranchByWinId, getNodeAtBranch, getTabBranch, hasWinId, JustUtil,
+  activeWinId, addTabWin, getBranchByNodeName, getBranchByWinId, getNodeAtBranch, getTabBranch, hasWinId, JustUtil,
   moveWinIdToSplit, moveWinIdToStack, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
@@ -80,6 +80,10 @@ export interface JustPayloadInsert {
 export interface JustPayloadAddTab {
   justId: JustId
 }
+export interface JustPayloadAddTabByNodeName {
+  justId: JustId
+  nodeName: string
+}
 export interface JustPayloadCloneTab {
   justId: JustId
   cloneJustId: JustId
@@ -152,6 +156,18 @@ export const createJustLayoutSlice = (id: string) =>
       addTab: (state, { payload }: PayloadAction<JustPayloadAddTab>) => {
         const justState = state as any;
         const branch = getTabBranch(justState.layout, [])
+        if (branch == null) return;
+        if (hasWinId(justState.layout, payload.justId)) {
+          justState.layout = activeWinId(justState.layout, payload.justId)
+        } else {
+          justState.layout = addTabWin(justState.layout, branch, payload.justId, -1)
+        }
+        justState.lastActiveId = payload.justId
+        justState.lastActiveTm = new Date().getTime()
+      },
+      addTabByNodeName: (state, { payload }: PayloadAction<JustPayloadAddTabByNodeName>) => {
+        const justState = state as any;
+        const branch = getBranchByNodeName(justState.layout, payload.nodeName, [])
         if (branch == null) return;
         if (hasWinId(justState.layout, payload.justId)) {
           justState.layout = activeWinId(justState.layout, payload.justId)

@@ -43,11 +43,15 @@ export function insertWinIdToSplit(layout: JustNode | null, payload: JustPayload
     $set: {
       type: 'split-percentage',
       direction: payload.direction,
-      [otherPos]: targetNode,
+      [otherPos]: {
+        ...targetNode,
+        name: undefined
+      },
       [payload.pos]: {
         type: "stack",
         tabs: [payload.justId],
         active: payload.justId,
+        name: undefined
       },
       size: payload.size ?? 50,
       dndAccept: targetNode.dndAccept,
@@ -130,7 +134,7 @@ export function getActiveWinIds(layout: JustNode | null): JustId[] {
 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
-  const branch = findEmptyBranch(layout, undefined, [])
+  const branch = findEmptyBranch(layout, [])
   if (branch === null) return layout
   if (branch.length === 0) return null
 
@@ -153,20 +157,20 @@ export function removeEmpty(layout: JustNode | null): JustNode | null {
 }
 
 
-export function findEmptyBranch(layout: JustNode | null, parentName: string | undefined, branch: JustBranch): JustBranch | null {
+export function findEmptyBranch(layout: JustNode | null, branch: JustBranch): JustBranch | null {
 
   if( layout === null) return null
   if (layout.type === 'stack') {
-    if (layout.tabs.length === 0 && (!layout.name && !parentName )) {
+    if (layout.tabs.length === 0 && !layout.name) {
       return branch
     }
   } else {
-    const branchFirst = findEmptyBranch(layout.first, layout.name, [...branch, 'first'])
+    const branchFirst = findEmptyBranch(layout.first, [...branch, 'first'])
     if (branchFirst != null ) {
       return branchFirst
     }
 
-    const branchSecond = findEmptyBranch(layout.second, layout.name, [...branch, 'second'])
+    const branchSecond = findEmptyBranch(layout.second, [...branch, 'second'])
     if (branchSecond != null) {
       return branchSecond
     }
@@ -232,22 +236,24 @@ export function getBranchByWinId(layout: JustNode | null, justId: JustId): JustB
 }
 export function getBranchByNodeName(layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null {
   if( layout === null) return null
-  if (layout.type === 'split-pixels') {
+  // if (layout.type === 'split-pixels') {
     if (layout.name == nodeName) {
       return [...curBranch]
     }
-    const nodeFirst = getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
-    if (nodeFirst != null) {
-      return nodeFirst
-    }
-    const nodeSecond = getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
-    if (nodeSecond != null) {
-      return nodeSecond
+    if (layout.type != 'stack') {
+      const nodeFirst = getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
+      if (nodeFirst != null) {
+        return nodeFirst
+      }
+      const nodeSecond = getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
+      if (nodeSecond != null) {
+        return nodeSecond
+      }
     }
     return null
-  } else {
-    return null
-  }
+  // } else {
+  //   return null
+  // }
 }
 
 export function getNodeByWinId(layout: JustNode | null, justId: JustId): JustNode | null {

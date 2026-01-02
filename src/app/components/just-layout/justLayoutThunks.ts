@@ -12,6 +12,11 @@ interface PayloadToggleWin {
   nodeName: string
 }
 
+interface PayloadShowWin {
+  nodeName: string
+  show: boolean
+}
+
 interface PayloadGetSize {
   nodeName: string
 }
@@ -68,6 +73,27 @@ export function createJustLayoutThunks(sliceId: string) {
     dispatch(justLayoutActions.setLayout(newLayout))
   })
 
+  const showWin = createSliceThunk(sliceId, ({nodeName, show}: PayloadShowWin, {dispatch, sliceState}) => {
+    const justLayoutActions = getActions<JustLayoutActions>(sliceId);
+    const layout = sliceState?.layout;
+    const branch = getBranchByNodeName(layout, nodeName, [])
+    if (branch == null) return;
+    const node = getNodeAtBranch(layout, branch)
+    if (node == null) return;
+    if (node.type !== 'split-pixels') return;
+    if (show === (node.size === 0)) {
+      const newSize = show ? node.primaryDefaultSize : 0;
+      const updateSpec = buildSpecFromUpdateSpec(branch, {
+        $merge: {
+          size: newSize
+        }
+      })
+      const newLayout = updateNode(layout, updateSpec)
+      if (newLayout == null) return;
+      dispatch(justLayoutActions.setLayout(newLayout))
+    }
+  })
+
   const getSizeByNodeName = createSliceThunk(sliceId, ({nodeName}: PayloadGetSize, {sliceState}) => {
     const layout = sliceState?.layout;
     const branch = getBranchByNodeName(layout, nodeName, [])
@@ -121,6 +147,7 @@ export function createJustLayoutThunks(sliceId: string) {
   return {
     toggleSideMenu,
     toggleWin,
+    showWin,
     getSizeByNodeName,
     openWin,
     openWinMenu,

@@ -15,6 +15,7 @@ import JustStatusBar from "@/app/status-bar/JustStatusBar.tsx";
 import JustUtilBar from "@/app/util-bar/JustUtilBar.tsx";
 import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
 import JobListView from "@/app/job/ui/JobListView.tsx";
+import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -31,7 +32,9 @@ export const UTIL_BAR_NODE_NAME = "UTIL_BAR_NODE"
 
 export const SIDE_MENU_NODE_NAME = "SIDE_MENU_NODE"
 
-export const JOB_MONITOR_NODE_NAME = "JOB_MONITOR_NODE"
+export const JOB_MONITOR_LIST_NODE_NAME = "JOB_MONITOR_LIST_NODE"
+export const JOB_MONITOR_VIEW_NODE_NAME = "JOB_MONITOR_VIEW_NODE"
+
 
 export const INIT_SIDE_MENU_SIZE = 200
 export const INIT_BOTTOM_PANEL_SIZE = 200
@@ -68,6 +71,8 @@ export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 
 export const jobListViewId: JustId = {viewId: 'job-list-view', title: 'Job List'};
 // export const jobMonitorId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor'};
+
+// export const jobMonitorViewId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor' , params: {jobId: 'XXX'}};
 
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   {menuId: page01Id, menuName: page01Id.title},
@@ -173,7 +178,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
 
   },
   "job-monitor-view": {
-    title: "Job Monitor",
+    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
     icon: <Icon icon={faTerminal} />,
     getView: (justId) => {
       return (
@@ -241,6 +246,7 @@ export const layoutSideMenu: JustNode = {
     direction: 'column',
     size: 50,
     dndAccept: DND_ACCEPT_CONTENT,
+    name: 'CONTENT_VIEW',
     first: {
       type: 'stack',
       tabs: [page01Id],
@@ -277,7 +283,7 @@ const layoutUtilBar: JustSplitPixels = {
 const layoutJobMonitor: JustSplitPixels = {
   type: 'split-pixels',
   direction: 'row',
-  name: JOB_MONITOR_NODE_NAME,
+  name: JOB_MONITOR_LIST_NODE_NAME,
   primary: 'first',
   primaryDefaultSize: 200,
   size: 200,
@@ -292,6 +298,7 @@ const layoutJobMonitor: JustSplitPixels = {
     type: 'stack',
     tabs: [],
     active: null,
+    name: JOB_MONITOR_VIEW_NODE_NAME,
     dndAccept: ['job-monitor-view'],
   }
 }

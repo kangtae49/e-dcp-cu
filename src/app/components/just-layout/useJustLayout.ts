@@ -14,11 +14,19 @@ const useJustLayout = (layoutId: string) => {
     console.log(nodeName)
     dispatch(justLayoutTrunks.toggleWin({nodeName}))
   }
+  const showWin = (nodeName: string, show: boolean) => {
+    console.log(nodeName)
+    dispatch(justLayoutTrunks.showWin({nodeName, show}))
+  }
   const addTabWin = (justId: JustId) => {
     const ids: JustId [] = dispatch(justLayoutTrunks.getDupWinIds({justId}))
 
     const dupWinId = ids.toSorted((a, b) => (a.dupId ?? '') >= (b.dupId ?? '') ? 1 : -1).at(-1) ?? justId;
     dispatch(justLayoutActions.addTab({justId: dupWinId}))
+  }
+
+  const addTabWinByNodeName = (justId: JustId, nodeName: string) => {
+    dispatch(justLayoutActions.addTabByNodeName({justId: justId, nodeName: nodeName}))
   }
 
   const getSizeByNodeName = (nodeName: string): number | null => {
@@ -33,8 +41,10 @@ const useJustLayout = (layoutId: string) => {
   return {
     state,
     toggleWin,
+    showWin,
     getSizeByNodeName,
     addTabWin,
+    addTabWinByNodeName,
     setActiveWin
   }
 }

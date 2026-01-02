@@ -242,3 +242,6 @@
 .fa-pen-to-square:hover { transform: var(--icon-hover-scale); }
 .fa-circle-stop { color: var(--icon-color); }
 .fa-circle-stop:hover { transform: var(--icon-hover-scale); }
+.fa-terminal { color: var(--icon-color); }
+.fa-terminal:hover { transform: var(--icon-hover-scale); }
+

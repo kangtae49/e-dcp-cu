@@ -27,6 +27,8 @@ import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
+import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
+import {BOTTOM_PANEL_NODE_NAME, JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
@@ -54,6 +56,10 @@ function Page01View({justId}: Props) {
   const refGrid = useRef<HTMLDivElement>(null)
   const refChart = useRef<HTMLDivElement>(null)
 
+  const {
+    showWin,
+    addTabWinByNodeName
+  } = useJustLayout(LAYOUT_ID)
   const {
     state: pageState,
     setCompany,
@@ -155,6 +161,16 @@ function Page01View({justId}: Props) {
     e.preventDefault()
     console.log('clickDownload', outPath)
     window.api.openSaveDialog(outPath, outPath).then()
+  }
+
+  const clickJobMonitor = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const jobId = pageState?.jobInfo?.jobId;
+    console.log('clickJobMonitor', jobId)
+    if (jobId) {
+      addTabWinByNodeName({viewId: "job-monitor-view", title: jobId, params: {jobId}}, JOB_MONITOR_VIEW_NODE_NAME)
+      showWin(BOTTOM_PANEL_NODE_NAME, true)
+    }
   }
 
   const clickOpenFile = (e: React.MouseEvent) => {
@@ -343,15 +359,16 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('GRID')}>
             <Icon icon={faTableList} />grid
           </div>
-          <div className={classNames(
-            "tab-title",
-                {
-                  "active": pageState?.tab === "LOG",
-                }
-              )}
-              onClick={()=> setTab('LOG')}>
-            <Icon icon={faTerminal} />log
-          </div>
+          {/*<div className={classNames(*/}
+          {/*  "tab-title",*/}
+          {/*      {*/}
+          {/*        "active": pageState?.tab === "LOG",*/}
+          {/*      }*/}
+          {/*    )}*/}
+          {/*    onClick={()=> setTab('LOG')}>*/}
+          {/*  <Icon icon={faTerminal} />log*/}
+          {/*</div>*/}
+
           <div>
             <div
               draggable={true}
@@ -368,6 +385,15 @@ function Page01View({justId}: Props) {
               <Icon icon={faPenToSquare} />
             </div>
           </div>
+          {pageState?.jobInfo?.jobId &&
+          <div>
+            <div
+              onClick={clickJobMonitor}
+            >
+              <Icon icon={faTerminal} />
+            </div>
+          </div>
+          }
           { jobStatus === 'RUNNING' &&
           <div>
             <div

@@ -1,0 +1,36 @@
+.job-list-view {
+    display: flex;
+    flex-direction: column;
+    background-color: #2b2d30;
+    height: 100%;
+    color: rgb(255, 255, 255, 0.7);
+    border-left: 1px solid #1e1f22;
+    border-top: 1px solid #1e1f22;
+}
+
+.job-list-view .job-list-title {
+    flex: 0 0 40px;
+    display: flex;
+    align-items: center;
+    background-color: #2e2e2e;
+    color: white;
+    /*justify-content: center;*/
+    min-width: 0;
+    padding-left: 10px;
+    border-bottom: 1px solid #1e1f22;
+    box-sizing: border-box;
+}
+
+.job-list-view .job-list-title .icon-minimize {
+    flex: 0 0 30px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.job-list-title .job-list-name {
+    flex: 1 1 auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
