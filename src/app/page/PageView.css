@@ -201,6 +201,9 @@
 .page-body .tabs .tab-title.active {
     background-color: #25324d;
 }
+.page-body .tabs .tab-title svg {
+    color: #bcccdc
+}
 
 .page-chart {
     display: flex;
