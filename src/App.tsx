@@ -23,8 +23,6 @@ import useGridData from "@/app/grid/useGridData.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {
   initialLayoutValue,
-  LAYOUT_DND_ACCEPT,
-  LAYOUT_DND_TYPE,
   LAYOUT_ID,
   SIDE_MENU_NODE_NAME,
   ViewId,
@@ -75,11 +73,8 @@ function App() {
       <WatchListener />
       <div className="just-app">
         <div className="just-container">
-          {/*<JustToolBar />*/}
           <JustLayoutView
             layoutId={LAYOUT_ID}
-            dndType={LAYOUT_DND_TYPE}
-            dndAccept={LAYOUT_DND_ACCEPT}
             getWinInfo={getWinInfo}
             initialValue={initialLayoutValue}
             closeWin={closeWin}

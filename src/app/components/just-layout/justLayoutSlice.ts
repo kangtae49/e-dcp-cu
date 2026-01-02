@@ -8,7 +8,8 @@ import {
 
 export type JustDirection = 'row' | 'column';
 export type JustSplitDirection = 'first' | 'second';
-export type JustSplitTypeUnit = 'split-percentage' | 'split-pixels';
+export type JustSplitType = 'split-percentage' | 'split-pixels';
+export type JustType = 'stack' | JustSplitType;
 
 type JSONPrimitive = string | number | boolean | null | undefined;
 export type JSONValue =
@@ -25,24 +26,29 @@ export interface JustId extends JSONObject {
   params?: Record<string, JSONValue>
 }
 
-export type JustNode = JustStack | JustSplitType
+export type JustNode = JustStack | JustSplit
 
 export type JustBranch = JustSplitDirection []
 
-export interface JustStack {
+
+export interface JustNodeBase {
+  type: JustType
+  name?: string
+  dndAccept?: string[]
+  hideTitle?: boolean
+}
+
+export interface JustStack extends JustNodeBase {
   type: 'stack'
   tabs: JustId[]
   active: JustId | null
-  hideTitle?: boolean
-  dndType?: string
-  dndAccept?: string[]
 }
 
-export type JustSplitType = JustSplitPercentage | JustSplitPixels;
+export type JustSplit = JustSplitPercentage | JustSplitPixels;
 
 
-export interface JustSplitBase {
-  type: JustSplitTypeUnit
+export interface JustSplitBase extends JustNodeBase {
+  type: JustSplitType
   direction: JustDirection
   first: JustNode
   second: JustNode
@@ -52,14 +58,10 @@ export interface JustSplitBase {
 
 export interface JustSplitPercentage extends JustSplitBase {
   type: 'split-percentage'
-  hideTitle?: boolean
-  dndType?: string
-  dndAccept?: string[]
 }
 
 export interface JustSplitPixels extends JustSplitBase {
   type: 'split-pixels'
-  name: string
   primary: JustSplitDirection
   primaryDefaultSize: number
   noSplitter?: boolean

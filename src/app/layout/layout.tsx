@@ -18,8 +18,8 @@ import JobListView from "@/app/job/ui/JobListView.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
-export const LAYOUT_DND_TYPE = "JUST_DRAG_SOURCE"
-export const LAYOUT_DND_ACCEPT = ["JUST_DRAG_SOURCE"]
+// export const LAYOUT_DND_TYPE = "JUST_DRAG_SOURCE"
+// export const LAYOUT_DND_ACCEPT = ["JUST_DRAG_SOURCE"]
 
 export const STATUS_BAR_NODE_NAME = "STATUS_BAR_NODE"
 
@@ -46,6 +46,11 @@ export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
   | "job-monitor-view"
   // | "demo" | "demo-grid" | "demo-line-chart"
 
+export const DND_ACCEPT_CONTENT = [
+  "page01",
+  "grid-view", "chart-view",
+  "about",
+]
 
 export interface SideMenuItem {
   menuId: JustId,
@@ -77,9 +82,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "status-bar": {
     title: "Status Bar",
     icon: <div/>,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     getView: (justId) => {
       return (
         <JustStatusBar justId={justId}/>
@@ -89,9 +91,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "bottom-panel": {
     title: "Bottom Panel",
     icon: <div/>,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     getView: () => {
       return (
         <JustBottomPanel />
@@ -101,9 +100,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "util-bar": {
     title: "Util Bar",
     icon: <div/>,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     getView: () => {
       return (
         <JustUtilBar/>
@@ -113,9 +109,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "tool-bar": {
     title: "Toolbar",
     icon: <div/>,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     getView: () => {
       return (
         <JustToolBar/>
@@ -125,9 +118,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "side-menu": {
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     // showClose: false,
     getView: () => {
       return (
@@ -175,9 +165,6 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "job-list-view": {
     title: "Job Monitor",
     icon: <Icon icon={faTerminal} />,
-    canDrag: false,
-    canDrop: false,
-    showTitle: false,
     getView: (justId) => {
       return (
         <JobListView justId={justId}/>
@@ -253,8 +240,7 @@ export const layoutSideMenu: JustNode = {
     type: 'split-percentage',
     direction: 'column',
     size: 50,
-    dndType: LAYOUT_DND_TYPE,
-    dndAccept: LAYOUT_DND_ACCEPT,
+    dndAccept: DND_ACCEPT_CONTENT,
     first: {
       type: 'stack',
       tabs: [page01Id],
@@ -283,7 +269,8 @@ const layoutUtilBar: JustSplitPixels = {
   second: {
     type: 'stack',
     tabs: [utilBarId],
-    active: utilBarId
+    active: utilBarId,
+    hideTitle: true,
   }
 }
 
@@ -298,7 +285,8 @@ const layoutJobMonitor: JustSplitPixels = {
   first: {
     type: 'stack',
     tabs: [jobListViewId],
-    active: jobListViewId
+    active: jobListViewId,
+    hideTitle: true,
   },
   second: {
     type: 'stack',
@@ -329,7 +317,8 @@ const layoutToolBar: JustSplitPixels  = {
   first: {
     type: 'stack',
     tabs: [toolBarId],
-    active: toolBarId
+    active: toolBarId,
+    hideTitle: true,
   },
   second: layoutBottomPanel
 }
@@ -346,7 +335,8 @@ const layoutStatusBar: JustSplitPixels  = {
   second: {
     type: 'stack',
     tabs: [statusBarId],
-    active: statusBarId
+    active: statusBarId,
+    hideTitle: true
   },
 }
 

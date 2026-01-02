@@ -5,7 +5,7 @@ import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "..
 
 interface Prop {
   layoutId: string
-  dndType: string
+  hideTitle?: boolean
   dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
@@ -15,15 +15,14 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-function JustWinView ({layoutId, dndType, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
-  const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
-  const showTitle = winInfo?.showTitle ?? true
+function JustWinView ({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
+  // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
+  const showTitle = hideTitle !== true
   return (
     <div className="just-win">
       {showTitle &&
         <JustWinTitleView
           layoutId={layoutId}
-          dndType={dndType}
           dndAccept={dndAccept}
           justBranch={justBranch}
           justStack={justStack}
@@ -35,7 +34,6 @@ function JustWinView ({layoutId, dndType, dndAccept, justBranch, justStack, getW
       }
       <JustWinBodyView
         layoutId={layoutId}
-        dndType={dndType}
         dndAccept={dndAccept}
         justBranch={justBranch}
         justStack={justStack}

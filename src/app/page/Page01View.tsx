@@ -27,7 +27,6 @@ import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
-import {LAYOUT_DND_TYPE} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
@@ -187,7 +186,7 @@ function Page01View({justId}: Props) {
   }), [ref, gridDataState?.gridDataMap?.[outPath]?.isLocked])
 
   const [, dragGrid] = useDrag({
-    type: LAYOUT_DND_TYPE,
+    type: justId.viewId,
     item: () => {
       const item: JustDragItem = {
         justId: {

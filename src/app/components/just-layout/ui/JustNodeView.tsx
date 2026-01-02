@@ -3,13 +3,13 @@ import {
   type JustBranch,
   type JustLayoutActions,
   type JustLayoutState,
-  type JustNode, type JustSplitDirection, type JustSplitType,
+  type JustNode, type JustSplitDirection, type JustSplit,
 } from "../justLayoutSlice.ts";
 import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import JustSplit, {type SplitSize} from "./JustSplit.tsx";
+import JustSplitter, {type SplitSize} from "./JustSplitter.tsx";
 import {type CSSProperties, useRef} from "react";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
@@ -18,7 +18,7 @@ interface Props {
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
-  dndType: string
+  hideTitle?: boolean
   dndAccept: string[]
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
@@ -26,7 +26,7 @@ interface Props {
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
+export const JustNodeView: React.FC<Props> = ({ layoutId, hideTitle, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
   const {
@@ -40,7 +40,7 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, no
   }
 
 
-  const getStyle = (node: JustSplitType, splitDirection: JustSplitDirection): CSSProperties => {
+  const getStyle = (node: JustSplit, splitDirection: JustSplitDirection): CSSProperties => {
 
     if (node.type === "split-percentage" && splitDirection === 'first') {
       return {
@@ -60,9 +60,9 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, no
     <div className="just-node" ref={refNode}>
       {node?.type === 'stack' && (
         <JustWinView
+          hideTitle={node.hideTitle ?? hideTitle}
           layoutId={layoutId}
-          dndType={dndType}
-          dndAccept={dndAccept}
+          dndAccept={node.dndAccept ?? dndAccept}
           justStack={node}
           justBranch={justBranch}
           getWinInfo={getWinInfo}
@@ -89,8 +89,8 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, no
           >
             <JustNodeView
               layoutId={layoutId}
-              dndType={dndType}
-              dndAccept={dndAccept}
+              hideTitle={node.hideTitle ?? hideTitle}
+              dndAccept={node.dndAccept ?? dndAccept}
               node={node.first}
               justBranch={[...justBranch, "first"]}
               getWinInfo={getWinInfo}
@@ -102,7 +102,7 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, no
           {
             !(node.type === 'split-pixels' && node.noSplitter === true)
             &&
-            <JustSplit
+            <JustSplitter
               layoutId={layoutId}
               node={node}
               justBranch={justBranch}
@@ -120,8 +120,8 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, dndType, dndAccept, no
           >
             <JustNodeView
               layoutId={layoutId}
-              dndType={dndType}
-              dndAccept={dndAccept}
+              hideTitle={node.hideTitle ?? hideTitle}
+              dndAccept={node.dndAccept ?? dndAccept}
               node={node.second}
               justBranch={[...justBranch, "second"]}
               getWinInfo={getWinInfo}

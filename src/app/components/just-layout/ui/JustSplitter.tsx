@@ -2,8 +2,8 @@ import {RefObject, useEffect, useRef, useState} from "react";
 import type {
   JustBranch,
   JustSplitDirection,
-  JustSplitType,
-  JustSplitTypeUnit
+  JustSplit,
+  JustSplitType
 } from "../justLayoutSlice.ts";
 import classNames from "classnames";
 import throttle from 'lodash/throttle';
@@ -15,26 +15,26 @@ const RESIZE_THROTTLE_MS = 1000 / 30; // 30 fps
 export type SplitSize = SplitSizePercentage | SplitSizePiexels;
 
 export interface SplitSizePercentage {
-  type: JustSplitTypeUnit,
+  type: JustSplitType,
   size: number,
 }
 
 export interface SplitSizePiexels {
-  type: JustSplitTypeUnit,
+  type: JustSplitType,
   primary: JustSplitDirection
   size: number
 }
 
 interface Props {
   layoutId: string
-  node: JustSplitType
+  node: JustSplit
   justBranch: JustBranch
   containerRef: RefObject<HTMLDivElement | null>
   onChange?: (splitSize: SplitSize) => void;
   onRelease?: (splitSize: SplitSize) => void;
 }
 
-function JustSplit({ node, containerRef, onChange, onRelease }: Props) {
+function JustSplitter({ node, containerRef, onChange, onRelease }: Props) {
   const refSplit = useRef<HTMLDivElement>(null);
   const [listenersBound, setListenersBound] = useState(false);
 
@@ -90,7 +90,7 @@ function JustSplit({ node, containerRef, onChange, onRelease }: Props) {
   //   return percentage;
   // }
 
-  const calculateSplitSize = (event: MouseEvent, node: JustSplitType, containerRef: React.RefObject<HTMLDivElement | null>): SplitSize | null => {
+  const calculateSplitSize = (event: MouseEvent, node: JustSplit, containerRef: React.RefObject<HTMLDivElement | null>): SplitSize | null => {
     if (containerRef.current == null) return null;
     const rect = containerRef.current.getBoundingClientRect()
     const MousePos = node.direction === 'row' ? event.clientX : event.clientY;
@@ -123,7 +123,7 @@ function JustSplit({ node, containerRef, onChange, onRelease }: Props) {
 
   }
 
-  const throttledUpdatePercentage = throttle((event: MouseEvent, type: JustSplitType, containerRef: React.RefObject<HTMLDivElement | null>) => {
+  const throttledUpdatePercentage = throttle((event: MouseEvent, type: JustSplit, containerRef: React.RefObject<HTMLDivElement | null>) => {
     if (containerRef.current == null) return null;
     const splitSize = calculateSplitSize(event, type, containerRef)
     if (splitSize !== null) {
@@ -144,4 +144,4 @@ function JustSplit({ node, containerRef, onChange, onRelease }: Props) {
   )
 }
 
-export default JustSplit
+export default JustSplitter

@@ -17,8 +17,6 @@ interface Props {
   layoutId: string
   getWinInfo: GetWinInfoFn
   initialValue: JustNode
-  dndType?: string
-  dndAccept?: string[]
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
   onDoubleClickTitle?: OnDoubleClickTitleFn
@@ -26,7 +24,7 @@ interface Props {
 
 
 
-export function JustLayoutView({layoutId, dndType, dndAccept, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
+export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
   const {onLoad} = useOnload();
   const {
     state: justLayoutState,
@@ -37,7 +35,9 @@ export function JustLayoutView({layoutId, dndType, dndAccept, getWinInfo, initia
     dispatch(justLayoutActions.setLayout(initialValue))
 
   })
-
+  const dndType = JUST_DRAG_SOURCE
+  const dndAccept = [JUST_DRAG_SOURCE]
+  const hideTitle: boolean | undefined = undefined
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={classNames(
@@ -46,8 +46,8 @@ export function JustLayoutView({layoutId, dndType, dndAccept, getWinInfo, initia
       )}>
         {justLayoutState && <JustNodeView
             layoutId={layoutId}
-            dndType={dndType ?? JUST_DRAG_SOURCE}
-            dndAccept={dndAccept ?? [dndType ?? JUST_DRAG_SOURCE]}
+            hideTitle={hideTitle ?? justLayoutState.layout?.hideTitle}
+            dndAccept={dndAccept ?? justLayoutState.layout?.dndAccept}
             node={justLayoutState.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}

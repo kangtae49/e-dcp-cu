@@ -14,14 +14,13 @@ import JustDraggableTitle, {type JustDragItem} from "./JustDraggableTitle";
 import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
-import {CloseWinFn, GetWinInfoFn, JUST_DRAG_SOURCE, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 
 interface Prop {
   layoutId: string
-  dndType: string
   dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
@@ -29,10 +28,9 @@ interface Prop {
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
   onDoubleClickTitle?: OnDoubleClickTitleFn
-  // viewMap: Record<string, WinInfo>
 }
 
-function JustWinTitleView({layoutId, dndType, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
+function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
   const {
@@ -82,7 +80,8 @@ function JustWinTitleView({layoutId, dndType, dndAccept, justBranch, justStack, 
 
 
   const onDrop = (itemType: any, item: JustDragItem) => {
-    console.log("onDrop(JustWinTitle)", itemType, item)
+    console.log("onDrop(JustWinTitle)", itemType, item, justBranch)
+    // const isSameBranch = item.direction?.length === justBranch.length && item?.direction.at(-1) === justBranch.at(-1)
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,
@@ -96,23 +95,20 @@ function JustWinTitleView({layoutId, dndType, dndAccept, justBranch, justStack, 
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: dndAccept,
-      canDrop: () => {
-        let canDrop = true;
-        if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
-          canDrop = false
-        }
-        return canDrop;
-      },
-      // canDrop: () => true,
       collect: (monitor: DropTargetMonitor) => ({
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
       }),
       drop(_item: JustDragItem, monitor) {
         // console.log("drop item", item, monitor.getItem())
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined
       },
+      hover(item: JustDragItem, monitor) {
+        if (!ref.current) {
+          return
+        }
+        item.index = -1
+      }
     }), [justStack]
   )
 
@@ -163,7 +159,6 @@ function JustWinTitleView({layoutId, dndType, dndAccept, justBranch, justStack, 
           <JustDraggableTitle
             key={[...justBranch, JustUtil.toString(justId)].join(",")}
             layoutId={layoutId}
-            dndType={dndType}
             dndAccept={dndAccept}
             rect={rect}
             justId={justId}

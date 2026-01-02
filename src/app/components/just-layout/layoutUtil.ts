@@ -22,6 +22,7 @@ export function insertWinIdToStack(layout: JustNode | null, payload: JustPayload
   const newIndex = payload.index >= 0 ? clamp(payload.index, 0, targetTabs.length) : targetTabs.length;
   return updateNodeOfBranch(layout, payload.branch, {
     $set: {
+      ...targetNode,
       type: "stack",
       tabs: [
         ...targetTabs.slice(0, newIndex),
@@ -47,8 +48,10 @@ export function insertWinIdToSplit(layout: JustNode | null, payload: JustPayload
         type: "stack",
         tabs: [payload.justId],
         active: payload.justId,
+        dndAccept: targetNode.dndAccept
       },
       size: payload.size ?? 50,
+      dndAccept: targetNode.dndAccept
     }
   })
 
@@ -126,7 +129,7 @@ export function getActiveWinIds(layout: JustNode | null): JustId[] {
 
 export function removeEmpty(layout: JustNode | null): JustNode | null {
   if (layout == null) return layout;
-  const branch = findEmptyBranch(layout, [])
+  const branch = findEmptyBranch(layout, undefined, [])
   if (branch === null) return layout
   if (branch.length === 0) return null
 
@@ -136,42 +139,36 @@ export function removeEmpty(layout: JustNode | null): JustNode | null {
   const lastSplitType = branch[branch.length - 1]
   const parentBranch = branch.slice(0, -1)
   const otherSplitType = lastSplitType === 'first' ? 'second' : 'first'
+  const parentBranchNode = getNodeByBranch(layout, parentBranch)
   const otherNode = getNodeByBranch(layout, [...parentBranch, otherSplitType])
   return updateNodeOfBranch(layout, parentBranch, {
-    $set: otherNode,
+    $set: {
+      ...otherNode,
+      dndAccept: parentBranchNode.dndAccept
+    },
   })
 }
 
 
-export function findEmptyBranch(layout: JustNode | null, branch: JustBranch): JustBranch | null {
+export function findEmptyBranch(layout: JustNode | null, parentName: string | undefined, branch: JustBranch): JustBranch | null {
 
   if( layout === null) return null
   if (layout.type === 'stack') {
-    if (layout.tabs.length === 0) {
+    if (layout.tabs.length === 0 && (!layout.name && !parentName )) {
       return branch
-    } else {
-      return null
     }
   } else {
-    if (layout.type === 'split-pixels' && layout.first.type === 'stack') {
-      // nothing
-    } else {
-      const branchFirst = findEmptyBranch(layout.first, [...branch, 'first'])
-      if (branchFirst != null ) {
-        return branchFirst
-      }
+    const branchFirst = findEmptyBranch(layout.first, layout.name, [...branch, 'first'])
+    if (branchFirst != null ) {
+      return branchFirst
     }
 
-    if (layout.type === 'split-pixels' && layout.second.type === 'stack') {
-      // nothing
-    } else {
-      const branchSecond = findEmptyBranch(layout.second, [...branch, 'second'])
-      if (branchSecond != null) {
-        return branchSecond
-      }
+    const branchSecond = findEmptyBranch(layout.second, layout.name, [...branch, 'second'])
+    if (branchSecond != null) {
+      return branchSecond
     }
-    return null
   }
+  return null
 }
 
 // export function moveWinId(layout: JustNode | null, justId: JustId, branch: JustBranch, pos: JustPos, direction: JustDirection, index: number): JustNode | null {

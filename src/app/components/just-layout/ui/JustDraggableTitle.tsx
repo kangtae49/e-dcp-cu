@@ -27,7 +27,6 @@ export interface JustDragItem {
 
 interface Prop {
   layoutId: string
-  dndType: string
   dndAccept: string[]
   justBranch: JustBranch
   justId: JustId
@@ -42,7 +41,7 @@ interface Prop {
 function JustDraggableTitle(props: Prop) {
   const {
     layoutId,
-    dndType, dndAccept,
+    dndAccept,
     winInfo, justBranch, justId, justStack,
     closeWin,
     onClickTitle,
@@ -104,8 +103,7 @@ function JustDraggableTitle(props: Prop) {
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
-      type: dndType,
-      canDrag: winInfo.canDrag ?? true,
+      type: justId.viewId,
       item: {
         justBranch,
         justId,
@@ -119,7 +117,6 @@ function JustDraggableTitle(props: Prop) {
 
   const [, drop] = useDrop<JustDragItem, void, { handlerId: any | null }> ({
     accept: dndAccept,
-    canDrop: () => winInfo.canDrop ?? true,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -131,9 +128,6 @@ function JustDraggableTitle(props: Prop) {
       }
       if (justId === item.justId) {
         return
-      }
-      if (!monitor.canDrop()) {
-        return;
       }
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
       const clientOffset = monitor.getClientOffset()

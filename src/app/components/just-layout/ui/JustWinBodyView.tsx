@@ -16,18 +16,16 @@ import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 
 interface Prop {
   layoutId: string
-  dndType: string
   dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
-  // viewMap: Record<string, WinInfo>
   getWinInfo: GetWinInfoFn
 }
 
 function JustWinBodyView (props: Prop) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const { layoutId, dndType, dndAccept, getWinInfo, justBranch, justStack } = props;
+  const { layoutId, dndAccept, getWinInfo, justBranch, justStack } = props;
   const [overlayRect, setOverlayRect] = useState<{ top: number, left: number, width: number, height: number }|null>(null)
   const {
     state: justLayoutState,
@@ -62,25 +60,13 @@ function JustWinBodyView (props: Prop) {
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: dndAccept,
-      canDrop: () => {
-        let canDrop = true;
-        if (justStack.active !== null && !(getWinInfo(justStack.active).canDrop ?? true)) {
-          canDrop = false
-        }
-        return canDrop;
-      },
-      // canDrop: () => true,
       collect: (monitor: DropTargetMonitor) => ({
         isOver: monitor.isOver(),
-        canDrop: monitor.canDrop(),
       }),
       drop(_item: JustDragItem, monitor) {
         if (!ref.current) {
           return undefined
         }
-        // if (item.winId === justStack.active) {
-        //   return
-        // }
         onDrop(monitor.getItemType(), monitor.getItem())
         return undefined
       },
@@ -88,12 +74,6 @@ function JustWinBodyView (props: Prop) {
         if (!ref.current) {
           return
         }
-        if(!monitor.canDrop()) {
-          return;
-        }
-        // if (item.winId === justStack.active) {
-        //   return
-        // }
         const hoverBoundingRect = ref.current?.getBoundingClientRect()
         const clientOffset = monitor.getClientOffset()
         const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
