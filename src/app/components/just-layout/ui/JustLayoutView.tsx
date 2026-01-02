@@ -11,7 +11,7 @@ import {
 import useOnload from "@/hooks/useOnload.ts";
 import {JustNodeView} from "./JustNodeView.tsx";
 import classNames from "classnames";
-import {CloseWinFn, GetWinInfoFn, JUST_DRAG_SOURCE, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 
 interface Props {
   layoutId: string
