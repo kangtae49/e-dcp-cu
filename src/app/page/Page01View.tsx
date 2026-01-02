@@ -368,7 +368,7 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('LOG')}>
             <Icon icon={faTerminal} />log
           </div>
-
+          {gridDataState?.gridDataMap[outPath] &&
           <div>
             <div
               draggable={true}
@@ -378,6 +378,8 @@ function Page01View({justId}: Props) {
               <Icon icon={faDownload} />
             </div>
           </div>
+          }
+          {gridDataState?.gridDataMap[outPath] &&
           <div>
             <div
               onClick={clickOpenFile}
@@ -385,6 +387,7 @@ function Page01View({justId}: Props) {
               <Icon icon={faPenToSquare} />
             </div>
           </div>
+          }
           {/*{pageState?.jobInfo?.jobId &&*/}
           {/*<div>*/}
           {/*  <div*/}
