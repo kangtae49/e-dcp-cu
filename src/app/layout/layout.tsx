@@ -291,7 +291,8 @@ const layoutJobMonitor: JustSplitPixels = {
   second: {
     type: 'stack',
     tabs: [],
-    active: null
+    active: null,
+    dndAccept: ['job-monitor-view'],
   }
 }
 

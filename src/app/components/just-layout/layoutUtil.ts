@@ -48,10 +48,11 @@ export function insertWinIdToSplit(layout: JustNode | null, payload: JustPayload
         type: "stack",
         tabs: [payload.justId],
         active: payload.justId,
-        dndAccept: targetNode.dndAccept
       },
       size: payload.size ?? 50,
-      dndAccept: targetNode.dndAccept
+      dndAccept: targetNode.dndAccept,
+      name: targetNode.name,
+      hideTitle: targetNode.hideTitle,
     }
   })
 
@@ -144,7 +145,9 @@ export function removeEmpty(layout: JustNode | null): JustNode | null {
   return updateNodeOfBranch(layout, parentBranch, {
     $set: {
       ...otherNode,
-      dndAccept: parentBranchNode.dndAccept
+      dndAccept: parentBranchNode.dndAccept,
+      name: parentBranchNode.name,
+      hideTitle: parentBranchNode.hideTitle,
     },
   })
 }

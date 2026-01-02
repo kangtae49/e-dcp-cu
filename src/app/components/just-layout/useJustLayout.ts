@@ -25,12 +25,17 @@ const useJustLayout = (layoutId: string) => {
     return dispatch(justLayoutTrunks.getSizeByNodeName({nodeName}))
   }
 
+  const setActiveWin = (justId: JustId) => {
+    dispatch(justLayoutActions.activeWin({justId}))
+  }
+
   const state = justLayoutState
   return {
     state,
     toggleWin,
     getSizeByNodeName,
-    addTabWin
+    addTabWin,
+    setActiveWin
   }
 }
 
