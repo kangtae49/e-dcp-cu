@@ -23,7 +23,6 @@ import {JSONValue, JustId} from "@/app/components/just-layout/justLayoutSlice.ts
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
-import {JUST_DRAG_SOURCE} from "@/app/components/just-layout";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
@@ -55,6 +54,7 @@ function Page01View({justId}: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const refGrid = useRef<HTMLDivElement>(null)
   const refChart = useRef<HTMLDivElement>(null)
+  const refJob = useRef<HTMLDivElement>(null)
 
   // const {
   //   showWin,
@@ -225,7 +225,7 @@ function Page01View({justId}: Props) {
 
 
   const [, dragChart] = useDrag({
-    type: JUST_DRAG_SOURCE,
+    type: 'chart-view',
     item: () => {
       const item: JustDragItem = {
         justId: {
@@ -235,6 +235,29 @@ function Page01View({justId}: Props) {
             file: outPath,
             xAxisCol: xAxisCol,
             legend: legend as unknown as JSONValue,
+          }
+        },
+      }
+      return item;
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end: (item, monitor) => {
+      console.log('drag end', item, monitor);
+    }
+  })
+
+  const [, dragJob] = useDrag({
+    type: 'job-monitor-view',
+    item: () => {
+      const jobId = pageState?.jobInfo?.jobId ?? '';
+      const item: JustDragItem = {
+        justId: {
+          viewId: "job-monitor-view",
+          title: pageState?.jobInfo?.jobId ?? '',
+          params: {
+            jobId
           }
         },
       }
@@ -271,6 +294,11 @@ function Page01View({justId}: Props) {
     }
   }, [dragChart]);
 
+  useLayoutEffect(() => {
+    if (refJob.current) {
+      dragJob(refJob);
+    }
+  }, [dragJob]);
 
   return (
     <div className="win-page"
@@ -359,8 +387,9 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('GRID')}>
             <Icon icon={faTableList} />grid
           </div>
-          <div className={classNames(
-            "tab-title",
+          <div
+            ref={refJob}
+            className={classNames("tab-title",
                 {
                   "active": pageState?.tab === "LOG",
                 }

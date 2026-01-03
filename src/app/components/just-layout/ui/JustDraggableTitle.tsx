@@ -101,19 +101,17 @@ function JustDraggableTitle(props: Prop) {
     }
   }
 
-  const [{ isDragging }, drag] = useDrag(
-    () => ({
-      type: justId.viewId,
-      item: {
-        justBranch,
-        justId,
-        index: -1,
-      } as JustDragItem,
-      collect: (monitor: DragSourceMonitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
+  const [{ isDragging }, drag] = useDrag({
+    type: justId.viewId,
+    item: {
+      justBranch,
+      justId,
+      index: -1,
+    } as JustDragItem,
+    collect: (monitor: DragSourceMonitor) => ({
+      isDragging: monitor.isDragging(),
     }),
-  )
+  })
 
   const [, drop] = useDrop<JustDragItem, void, { handlerId: any | null }> ({
     accept: dndAccept,

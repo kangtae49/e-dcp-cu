@@ -52,7 +52,7 @@ export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
 
 export const DND_ACCEPT_CONTENT = [
   "page01",
-  "grid-view", "chart-view",
+  "grid-view", "chart-view", "job-monitor-view",
   "about",
 ]
 
