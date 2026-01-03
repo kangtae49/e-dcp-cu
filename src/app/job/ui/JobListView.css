@@ -1,4 +1,6 @@
 .job-list-view {
+    --icon-color: #f4a261;
+    --icon-hover-scale: scale(1.2);
     display: flex;
     flex-direction: column;
     background-color: #2b2d30;
@@ -33,4 +35,57 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+.job-list-content {
+    flex: 1;
+    /*display: flex;*/
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.job-list-table {
+    height: 100%;
+}
+
+.job-list-row {
+    display: flex;
+    font-size: 14px;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.job-list-icon {
+    flex: 0 0 20px;
+    width: 20px;
+    margin: 0 3px 0 3px;
+    box-sizing: border-box;
+}
+
+.job-list-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.job-list-icon .spinner {
+    width: 16px;
+    height: 16px;
+    border: 3px solid #ccc;
+    border-top: 3px solid #ffc233;
+    border-radius: 50%;
+    /*transform-origin: center;*/
+    aspect-ratio: 1 / 1;
+    animation: spin-job 1s linear infinite;
+    box-sizing: border-box;
+}
+
+@keyframes spin-job {
+    to { transform: rotate(360deg); }
+}
+
+.fa-circle-stop { color: var(--icon-color); }
+.fa-circle-stop:hover { transform: var(--icon-hover-scale); }
+.fa-terminal { color: white; }
 

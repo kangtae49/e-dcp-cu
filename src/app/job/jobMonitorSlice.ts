@@ -4,13 +4,11 @@ import {JobEvent, JobStatus} from "@/types.ts";
 export const JOB_MONITOR_ID = "JOB-MONITOR"
 
 export interface JobMonitorState {
-  active: string | null
   status: Record<string, JobStatus>,
   events: Record<string, JobEvent []>
 }
 
 const initialState: JobMonitorState = {
-  active: null,
   status: {} as Record<string, JobStatus>,
   events: {} as Record<string, JobEvent []>
 }

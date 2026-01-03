@@ -35,6 +35,7 @@ export const SIDE_MENU_NODE_NAME = "SIDE_MENU_NODE"
 export const JOB_MONITOR_LIST_NODE_NAME = "JOB_MONITOR_LIST_NODE"
 export const JOB_MONITOR_VIEW_NODE_NAME = "JOB_MONITOR_VIEW_NODE"
 
+export const CONTENTS_VIEW = "CONTENTS_VIEW"
 
 export const INIT_SIDE_MENU_SIZE = 200
 export const INIT_BOTTOM_PANEL_SIZE = 200
@@ -246,7 +247,7 @@ export const layoutSideMenu: JustNode = {
     direction: 'column',
     size: 50,
     dndAccept: DND_ACCEPT_CONTENT,
-    name: 'CONTENT_VIEW',
+    name: CONTENTS_VIEW,
     first: {
       type: 'stack',
       tabs: [page01Id],

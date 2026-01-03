@@ -4,14 +4,14 @@ import IconMinimize from "@/assets/minimize.svg?react"
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
-import {LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
+import {CONTENTS_VIEW, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
 
 
 function SideMenu() {
 
   const {
     toggleWin,
-    addTabWin
+    addTabWinByNodeName
   } = useJustLayout(LAYOUT_ID)
 
   const toggleSideMenu = () => {
@@ -19,7 +19,7 @@ function SideMenu() {
   }
 
   const openWin = async (justId: JustId) => {
-    addTabWin(justId)
+    addTabWinByNodeName(justId, CONTENTS_VIEW)
   }
 
   return (

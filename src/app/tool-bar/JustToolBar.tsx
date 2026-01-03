@@ -10,7 +10,7 @@ import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {
-  aboutId,
+  aboutId, CONTENTS_VIEW,
   INIT_SIDE_MENU_SIZE,
   LAYOUT_ID,
   SIDE_MENU_ID_LIST,
@@ -24,7 +24,7 @@ function JustToolBar() {
   const {
     toggleWin,
     getSizeByNodeName,
-    addTabWin
+    addTabWinByNodeName,
   } = useJustLayout(LAYOUT_ID)
 
 
@@ -33,7 +33,7 @@ function JustToolBar() {
   }
 
   const openWin = (justId: JustId) => {
-    addTabWin(justId)
+    addTabWinByNodeName(justId, CONTENTS_VIEW)
   }
   const size = getSizeByNodeName(SIDE_MENU_NODE_NAME) ?? INIT_SIDE_MENU_SIZE;
   // const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
