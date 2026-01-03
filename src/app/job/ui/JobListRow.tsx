@@ -1,6 +1,4 @@
 import {RowComponentProps} from "react-window";
-import {JobEvent} from "@/types.ts";
-import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import {JobMonitorState} from "@/app/job/jobMonitorSlice.ts";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
@@ -12,7 +10,6 @@ import {
 import React from "react";
 
 interface Props {
-  // event: JobEvent
   count: number
   jobMonitorState: JobMonitorState
 }
