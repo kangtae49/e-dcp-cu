@@ -203,6 +203,7 @@ function Page01View({justId}: Props) {
 
   const [, dragGrid] = useDrag({
     type: justId.viewId,
+    canDrag: () => !!gridDataState?.gridDataMap?.[outPath],
     item: () => {
       const item: JustDragItem = {
         justId: {
@@ -226,6 +227,7 @@ function Page01View({justId}: Props) {
 
   const [, dragChart] = useDrag({
     type: 'chart-view',
+    canDrag: () => !!gridDataState?.gridDataMap?.[outPath],
     item: () => {
       const item: JustDragItem = {
         justId: {
@@ -250,6 +252,7 @@ function Page01View({justId}: Props) {
 
   const [, dragJob] = useDrag({
     type: 'job-monitor-view',
+    canDrag: () => !!pageState?.jobInfo?.jobId,
     item: () => {
       const jobId = pageState?.jobInfo?.jobId ?? '';
       const item: JustDragItem = {
