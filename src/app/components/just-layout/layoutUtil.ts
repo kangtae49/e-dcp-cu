@@ -238,24 +238,36 @@ export function getBranchByWinId(layout: JustNode | null, justId: JustId): JustB
 }
 export function getBranchByNodeName(layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null {
   if( layout === null) return null
-  // if (layout.type === 'split-pixels') {
-    if (layout.name == nodeName) {
-      return [...curBranch]
+  if (layout.name == nodeName) {
+    return [...curBranch]
+  }
+  if (layout.type != 'stack') {
+    const nodeFirst = getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
+    if (nodeFirst != null) {
+      return nodeFirst
     }
-    if (layout.type != 'stack') {
-      const nodeFirst = getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
-      if (nodeFirst != null) {
-        return nodeFirst
-      }
-      const nodeSecond = getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
-      if (nodeSecond != null) {
-        return nodeSecond
-      }
+    const nodeSecond = getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
+    if (nodeSecond != null) {
+      return nodeSecond
     }
-    return null
-  // } else {
-  //   return null
-  // }
+  }
+  return null
+}
+
+export function getTabBranchByNodeName(layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null {
+  if( layout === null) return null
+  const branchHead = getBranchByNodeName(layout, nodeName, curBranch)
+  if( branchHead == null) return null
+  const node = getNodeByBranch(layout, branchHead)
+  if (node.type === 'stack') {
+    return branchHead
+  } else {
+    const restBranch = getTabBranch(node, [])
+    if (restBranch != null) {
+      return [...branchHead, ...restBranch]
+    }
+  }
+  return null
 }
 
 export function getNodeByWinId(layout: JustNode | null, justId: JustId): JustNode | null {

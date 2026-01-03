@@ -1,6 +1,7 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {
-  activeWinId, addTabWin, getBranchByNodeName, getBranchByWinId, getNodeAtBranch, getTabBranch, hasWinId, JustUtil,
+  activeWinId, addTabWin, getBranchByNodeName, getBranchByWinId, getNodeAtBranch, getTabBranch,
+  getTabBranchByNodeName, hasWinId, JustUtil,
   moveWinIdToSplit, moveWinIdToStack, removeAllTabs, removeEmpty,
   removeWinId,
   updateSplitSize,
@@ -167,7 +168,7 @@ export const createJustLayoutSlice = (id: string) =>
       },
       addTabByNodeName: (state, { payload }: PayloadAction<JustPayloadAddTabByNodeName>) => {
         const justState = state as any;
-        const branch = getBranchByNodeName(justState.layout, payload.nodeName, [])
+        const branch = getTabBranchByNodeName(justState.layout, payload.nodeName, [])
         if (branch == null) return;
         if (hasWinId(justState.layout, payload.justId)) {
           justState.layout = activeWinId(justState.layout, payload.justId)
