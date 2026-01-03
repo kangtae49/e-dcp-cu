@@ -1,6 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {
-  activeWinId, addTabWin, getBranchByNodeName, getBranchByWinId, getNodeAtBranch, getTabBranch,
+  activeWinId, addTabWin, getBranchByWinId, getNodeAtBranch, getTabBranch,
   getTabBranchByNodeName, hasWinId, JustUtil,
   moveWinIdToSplit, moveWinIdToStack, removeAllTabs, removeEmpty,
   removeWinId,
