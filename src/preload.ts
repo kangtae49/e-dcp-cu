@@ -26,6 +26,8 @@ export interface Api {
 
   onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void): void,
   onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void): void,
+
+  onSuspend(callback: (event: Electron.IpcRendererEvent) => void): void,
 }
 
 const api: Api = {
@@ -77,6 +79,12 @@ const api: Api = {
   getPathForFile(file: File) {
     return webUtils.getPathForFile(file)
   },
+  onSuspend(callback: (event: Electron.IpcRendererEvent) => void) {
+    console.log("onSuspend")
+    ipcRenderer.removeAllListeners('monitor-suspend');
+    ipcRenderer.on('monitor-suspend', callback)
+  }
+
 
 }
 

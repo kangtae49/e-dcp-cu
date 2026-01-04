@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain, shell, dialog, type IpcMainEvent} from 'electron'
+import {app, BrowserWindow, powerMonitor, ipcMain, shell, dialog, type IpcMainEvent} from 'electron'
 import path from 'node:path';
 import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
@@ -339,4 +339,5 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('open-save-dialog', (_event, subpath: string, defaultName: string) => openSaveDialog(subpath, defaultName))
   ipcMain.handle('upload-file', (_, sourcePath: string, subpath: string) => uploadFile(sourcePath, subpath))
   ipcMain.on('ondragstart', onDragStart);
+  powerMonitor.on('suspend', () => mainWindow.webContents.send('monitor-suspend'))
 }

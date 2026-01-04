@@ -18,7 +18,6 @@ interface Props {
 function SelectBox({options, value, onChange}: Props) {
   // const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const clickOption = (option: Option) => {
-    console.log(option);
     // setSelectedOption(option);
     if (onChange) {
       onChange(option)

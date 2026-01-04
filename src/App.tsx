@@ -43,6 +43,9 @@ function App() {
   const {updateGridData} = useGridData(GRID_DATA_ID)
 
   useEffect(() => {
+    window.api.onSuspend((event) => {
+      console.log('onSuspend', event)
+    })
     CONFIG_KEYS.forEach((justId: JustId) => {
       const file: string = JustUtil.getParamString(justId, 'file');
       window.api.readDataExcel(file)
@@ -60,10 +63,8 @@ function App() {
     removeReducer(JustUtil.toString(justId))
   }
   const onClickTitle = (e: React.MouseEvent, justId: JustId) => {
-    console.log(e, justId)
   }
   const onDoubleClickTitle = (e: React.MouseEvent, justId: JustId) => {
-    console.log(e, justId)
     toggleWin(SIDE_MENU_NODE_NAME)
   }
 

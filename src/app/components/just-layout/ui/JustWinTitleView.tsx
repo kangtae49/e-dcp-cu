@@ -40,8 +40,6 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
   const dispatch = useAppDispatch();
 
   const clickClose = (justId: JustId) => {
-    console.log("clickClose", justId)
-
     dispatch(
       justLayoutActions.removeWin({
         justId
@@ -69,7 +67,6 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
   }
 
   const activeWin = (justId: JustId) => {
-    console.log("activeWin", justId)
     dispatch(
       justLayoutActions.activeWin({
         justId
@@ -80,8 +77,6 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
 
 
   const onDrop = (itemType: any, item: JustDragItem) => {
-    console.log("onDrop(JustWinTitle)", itemType, item, justBranch)
-    // const isSameBranch = item.direction?.length === justBranch.length && item?.direction.at(-1) === justBranch.at(-1)
     dispatch(
       justLayoutActions.moveWin({
         branch: justBranch,

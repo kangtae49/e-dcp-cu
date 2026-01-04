@@ -15,7 +15,6 @@ function ChartView({ justId }: Props) {
   const legend= JustUtil.getParam<LegendItem []>(justId, 'legend') ?? [];
 
   const clickTitle = () => {
-    console.log(dataKey)
     openSetting(dataKey)
   }
 

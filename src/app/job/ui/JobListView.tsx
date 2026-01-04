@@ -11,7 +11,6 @@ interface Props {
   justId: JustId
 }
 function JobListView({justId}: Props) {
-  console.log(justId)
   const {
     toggleWin,
   } = useJustLayout(LAYOUT_ID)

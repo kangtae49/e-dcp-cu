@@ -27,12 +27,10 @@ function GridView({justId}: Props) {
 
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log(dataKey)
     window.api.startDataFile(dataKey).then()
   }
 
   const dragDownload = (e: React.DragEvent) => {
-    console.log('onDragDownload', dataKey)
     e.preventDefault()
     window.api.startDrag({
       file: dataKey
@@ -41,14 +39,12 @@ function GridView({justId}: Props) {
 
   const clickDownload = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log(dataKey)
     window.api.openSaveDialog(dataKey, dataKey).then()
   }
 
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
-      console.log('drop:', item)
       if (gridDataState?.gridDataMap?.[dataKey]?.isLocked) {
         alert(`Close Excel: ${dataKey}`)
         window.api.startDataFile(dataKey).then()

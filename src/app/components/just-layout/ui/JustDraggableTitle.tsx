@@ -59,8 +59,6 @@ function JustDraggableTitle(props: Prop) {
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const clickClose = (justId: JustId) => {
-    console.log("closeWin", justId)
-
     dispatch(
       justLayoutActions.removeWin({
         justId
@@ -82,7 +80,6 @@ function JustDraggableTitle(props: Prop) {
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
-    console.log("clickTitle", justId)
     dispatch(
       justLayoutActions.activeWin({
         justId
@@ -95,7 +92,6 @@ function JustDraggableTitle(props: Prop) {
   }
 
   const dblClickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
-    console.log("dblClickTitle", justId)
     if (onDoubleClickTitle) {
       onDoubleClickTitle(e, justId)
     }
@@ -151,7 +147,6 @@ function JustDraggableTitle(props: Prop) {
       if (parentRect == null) return;
       const rect = ref.current.getBoundingClientRect();
       if (parentRect.left > rect.left || parentRect.right < rect.right) {
-        console.log("JustDraggableTitle useEffect")
         ref.current.scrollIntoView({
           behavior: 'auto',
           block: 'center',

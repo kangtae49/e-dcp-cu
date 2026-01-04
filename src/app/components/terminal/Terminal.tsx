@@ -59,7 +59,6 @@ function Terminal({jobId}: Props) {
     // if (termRef.current) {
     //   termRef.current?.dispose()
     // }
-    console.log('rect', containerRef?.current?.getBoundingClientRect())
     const term = new XTerm({
       // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
       fontFamily: '"Gulimche", "굴림체", dotum, sans-serif',
@@ -78,7 +77,6 @@ function Terminal({jobId}: Props) {
     });
 
     if (containerRef.current) {
-      console.log("create terminal");
 
       const fitAddon = new FitAddon();
       term.loadAddon(fitAddon);
@@ -98,7 +96,6 @@ function Terminal({jobId}: Props) {
 
 
     return () => {
-      console.log("dispose terminal");
       observer.disconnect();
       term.dispose();
       // termRef.current?.dispose();
@@ -119,7 +116,6 @@ function Terminal({jobId}: Props) {
 
     // fitAddonRef.current.fit();
 
-    console.log('scroll to bottom')
     // termRef?.current.scrollToBottom()
   }, [jobMonitorState?.events[jobId]?.length]);
 

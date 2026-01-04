@@ -135,12 +135,10 @@ function Page01View({justId}: Props) {
   }
 
   const onChangeStartDate = (date: string | null) => {
-    console.log('onChangeStartDate:', date)
     setStartDate(date)
   }
 
   const onChangeEndDate = (date: string | null) => {
-    console.log('onChangeEndDate:', date)
     setEndDate(date)
   }
 
@@ -159,7 +157,6 @@ function Page01View({justId}: Props) {
     }
 
     if (jobStatus === 'RUNNING') return;
-    console.log('searchPage01')
 
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
@@ -169,7 +166,6 @@ function Page01View({justId}: Props) {
   }
 
   const dragDownload = (e: React.DragEvent) => {
-    console.log('onDragDownload', outPath)
     e.preventDefault()
     window.api.startDrag({
       file: outPath
@@ -178,7 +174,6 @@ function Page01View({justId}: Props) {
 
   const clickDownload = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('clickDownload', outPath)
     window.api.openSaveDialog(outPath, outPath).then()
   }
 
@@ -207,7 +202,6 @@ function Page01View({justId}: Props) {
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
-      console.log('drop:', item)
       if (gridDataState?.gridDataMap?.[outPath]?.isLocked) {
         alert(`Close Excel: ${outPath}`)
         window.api.startDataFile(outPath).then()
@@ -239,7 +233,6 @@ function Page01View({justId}: Props) {
       isDragging: monitor.isDragging(),
     }),
     end: (item, monitor) => {
-      console.log('drag end', item, monitor);
     }
   })
 
@@ -265,7 +258,6 @@ function Page01View({justId}: Props) {
       isDragging: monitor.isDragging(),
     }),
     end: (item, monitor) => {
-      console.log('drag end', item, monitor);
     }
   })
 
@@ -289,7 +281,6 @@ function Page01View({justId}: Props) {
       isDragging: monitor.isDragging(),
     }),
     end: (item, monitor) => {
-      console.log('drag end', item, monitor);
     }
   })
 

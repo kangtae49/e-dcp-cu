@@ -86,7 +86,6 @@ function JustGrid({dataKey}: Props) {
 
   const rows = getTableRows(configTable);
   const columns = getColumns(configTable.header, columnsSize);
-  console.log('configTable:', dataKey, configTable)
   return (
     <div className="just-grid" onScroll={handleScroll}>
       <ReactGrid

@@ -32,7 +32,6 @@ function JobListRow({
 
   const clickJobMonitor = (e: React.MouseEvent) => {
     e.preventDefault()
-    console.log('clickJobMonitor', jobId)
     if (jobId) {
       addTabWinByNodeName({viewId: "job-monitor-view", title: jobId, params: {jobId}}, JOB_MONITOR_VIEW_NODE_NAME)
       // showWin(BOTTOM_PANEL_NODE_NAME, true)

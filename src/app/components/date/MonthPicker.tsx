@@ -12,12 +12,8 @@ interface Props {
 }
 
 function MonthPicker ({value, onChange}: Props) {
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(value ?? new Date());
 
   const handleChange = (date: string | null) => {
-    console.log(date)
-    // setSelectedDate(date)
-
     if (onChange) {
       onChange(date)
     }

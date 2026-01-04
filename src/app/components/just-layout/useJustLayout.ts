@@ -11,11 +11,9 @@ const useJustLayout = (layoutId: string) => {
   } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const toggleWin = (nodeName: string) => {
-    console.log(nodeName)
     dispatch(justLayoutTrunks.toggleWin({nodeName}))
   }
   const showWin = (nodeName: string, show: boolean) => {
-    console.log(nodeName)
     dispatch(justLayoutTrunks.showWin({nodeName, show}))
   }
   const addTabWin = (justId: JustId) => {

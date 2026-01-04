@@ -22,7 +22,6 @@ function JustWinView ({layoutId, hideTitle, dndAccept, justBranch, justStack, ge
   const {setActiveWin} = useJustLayout(LAYOUT_ID)
   const showTitle = hideTitle !== true
   const onFocus = () => {
-    console.log("onFocus")
     if (justStack.active) {
       setActiveWin(justStack.active)
     }

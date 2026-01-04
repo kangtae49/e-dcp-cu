@@ -34,7 +34,6 @@ function JustWinBodyView (props: Prop) {
   const dispatch = useAppDispatch();
 
   const onDrop = (itemType: any, item: JustDragItem) => {
-    console.log("onDrop(JustWinBody)", itemType, item)
     if (!item.pos) return;
     if (item.pos === 'stack') {
       dispatch(
@@ -85,10 +84,8 @@ function JustWinBodyView (props: Prop) {
         const percentX = Math.abs((distX * 100) / hoverMiddleX)
         const percentY = Math.abs((distY * 100) / hoverMiddleY)
 
-        console.log("percentX", percentX, "percentY", percentY)
         if (percentX < 60 && percentY < 60) {
           item.pos = 'stack'
-          console.log('item: ', item)
           const overlayRect = {
             top: hoverBoundingRect.top,
             left: hoverBoundingRect.left,
