@@ -115,6 +115,25 @@ function Page01View({justId}: Props) {
     }
   }, [companyList, pageState?.company]);
 
+  // const getCompanyName = (cdVlId: string) => {
+  //   return companyList.find((opt) => opt.value === cdVlId)?.label || ''
+  // }
+
+  const formatYYMM = (strDt: string) => {
+    return format(strDt, 'yy-MM')
+  }
+
+  const getTitle = () => {
+    if (!pageState?.company) return ''
+    if (!pageState?.startDate) return ''
+    if (!pageState?.endDate) return ''
+    const companyName = pageState.company.label.slice(0, 2);
+    const viewName = '자산';
+    const startDate = formatYYMM(pageState.startDate);
+    const endDate = formatYYMM(pageState.endDate);
+    return `${companyName} ${viewName} ${startDate}~${endDate}`
+  }
+
   const onChangeStartDate = (date: string | null) => {
     console.log('onChangeStartDate:', date)
     setStartDate(date)
@@ -208,7 +227,7 @@ function Page01View({justId}: Props) {
       const item: JustDragItem = {
         justId: {
           viewId: "grid-view",
-          title: outFile,
+          title: getTitle(),
           params: {
             file: outPath,
           }
@@ -232,7 +251,7 @@ function Page01View({justId}: Props) {
       const item: JustDragItem = {
         justId: {
           viewId: "chart-view",
-          title: outFile,
+          title: getTitle(),
           params: {
             file: outPath,
             xAxisCol: xAxisCol,
