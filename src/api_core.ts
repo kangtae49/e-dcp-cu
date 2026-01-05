@@ -1,4 +1,8 @@
-import {app, BrowserWindow, powerMonitor, ipcMain, shell, dialog, type IpcMainEvent} from 'electron'
+import {
+  app, BrowserWindow, powerMonitor, ipcMain, shell, dialog,
+  type IpcMainEvent,
+  type IpcMainInvokeEvent,
+} from 'electron'
 import path from 'node:path';
 import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
@@ -15,16 +19,12 @@ const START_DRAG_IMG = getIconSubPath('assets/download.png')
 
 const runningProcesses: Map<string, ChildProcess> = new Map();
 
-export function getAppResourcePath() {
-  if (app.isPackaged) {
-    // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
-    return path.dirname(app.getAppPath())
-  } else {
-    return app.getAppPath()
-  }
+
+export function handleEcho(_event: IpcMainInvokeEvent, message: string) {
+    return message;
 }
 
-export function getVersions(): Versions {
+export function handleGetVersions(_event: IpcMainInvokeEvent): Versions {
   return {
     app: app.getVersion(),
     electron: process.versions.electron,
@@ -36,40 +36,40 @@ export function getVersions(): Versions {
     osRelease: os.release(),
   };
 }
-
-export function getIconSubPath(subpath: string) {
-  if (app.isPackaged) {
-    // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
-    return path.join(path.dirname(app.getAppPath()), subpath)
-  } else {
-    return path.join(app.getAppPath(), 'src', subpath)
-  }
-
+export function handleGetDirname(_event: IpcMainInvokeEvent) {
+  return __dirname;
 }
 
-export function getResourceSubPath(subpath: string) {
-  return path.join(getAppResourcePath(), subpath)
+export function handleGetAppResourcePath(_event: IpcMainInvokeEvent) {
+  return getAppResourcePath();
 }
 
-export function getScriptPath() {
-  return path.join(getResourceSubPath(SCRIPT_DIR))
+export function handleReadDataExcel(_event: IpcMainInvokeEvent, subpath: string) {
+  return readDataExcel(subpath);
 }
 
-export function getScriptSubPath(subpath: string) {
-  return path.join(getScriptPath(), subpath)
+export function handleStartDataFile(_event: IpcMainInvokeEvent, subpath: string) {
+  startDataFile(subpath);
 }
 
-export function isLockScriptSubPath(subpath: string) {
-  const filePath = path.join(getScriptPath(), subpath);
-  const fileDir = path.dirname(filePath);
-  const fileName = path.basename(filePath);
-  const lockFileName = `~$${fileName}`;
-  const lockFilePath = path.join(fileDir, lockFileName);
-  return fs.existsSync(lockFilePath)
+export function handleIsLockScriptPath(_event: IpcMainInvokeEvent, subpath: string) {
+  return isLockScriptSubPath(subpath);
 }
 
+export function handleGetEnv() {
+  const myEnv: Env = { ...process.env };
+  return myEnv;
+}
 
-export function readDataExcel(subpath: string): GridData | null {
+export function handleOpenSaveDialog(_event: IpcMainInvokeEvent, subpath: string, defaultName: string) {
+  return openSaveDialog(subpath, defaultName);
+}
+
+export function handleUploadFile(_event: IpcMainInvokeEvent, sourcePath: string, subpath: string) {
+  return uploadFile(sourcePath, subpath);
+}
+
+function readDataExcel(subpath: string): GridData | null {
   const filePath = getScriptSubPath(subpath)
 
   if (!fs.existsSync(filePath)) {
@@ -117,7 +117,50 @@ export function readDataExcel(subpath: string): GridData | null {
   }
 }
 
-export function startDataFile(subpath: string) {
+function getAppResourcePath() {
+  if (app.isPackaged) {
+    // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
+    return path.dirname(app.getAppPath())
+  } else {
+    return app.getAppPath()
+  }
+}
+
+export function getIconSubPath(subpath: string) {
+  if (app.isPackaged) {
+    // app.getAppPath(): C:\Users\kkt\AppData\Local\e_dcp_cu\app-1.0.0\resources\app.asar
+    return path.join(path.dirname(app.getAppPath()), subpath)
+  } else {
+    return path.join(app.getAppPath(), 'src', subpath)
+  }
+
+}
+
+export function getResourceSubPath(subpath: string) {
+  return path.join(getAppResourcePath(), subpath)
+}
+
+export function getScriptPath() {
+  return path.join(getResourceSubPath(SCRIPT_DIR))
+}
+
+export function getScriptSubPath(subpath: string) {
+  return path.join(getScriptPath(), subpath)
+}
+
+function isLockScriptSubPath(subpath: string) {
+  const filePath = path.join(getScriptPath(), subpath);
+  const fileDir = path.dirname(filePath);
+  const fileName = path.basename(filePath);
+  const lockFileName = `~$${fileName}`;
+  const lockFilePath = path.join(fileDir, lockFileName);
+  return fs.existsSync(lockFilePath)
+}
+
+
+
+
+function startDataFile(subpath: string) {
   shell.openPath(getScriptSubPath(subpath))
 }
 
@@ -266,10 +309,7 @@ export function stopScript(window: BrowserWindow, jobId: string) {
   }
 }
 
-export function getEnv() {
-  const myEnv: Env = { ...process.env };
-  return myEnv;
-}
+
 
 export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
   try {
@@ -291,7 +331,7 @@ export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
 }
 
 
-export const openSaveDialog = async (subpath: string, defaultName: string): Promise<DialogResult> => {
+const openSaveDialog = async (subpath: string, defaultName: string): Promise<DialogResult> => {
   const { filePath, canceled } = await dialog.showSaveDialog({
     title: 'Save',
     defaultPath: defaultName,
@@ -314,7 +354,7 @@ export const openSaveDialog = async (subpath: string, defaultName: string): Prom
   }
 }
 
-export function uploadFile (sourcePath: string, subpath: string) {
+function uploadFile (sourcePath: string, subpath: string) {
   if (!fs.existsSync(sourcePath)) {
     return
   }
@@ -326,18 +366,18 @@ export function uploadFile (sourcePath: string, subpath: string) {
 }
 
 export const registerHandlers = (mainWindow: BrowserWindow) => {
-  ipcMain.handle('echo', async (_event, message: string) => message);
-  ipcMain.handle('get-versions', () => getVersions());
-  ipcMain.handle('get-dirname', () => __dirname);
-  ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
-  ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));
-  ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
+  ipcMain.handle('echo', handleEcho);
+  ipcMain.handle('get-versions', handleGetVersions);
+  ipcMain.handle('get-dirname', handleGetDirname);
+  ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
+  ipcMain.handle('read-data-excel', handleReadDataExcel);
+  ipcMain.handle('start-data-file', handleStartDataFile);
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
-  ipcMain.handle('is-lock-script-path', (_event, subpath: string) => isLockScriptSubPath(subpath))
-  ipcMain.handle('get-env', () => getEnv())
-  ipcMain.handle('open-save-dialog', (_event, subpath: string, defaultName: string) => openSaveDialog(subpath, defaultName))
-  ipcMain.handle('upload-file', (_, sourcePath: string, subpath: string) => uploadFile(sourcePath, subpath))
+  ipcMain.handle('is-lock-script-path', handleIsLockScriptPath)
+  ipcMain.handle('get-env', handleGetEnv)
+  ipcMain.handle('open-save-dialog', handleOpenSaveDialog)
+  ipcMain.handle('upload-file', handleUploadFile)
   ipcMain.on('ondragstart', onDragStart);
   powerMonitor.on('suspend', () => mainWindow.webContents.send('monitor-suspend'))
 }

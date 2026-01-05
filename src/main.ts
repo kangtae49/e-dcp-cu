@@ -53,22 +53,11 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  console.log(app.isPackaged)
+  // console.log(app.isPackaged)
   // path.dirname()
   // const cur_path = await getCurPath(process.argv, app.isPackaged);
   const mainWindow = createWindow()
   registerHandlers(mainWindow);
-  // ipcMain.handle('echo', async (_event, message: string) => message);
-  // ipcMain.handle('get-dirname', () => __dirname);
-  // ipcMain.handle('get-app-resource-path', () => getAppResourcePath());
-  // ipcMain.handle('read-data-excel', (_, subpath: string) => readDataExcel(subpath));
-  // ipcMain.handle('start-data-file', (_, subpath: string) => startDataFile(subpath));
-  // ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
-  // ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
-  // ipcMain.handle('get-env', () => {
-  //   const myEnv: Env = { ...process.env };
-  //   return myEnv;
-  // })
 
   const watchPath = getScriptPath();
   const watcher = new FileWatcher(mainWindow, watchPath);
@@ -81,7 +70,6 @@ app.on('ready', () => {
 });
 
 
-// ipcMain.on('ondragstart', (event, item: DragStartItem) => {
 
 
 // Quit when all windows are closed, except on macOS. There, it's common
