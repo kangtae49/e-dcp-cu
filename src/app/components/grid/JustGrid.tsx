@@ -13,58 +13,76 @@ interface Props {
   dataKey: string
 }
 
-const getColumns = (header: string[], columnSize: Record<string, number>): Column[] => [
-  { columnId: " ", width: 50, resizable: true, },
-  ...header.map(h => ({ columnId: h, width: columnSize?.[h] ?? 150, resizable: true, })),
-]
+const getColumns = (header: string[], columnSize: Record<string, number>): Column[] => {
+  if (!header) {
+    return [
+      {columnId: " ", width: 50, resizable: true,},
+    ]
+  }
+  return [
+    {columnId: " ", width: 50, resizable: true,},
+    ...header.map(h => ({columnId: h, width: columnSize?.[h] ?? 150, resizable: true,})),
+  ]
+}
+
+const getTableHeader = (header: string []): Row => {
+  if (!header) {
+    return {rowId: "header", cells: [{ type: "number", value: 1 }]}
+  }
+  return {
+    rowId: "header",
+    cells: [
+      { type: "number", value: 1 },
+      ...header.map<DefaultCellTypes>(h => ({ type: "header", text: h }))
+    ]
+  }
+}
+
+
+
+const getTableBody = (table: GridData): Row [] => {
+  if (!table.data) {
+    return []
+  }
+  return table.data.map<Row>((row: any, idx: number) => ({
+    rowId: idx,
+    cells: [
+      { type: "number", value: idx+2, nonEditable: true},
+      ...table.header.map<DefaultCellTypes>((h: any) => {
+        if (row[h] === null || typeof row[h] === 'string') {
+          return ({type: "text", text: row[h] ?? '', nonEditable: true})
+        } else {
+          return ({type: "number", value: row[h], nonEditable: true})
+        }
+      })
+    ]
+  }))
+}
+
+const getTableRows = (table: GridData): Row[] => {
+  return [
+    getTableHeader(table.header),
+    ...getTableBody(table)
+  ]
+}
+
+
 function JustGrid({dataKey}: Props) {
 
   const {state: configsState} = useGridData(GRID_DATA_ID)
+  const [columnsSize, setColumnsSize] = useState({});
 
   const ref = useRef<ReactGrid>(null)
 
   const defaultConfigTable: GridData = {key: dataKey, header: [], data: []}
 
-  const configTable = configsState?.gridDataMap[dataKey] ?? defaultConfigTable;
 
-  const [columnsSize, setColumnsSize] = useState({});
 
-  const getTableRows = (table: GridData): Row[] => {
-    return [
-      getTableHeader(table.header),
-      ...getTableBody(table)
-    ]
-  }
 
-  const getTableHeader = (header: string []): Row => {
-    return {
-      rowId: "header",
-      cells: [
-        { type: "number", value: 1 },
-        ...header.map<DefaultCellTypes>(h => ({ type: "header", text: h }))
-      ]
-    }
-  }
-
-  const getTableBody = (table: GridData): Row [] => {
-    return table.data.map<Row>((row: any, idx: number) => ({
-      rowId: idx,
-      cells: [
-        { type: "number", value: idx+2, nonEditable: true},
-        ...table.header.map<DefaultCellTypes>((h: any) => {
-          if (row[h] === null || typeof row[h] === 'string') {
-            return ({type: "text", text: row[h] ?? '', nonEditable: true})
-          } else {
-            return ({type: "number", value: row[h], nonEditable: true})
-          }
-        })
-      ]
-    }))
-  }
 
   useEffect(() => {
     ref?.current?.forceUpdate();
-  }, [configTable]);
+  }, [configsState?.gridDataMap[dataKey]]);
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumnsSize((prev) => {
@@ -84,8 +102,11 @@ function JustGrid({dataKey}: Props) {
 
   const throttledUpdateScroll = throttle(()=> updateScroll, 1000 / 2)
 
-  const rows = getTableRows(configTable);
+  const configTable = configsState?.gridDataMap[dataKey] ?? defaultConfigTable;
+
   const columns = getColumns(configTable.header, columnsSize);
+  const rows = getTableRows(configTable);
+
   return (
     <div className="just-grid" onScroll={handleScroll}>
       <ReactGrid
