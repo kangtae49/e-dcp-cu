@@ -16,6 +16,7 @@ import JustUtilBar from "@/app/util-bar/JustUtilBar.tsx";
 import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
 import JobListView from "@/app/job/ui/JobListView.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {CounterView} from "@/app/counter/CounterView.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -48,6 +49,7 @@ export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
   | "chart-view"
   | "job-list-view"
   | "job-monitor-view"
+  | "counter-view"
   // | "demo" | "demo-grid" | "demo-line-chart"
 
 export const DND_ACCEPT_CONTENT = [
@@ -74,6 +76,8 @@ export const jobListViewId: JustId = {viewId: 'job-list-view', title: 'Job List'
 // export const jobMonitorId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor'};
 
 // export const jobMonitorViewId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor' , params: {jobId: 'XXX'}};
+
+export const counterViewId: JustId = {viewId: 'counter-view', title: 'Counter View'};
 
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   {menuId: page01Id, menuName: page01Id.title},
@@ -187,6 +191,16 @@ export const viewMap: Record<ViewId, WinInfo> = {
       )
     }
   },
+  "counter-view": {
+    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
+    icon: <Jdenticon size="30" value="counter-view" />,
+    canDup: true,
+    getView: (justId) => {
+      return (
+        <CounterView />
+      )
+    }
+  }
   // "demo": () => ({
   //   title: "Demo",
   //   icon: <Jdenticon size="30" value="demo" />,
@@ -255,7 +269,7 @@ export const layoutSideMenu: JustNode = {
     },
     second: {
       type: 'stack',
-      tabs: [aboutId],
+      tabs: [aboutId, counterViewId],
       active: aboutId
     }
   },
