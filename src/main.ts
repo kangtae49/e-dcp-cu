@@ -50,6 +50,21 @@ const createWindow = () => {
   return mainWindow;
 };
 
+const installExtensions = async () => {
+  if (process.env.NODE_ENV === 'development') {
+    const { default: installExtension, MOBX_DEVTOOLS } = await import('electron-devtools-installer');
+
+    try {
+      const name = await installExtension(MOBX_DEVTOOLS);
+      console.log(`Added Extension: ${name}`);
+    } catch (err) {
+      console.error('An error occurred: ', err);
+    }
+
+
+  }
+};
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -57,6 +72,10 @@ app.on('ready', () => {
   // console.log(app.isPackaged)
   // path.dirname()
   // const cur_path = await getCurPath(process.argv, app.isPackaged);
+
+  installExtensions()
+
+
   const mainWindow = createWindow()
   registerHandlers(mainWindow);
 

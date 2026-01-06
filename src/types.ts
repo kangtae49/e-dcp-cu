@@ -45,13 +45,7 @@ export interface WatchEvent {
 }
 
 
-export interface GridData {
-  key: string,
-  timestamp?: number,
-  isLocked?: boolean,
-  header: string [],
-  data: Record<string, string | number | boolean | null> []
-}
+
 
 export interface Env {
   [key: string]: string | undefined;

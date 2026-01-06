@@ -2,12 +2,10 @@ import "./grid.css"
 import "@silevis/reactgrid/styles.css";
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
-import {
-  GRID_DATA_ID,
-} from "@/app/grid/gridDataSlice.ts";
 import throttle from "lodash/throttle";
-import {GridData} from "@/types.ts";
 import useGridData from "@/app/grid/useGridData.ts";
+import {GridData} from "@/app/grid/gridData.types.ts";
+import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 
 interface Props {
   dataKey: string
@@ -69,7 +67,7 @@ const getTableRows = (table: GridData): Row[] => {
 
 function JustGrid({dataKey}: Props) {
 
-  const {state: configsState} = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridData(GRID_DATA_ID)
   const [columnsSize, setColumnsSize] = useState({});
 
   const ref = useRef<ReactGrid>(null)
@@ -82,7 +80,7 @@ function JustGrid({dataKey}: Props) {
 
   useEffect(() => {
     ref?.current?.forceUpdate();
-  }, [configsState?.gridDataMap[dataKey]]);
+  }, [gridDataStore.gridDataMap[dataKey]]);
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumnsSize((prev) => {
@@ -102,7 +100,7 @@ function JustGrid({dataKey}: Props) {
 
   const throttledUpdateScroll = throttle(()=> updateScroll, 1000 / 2)
 
-  const configTable = configsState?.gridDataMap[dataKey] ?? defaultConfigTable;
+  const configTable = gridDataStore.gridDataMap[dataKey] ?? defaultConfigTable;
 
   const columns = getColumns(configTable.header, columnsSize);
   const rows = getTableRows(configTable);

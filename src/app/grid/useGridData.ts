@@ -1,31 +1,14 @@
-import {useDynamicSlice} from "@/store/hooks.ts";
-import {GridDataActions, GridDataState, createGridDataSlice} from "@/app/grid/gridDataSlice.ts";
-import {GridData} from "@/types.ts";
+import {useState} from "react";
+import {GRID_DATA_TYPES, GridDataFactory} from "@/app/grid/gridData.types.ts";
+import {container} from "@/inversify.config.ts";
 
-function useGridData(configId: string) {
-  const {
-    state,
-    actions: gridDataActions,
-    dispatch
-  } = useDynamicSlice<GridDataState, GridDataActions>(configId, createGridDataSlice)
+function useGridData(id: string) {
+  const [store] = useState(() => {
+    const factory = container.get<GridDataFactory>(GRID_DATA_TYPES.GridDataFactory);
+    return factory(id);
+  })
 
-  const updateGridData = (gridData: GridData) => {
-    dispatch(
-      gridDataActions.updateGridData(gridData)
-    )
-  }
-
-  const updateIsLocked = (key: string, isLocked: boolean) => {
-    dispatch(
-      gridDataActions.updateIsLocked({key, isLocked})
-    )
-  }
-
-  return {
-    state,
-    updateGridData,
-    updateIsLocked,
-  }
+  return store
 }
 
 export default useGridData

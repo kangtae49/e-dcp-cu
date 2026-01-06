@@ -1,10 +1,8 @@
 import "./chart.css"
 import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
-import {
-  GRID_DATA_ID,
-} from "@/app/grid/gridDataSlice.ts";
-import {GridData} from "@/types.ts";
 import useGridData from "@/app/grid/useGridData.ts";
+import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {GridData} from "@/app/grid/gridData.types.ts";
 
 interface DataKey {
   id: string
@@ -20,11 +18,11 @@ interface Props {
 
 function PageLineChart({title, outFile, legend}: Props) {
 
-  const {state: gridDataState} = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridData(GRID_DATA_ID)
 
   const defaultConfigTable: GridData = {key: outFile, header: [], data: []}
 
-  const configTable = gridDataState?.gridDataMap[outFile] ?? defaultConfigTable;
+  const configTable = gridDataStore.gridDataMap[outFile] ?? defaultConfigTable;
 
   // const data = [
   //   {

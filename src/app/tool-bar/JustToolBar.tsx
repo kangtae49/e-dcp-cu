@@ -5,7 +5,6 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import {CONFIG_KEYS} from "@/app/grid/gridDataSlice.ts";
 import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
@@ -17,6 +16,7 @@ import {
   SIDE_MENU_NODE_NAME, ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
+import {CONFIG_KEYS} from "@/app/grid/gridData.constants.ts";
 
 
 function JustToolBar() {

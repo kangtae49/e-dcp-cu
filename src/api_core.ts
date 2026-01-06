@@ -8,9 +8,10 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {GridData, Env, JobEvent, JobStatus, DragStartItem, DialogResult, Versions} from "./types.ts";
+import {Env, JobEvent, JobStatus, DragStartItem, DialogResult, Versions} from "./types.ts";
 import iconv from 'iconv-lite';
 import * as os from "node:os";
+import {GridData} from "@/app/grid/gridData.types.ts";
 // import nativeImage = Electron.nativeImage;
 
 

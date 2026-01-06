@@ -1,22 +1,13 @@
 import {useEffect} from "react";
-import {
-  GRID_DATA_ID,
-} from "@/app/grid/gridDataSlice.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import pathUtils from "@/utils/pathUtils.ts";
+import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 
 function WatchListener(): null {
 
-  const {
-    state: gridDataState,
-    updateGridData,
-    updateIsLocked
-  } = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridData(GRID_DATA_ID)
 
   useEffect(() => {
-    if (!gridDataState) {
-      return;
-    }
 
     window.api.onWatchEvent((event, watchEvent) => {
       console.log(watchEvent)
@@ -30,17 +21,17 @@ function WatchListener(): null {
         const dataKey = pathUtils.join(keyDir, orgKeyName)
         const isLocked = watchFile.status !== 'DELETED'
         console.log('isLocked', dataKey, isLocked)
-        updateIsLocked(dataKey, isLocked)
+        gridDataStore.updateIsLocked({key: dataKey, isLocked})
       } else {
         if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
           window.api.readDataExcel(watchFile.key)
             .then((gridData) => {
               if (gridData) {
-                updateGridData(gridData)
+                gridDataStore.updateGridData(gridData)
               }
             })
         } else if (watchFile.status === 'DELETED') {
-          updateGridData({
+          gridDataStore.updateGridData({
             key: watchFile.key,
             header: [],
             data: []
@@ -50,7 +41,7 @@ function WatchListener(): null {
 
 
     })
-  }, [gridDataState])
+  }, [gridDataStore])
   return null
 }
 

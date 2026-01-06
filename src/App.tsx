@@ -3,10 +3,6 @@ import './App.css'
 import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
-import {
-  GRID_DATA_ID,
-  CONFIG_KEYS,
-} from "@/app/grid/gridDataSlice.ts";
 import React, {useEffect} from "react";
 // import {
 //   initialLayoutValue,
@@ -29,6 +25,7 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 
 
 function getWinInfo(justId: JustId): WinInfo {
@@ -37,6 +34,7 @@ function getWinInfo(justId: JustId): WinInfo {
 }
 
 function App() {
+
 
   const {toggleWin} = useJustLayout(LAYOUT_ID);
 

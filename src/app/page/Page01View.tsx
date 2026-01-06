@@ -7,7 +7,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
 import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import {
@@ -26,6 +25,7 @@ import {NativeTypes} from "react-dnd-html5-backend";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
+import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 // import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 // import {BOTTOM_PANEL_NODE_NAME, JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
 
@@ -73,10 +73,7 @@ function Page01View({justId}: Props) {
     state: jobState,
   } = useJobMonitor(JOB_MONITOR_ID);
 
-  const {
-    state: gridDataState,
-    updateGridData,
-  } = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridData(GRID_DATA_ID)
 
 
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
@@ -85,7 +82,7 @@ function Page01View({justId}: Props) {
     })
   }
 
-  const config = gridDataState?.gridDataMap?.[dataKey];
+  const config = gridDataStore.gridDataMap?.[dataKey];
   const companyList = toOptions(config?.data ?? []);
 
 
@@ -104,7 +101,7 @@ function Page01View({justId}: Props) {
     window.api.readDataExcel(outPath)
       .then((gridData) => {
         if (gridData) {
-          updateGridData(gridData)
+          gridDataStore.updateGridData(gridData)
         }
       })
   }, [outPath])
@@ -150,7 +147,7 @@ function Page01View({justId}: Props) {
     if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return;
 
     // const isLock = await window.api.isLockScriptSubPath(outPath);
-    if (gridDataState?.gridDataMap?.[outPath]?.isLocked) {
+    if (gridDataStore.gridDataMap?.[outPath]?.isLocked) {
       alert(`Close Excel: ${outPath}`)
       window.api.startDataFile(outPath).then()
       return
@@ -202,7 +199,7 @@ function Page01View({justId}: Props) {
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
-      if (gridDataState?.gridDataMap?.[outPath]?.isLocked) {
+      if (gridDataStore.gridDataMap?.[outPath]?.isLocked) {
         alert(`Close Excel: ${outPath}`)
         window.api.startDataFile(outPath).then()
         return
@@ -212,11 +209,11 @@ function Page01View({justId}: Props) {
       const path = window.api.getPathForFile(fileItem.files[0])
       window.api.uploadFile(path, outPath).then()
     }
-  }), [ref, gridDataState?.gridDataMap?.[outPath]?.isLocked])
+  }), [ref, gridDataStore.gridDataMap?.[outPath]?.isLocked])
 
   const [, dragGrid] = useDrag({
     type: justId.viewId,
-    canDrag: () => !!gridDataState?.gridDataMap?.[outPath],
+    canDrag: () => !!gridDataStore.gridDataMap?.[outPath],
     item: () => {
       const item: JustDragItem = {
         justId: {
@@ -239,7 +236,7 @@ function Page01View({justId}: Props) {
 
   const [, dragChart] = useDrag({
     type: 'chart-view',
-    canDrag: () => !!gridDataState?.gridDataMap?.[outPath],
+    canDrag: () => !!gridDataStore.gridDataMap?.[outPath],
     item: () => {
       const item: JustDragItem = {
         justId: {
@@ -363,7 +360,7 @@ function Page01View({justId}: Props) {
                   검색
                 </div>
                 {
-                  gridDataState?.gridDataMap?.[outPath]?.isLocked &&
+                  gridDataStore.gridDataMap?.[outPath]?.isLocked &&
                   <div className="badge-wrap">
                     <div className="badge" style={{top: "-13px", left: "-5px"}}>
                       <Icon icon={faLock} />
@@ -410,7 +407,7 @@ function Page01View({justId}: Props) {
               onClick={()=> setTab('LOG')}>
             <Icon icon={faTerminal} />log
           </div>
-          {gridDataState?.gridDataMap[outPath] &&
+          {gridDataStore.gridDataMap[outPath] &&
           <div>
             <div
               draggable={true}
@@ -421,7 +418,7 @@ function Page01View({justId}: Props) {
             </div>
           </div>
           }
-          {gridDataState?.gridDataMap[outPath] &&
+          {gridDataStore.gridDataMap[outPath] &&
           <div>
             <div
               onClick={clickOpenFile}

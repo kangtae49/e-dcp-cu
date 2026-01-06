@@ -41,6 +41,13 @@ import App from './App'
 import {Provider} from "react-redux";
 import {store} from "./store";
 
+// import { toJS } from 'mobx';
+// import {container} from "@/inversify.config.ts";
+// if (process.env.NODE_ENV === 'development') {
+//   (window as any).container = container;
+//   (window as any).toJS = toJS;
+// }
+
 console.log(
   '👋 This message is being logged by "renderer.ts", included via Vite',
 );

@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { COUNTER_TYPES } from "./counter.types"; // 로컬 타입 참조
+import { COUNTER_TYPES } from "./counter.types";
 import { CounterService } from "./counter.service";
 import {makeAutoObservable} from "mobx";
 
@@ -15,7 +15,7 @@ export class CounterStore {
 
     makeAutoObservable(this, {
       service: false
-    });
+    }, { autoBind: true });
   }
 
   increment() {

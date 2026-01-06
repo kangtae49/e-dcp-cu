@@ -6,10 +6,10 @@ import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import React, {useLayoutEffect, useRef} from "react";
 import useGridData from "@/app/grid/useGridData.ts";
-import {GRID_DATA_ID} from "@/app/grid/gridDataSlice.ts";
 import {useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
+import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 
 interface Props {
   justId: JustId
@@ -18,9 +18,7 @@ interface Props {
 function GridView({justId}: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const {
-    state: gridDataState,
-  } = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridData(GRID_DATA_ID)
 
   const dataKey = JustUtil.getParamString(justId, 'file');
   const title = justId.title;
@@ -45,7 +43,7 @@ function GridView({justId}: Props) {
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
     drop(item: FileItem, monitor) {
-      if (gridDataState?.gridDataMap?.[dataKey]?.isLocked) {
+      if (gridDataStore.gridDataMap?.[dataKey]?.isLocked) {
         alert(`Close Excel: ${dataKey}`)
         window.api.startDataFile(dataKey).then()
         return
@@ -55,7 +53,7 @@ function GridView({justId}: Props) {
       const path = window.api.getPathForFile(fileItem.files[0])
       window.api.uploadFile(path, dataKey).then()
     }
-  }), [ref, gridDataState?.gridDataMap?.[dataKey]?.isLocked])
+  }), [ref, gridDataStore.gridDataMap?.[dataKey]?.isLocked])
 
 
 
