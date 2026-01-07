@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "cross-env DEV_PORT=8000 electron-forge start -- --verbose",
+    "start": "electron-forge start -- --verbose",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "make-trace": "cross-env NODE_OPTIONS='--trace-deprecation' electron-forge make",

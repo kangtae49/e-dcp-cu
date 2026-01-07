@@ -61,7 +61,7 @@ const JustWinBodyView = observer((props: Prop) => {
         if (!ref.current) {
           return
         }
-        const hoverBoundingRect = ref.current?.getBoundingClientRect()
+        const hoverBoundingRect = ref.current.getBoundingClientRect()
         const clientOffset = monitor.getClientOffset()
         const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
         const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2

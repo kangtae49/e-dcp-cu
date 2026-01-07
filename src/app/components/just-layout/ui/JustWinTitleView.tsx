@@ -102,7 +102,7 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
 
     function update() {
       if (ref.current === null) return;
-      const newRect = ref.current?.getBoundingClientRect() ?? null;
+      const newRect = ref.current.getBoundingClientRect() ?? null;
       // console.log("parent Rect:", newRect)
       setRect(newRect)
     }

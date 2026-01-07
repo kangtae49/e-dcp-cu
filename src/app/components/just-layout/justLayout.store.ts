@@ -318,7 +318,7 @@ export class JustLayoutStore {
 
   openWinMenu = ({justId, nodeName}: PayloadOpenWinMenu) => {
     const viewId = justId.viewId;
-    const winIds: JustId[] = this.getWinIds({viewId}) as unknown as JustId[];
+    const winIds: JustId[] = this.getWinIds({viewId});
     if (winIds.length === 0) {
       console.log('openWinMenu1', winIds, justId)
       this.openWinByNodeName({justId, nodeName})

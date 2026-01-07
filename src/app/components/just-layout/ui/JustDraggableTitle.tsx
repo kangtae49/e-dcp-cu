@@ -112,7 +112,7 @@ const JustDraggableTitle = observer((props: Prop) => {
       if (justId === item.justId) {
         return
       }
-      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+      const hoverBoundingRect = ref.current.getBoundingClientRect()
       const clientOffset = monitor.getClientOffset()
       const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left
