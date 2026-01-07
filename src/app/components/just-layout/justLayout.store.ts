@@ -143,6 +143,10 @@ export class JustLayoutStore {
     this.lastActiveTm = new Date().getTime()
   }
 
+  queryWinIdsByViewId = (viewId: string) => {
+    return this.service.queryWinIdsByViewId(this.layout ?? null, viewId, [])
+  }
+
   cloneTab = (payload: JustPayloadCloneTab) => {
     const branch = this.service.getBranchByWinId(this.layout, payload.justId)
     if (branch == null) return;

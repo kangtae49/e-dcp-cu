@@ -2,7 +2,7 @@ import "./SideMenu.css"
 import Jdenticon from "react-jdenticon";
 import IconMinimize from "@/assets/minimize.svg?react"
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
-import {CONTENTS_VIEW, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
+import {LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
@@ -16,7 +16,7 @@ function SideMenu() {
   }
 
   const openWin = async (justId: JustId) => {
-    justLayoutStore.addTabByNodeName({justId, nodeName: CONTENTS_VIEW})
+    justLayoutStore.openWinMenu({justId})
   }
 
   return (
