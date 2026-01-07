@@ -1,13 +1,14 @@
 import {RefObject, useEffect, useRef, useState} from "react";
-import type {
-  JustBranch,
-  JustSplitDirection,
-  JustSplit,
-  JustSplitType
-} from "../justLayoutSlice.ts";
 import classNames from "classnames";
 import throttle from 'lodash/throttle';
 import clamp from "lodash/clamp";
+import {
+  JustBranch,
+  JustSplit,
+  JustSplitDirection,
+  JustSplitType
+} from "@/app/components/just-layout/justLayout.types.ts";
+import {observer} from "mobx-react-lite";
 
 const RESIZE_THROTTLE_MS = 1000 / 30; // 30 fps
 
@@ -34,7 +35,7 @@ interface Props {
   onRelease?: (splitSize: SplitSize) => void;
 }
 
-function JustSplitter({ node, containerRef, onChange, onRelease }: Props) {
+const JustSplitter = observer(({ node, containerRef, onChange, onRelease }: Props) => {
   const refSplit = useRef<HTMLDivElement>(null);
   const [listenersBound, setListenersBound] = useState(false);
 
@@ -142,6 +143,6 @@ function JustSplitter({ node, containerRef, onChange, onRelease }: Props) {
       onMouseDown={onMouseDown}
     />
   )
-}
+})
 
 export default JustSplitter

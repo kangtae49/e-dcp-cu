@@ -1,9 +1,10 @@
 import JustWinTitleView from "./JustWinTitleView.tsx";
 import JustWinBodyView from "./JustWinBodyView.tsx";
-import type {JustBranch, JustStack} from "../justLayoutSlice.ts";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {LAYOUT_ID} from "@/app/layout/layout.tsx";
+import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 interface Prop {
   layoutId: string
@@ -17,13 +18,13 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-function JustWinView ({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
+const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
-  const {setActiveWin} = useJustLayout(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
   const showTitle = hideTitle !== true
   const onFocus = () => {
     if (justStack.active) {
-      setActiveWin(justStack.active)
+      justLayoutStore.activeWin({justId: justStack.active})
     }
   }
   return (
@@ -49,6 +50,6 @@ function JustWinView ({layoutId, hideTitle, dndAccept, justBranch, justStack, ge
       />
     </div>
   )
-}
+})
 
 export default JustWinView

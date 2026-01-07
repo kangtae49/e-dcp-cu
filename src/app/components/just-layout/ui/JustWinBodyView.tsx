@@ -1,18 +1,13 @@
 
 import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
 import classNames from 'classnames';
-import {
-  createJustLayoutSlice,
-  type JustBranch,
-  type JustLayoutActions,
-  type JustLayoutState,
-  type JustStack,
-} from "../justLayoutSlice.ts";
 import {type JustDragItem} from "./JustDraggableTitle.tsx";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import {Activity, useLayoutEffect, useRef, useState} from "react";
 import {GetWinInfoFn} from "..";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 interface Prop {
   layoutId: string
@@ -22,38 +17,31 @@ interface Prop {
   getWinInfo: GetWinInfoFn
 }
 
-function JustWinBodyView (props: Prop) {
+const JustWinBodyView = observer((props: Prop) => {
   const ref = useRef<HTMLDivElement>(null)
 
   const { layoutId, dndAccept, getWinInfo, justBranch, justStack } = props;
   const [overlayRect, setOverlayRect] = useState<{ top: number, left: number, width: number, height: number }|null>(null)
-  const {
-    state: justLayoutState,
-    actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
-  const dispatch = useAppDispatch();
+
+  const justLayoutStore = useJustLayoutStore(layoutId);
+
 
   const onDrop = (itemType: any, item: JustDragItem) => {
     if (!item.pos) return;
     if (item.pos === 'stack') {
-      dispatch(
-        justLayoutActions.moveWin({
-          pos: item.pos,
-          branch: justBranch,
-          justId: item.justId,
-          index: item.index ?? -1
-        })
-      )
+      justLayoutStore.moveWin({
+        pos: item.pos,
+        justId: item.justId,
+        branch: justBranch,
+        index: item.index ?? -1
+      })
     } else {
-      dispatch(
-        justLayoutActions.moveWin({
-          pos: item.pos,
-          branch: justBranch,
-          justId: item.justId,
-          direction: item.direction ?? 'row',
-        })
-      )
-
+      justLayoutStore.moveWin({
+        pos: item.pos,
+        justId: item.justId,
+        branch: justBranch,
+        direction: item.direction ?? 'row',
+      })
     }
   }
   const [{ isOver }, drop] = useDrop(
@@ -124,7 +112,7 @@ function JustWinBodyView (props: Prop) {
         "just-win-body",
         {
           "isOver": isOver,
-          "last-active": JustUtil.isEquals(justStack.active, justLayoutState?.lastActiveId)
+          "last-active": JustUtil.isEquals(justStack.active, justLayoutStore.lastActiveId)
         })
       }
       ref={ref}
@@ -146,6 +134,6 @@ function JustWinBodyView (props: Prop) {
       }
     </div>
   )
-}
+})
 
 export default JustWinBodyView

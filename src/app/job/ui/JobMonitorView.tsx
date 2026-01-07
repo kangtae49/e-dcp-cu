@@ -1,8 +1,8 @@
 import "./JobMonitorView.css"
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import React from "react";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 interface Props {
   justId: JustId
 }

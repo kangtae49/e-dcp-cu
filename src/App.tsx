@@ -14,9 +14,7 @@ import React, {useEffect} from "react";
 // } from "@/app/layout/layout-util.tsx";
 import {WinInfo} from "@/app/components/just-layout";
 import {removeReducer} from "@/store";
-import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import useGridData from "@/app/grid/useGridData.ts";
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {
   initialLayoutValue,
   LAYOUT_ID,
@@ -26,6 +24,8 @@ import {
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 
 
 function getWinInfo(justId: JustId): WinInfo {
@@ -36,7 +36,7 @@ function getWinInfo(justId: JustId): WinInfo {
 function App() {
 
 
-  const {toggleWin} = useJustLayout(LAYOUT_ID);
+  const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
 
   const {updateGridData} = useGridData(GRID_DATA_ID)
 
@@ -63,7 +63,7 @@ function App() {
   const onClickTitle = (e: React.MouseEvent, justId: JustId) => {
   }
   const onDoubleClickTitle = (e: React.MouseEvent, justId: JustId) => {
-    toggleWin(SIDE_MENU_NODE_NAME)
+    justLayoutStore.toggleWin({nodeName: SIDE_MENU_NODE_NAME})
   }
 
   return (

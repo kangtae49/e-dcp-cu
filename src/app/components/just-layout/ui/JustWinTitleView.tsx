@@ -3,20 +3,15 @@ import classNames from 'classnames';
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-solid-svg-icons"
 
-import {
-  createJustLayoutSlice,
-  type JustBranch, JustId,
-  type JustLayoutActions,
-  type JustLayoutState,
-  type JustStack,
-} from "../justLayoutSlice.ts";
+
 import JustDraggableTitle, {type JustDragItem} from "./JustDraggableTitle";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustBranch, JustId, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 
 interface Prop {
@@ -30,34 +25,27 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) {
+const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
-  const {
-    actions: justLayoutActions,
-    thunks: justLayoutThunks,
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
-  const dispatch = useAppDispatch();
+
+  const justLayoutStore = useJustLayoutStore(layoutId);
 
   const clickClose = (justId: JustId) => {
-    dispatch(
-      justLayoutActions.removeWin({
-        justId
-      })
-    )
+    justLayoutStore.removeWin({
+      justId
+    })
     if (closeWin) {
       closeWin(justId)
     }
   }
 
   const closeAllTabs = (branch: JustBranch) => {
-    const winIds: JustId[] = dispatch(justLayoutThunks.getWinIdsByBranch({branch}));
+    const winIds: JustId[] = justLayoutStore.getWinIdsByBranch({branch});
 
-    dispatch(
-      justLayoutActions.removeAllTabs({
-        branch
-      })
-    )
+    justLayoutStore.removeAllTabs({
+      branch
+    })
 
     if (closeWin) {
       winIds.forEach((justId: JustId) => {
@@ -67,24 +55,20 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
   }
 
   const activeWin = (justId: JustId) => {
-    dispatch(
-      justLayoutActions.activeWin({
-        justId
-      })
-    )
+    justLayoutStore.activeWin({
+      justId
+    })
   }
 
 
 
   const onDrop = (itemType: any, item: JustDragItem) => {
-    dispatch(
-      justLayoutActions.moveWin({
-        branch: justBranch,
-        justId: item.justId,
-        pos: 'stack',
-        index: item.index ?? -1
-      })
-    )
+    justLayoutStore.moveWin({
+      pos: 'stack',
+      justId: item.justId,
+      branch: justBranch,
+      index: item.index ?? -1
+    })
   }
 
   const [{ isOver }, drop] = useDrop(
@@ -206,6 +190,6 @@ function JustWinTitleView({layoutId, dndAccept, justBranch, justStack, getWinInf
       </div>
     </div>
   )
-}
+})
 
 export default JustWinTitleView

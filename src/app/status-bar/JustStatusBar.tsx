@@ -1,5 +1,4 @@
 import "./JustStatusBar.css"
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {
   BOTTOM_PANEL_NODE_NAME,
   INIT_BOTTOM_PANEL_SIZE,
@@ -7,27 +6,24 @@ import {
   LAYOUT_ID,
   SIDE_MENU_NODE_NAME
 } from "@/app/layout/layout.tsx";
-import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faTerminal} from "@fortawesome/free-solid-svg-icons";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 
 interface Props {
   justId: JustId
 }
 function JustStatusBar({justId}: Props) {
-  const {
-    toggleWin,
-    getSizeByNodeName,
-    addTabWin
-  } = useJustLayout(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
 
 
   const toggleBottomPanel = () => {
-    toggleWin(BOTTOM_PANEL_NODE_NAME)
+    justLayoutStore.toggleWin({nodeName: BOTTOM_PANEL_NODE_NAME})
   }
 
-  const size = getSizeByNodeName(BOTTOM_PANEL_NODE_NAME) ?? INIT_BOTTOM_PANEL_SIZE;
+  const size = justLayoutStore.getSizeByNodeName({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? INIT_BOTTOM_PANEL_SIZE;
   return (
     <div className="just-status-bar">
       <div className="just-status-center">

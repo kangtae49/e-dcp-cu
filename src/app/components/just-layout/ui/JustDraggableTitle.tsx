@@ -1,24 +1,17 @@
 import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {
-  createJustLayoutSlice,
-  type JustBranch,
-  type JustDirection, JustId, type JustLayoutActions, type JustLayoutState,
-  type JustPos,
-  type JustStack,
-} from "../justLayoutSlice.ts";
 import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
-import {useDynamicSlice} from "@/store/hooks.ts";
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
-import {createJustLayoutThunks} from "../justLayoutThunks.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 export interface JustDragItem {
-  // justBranch: JustBranch
   justId: JustId
   direction?: JustDirection
   pos?: JustPos
@@ -38,7 +31,7 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-function JustDraggableTitle(props: Prop) {
+const JustDraggableTitle = observer((props: Prop) => {
   const {
     layoutId,
     dndAccept,
@@ -51,19 +44,19 @@ function JustDraggableTitle(props: Prop) {
   const ref = useRef<HTMLDivElement>(null)
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
-  const {
-    state: justLayoutState,
-    actions: justLayoutActions,
-    // thunks: justLayoutThunks,
-    dispatch,
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
+  // const {
+  //   state: justLayoutState,
+  //   actions: justLayoutActions,
+  //   // thunks: justLayoutThunks,
+  //   dispatch,
+  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
+
+  const justLayoutStore = useJustLayoutStore(layoutId);
 
   const clickClose = (justId: JustId) => {
-    dispatch(
-      justLayoutActions.removeWin({
-        justId
-      })
-    )
+    justLayoutStore.removeWin({
+      justId
+    })
     if (closeWin) {
       closeWin(justId);
     }
@@ -71,20 +64,16 @@ function JustDraggableTitle(props: Prop) {
 
   const cloneWin = (justId: JustId) => {
     const cloneJustId = JustUtil.replaceDup(justId)
-    dispatch(
-      justLayoutActions.cloneTab({
-        justId,
-        cloneJustId
-      })
-    )
+    justLayoutStore.cloneTab({
+      justId,
+      cloneJustId
+    })
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
-    dispatch(
-      justLayoutActions.activeWin({
-        justId
-      })
-    )
+    justLayoutStore.activeWin({
+      justId
+    })
     if (onClickTitle) {
       onClickTitle(e, justId)
     }
@@ -142,7 +131,7 @@ function JustDraggableTitle(props: Prop) {
   })
 
   useEffect(() => {
-    if (JustUtil.isEquals(justId, justLayoutState?.lastActiveId ?? null)) {
+    if (JustUtil.isEquals(justId, justLayoutStore.lastActiveId ?? null)) {
       if (ref.current == null) return;
       if (parentRect == null) return;
       const rect = ref.current.getBoundingClientRect();
@@ -154,7 +143,7 @@ function JustDraggableTitle(props: Prop) {
         })
       }
     }
-  }, [justLayoutState?.lastActiveTm])
+  }, [justLayoutStore.lastActiveTm])
 
 
 
@@ -179,7 +168,7 @@ function JustDraggableTitle(props: Prop) {
         {
           "dragging": isDragging,
           "just-active": JustUtil.isEquals(justStack.active, justId),
-          "last-active": JustUtil.isEquals(justLayoutState?.lastActiveId, justId)
+          "last-active": JustUtil.isEquals(justLayoutStore.lastActiveId, justId)
         }
       )}
       ref={ref}
@@ -229,6 +218,6 @@ function JustDraggableTitle(props: Prop) {
       </ControlledMenu>
     </div>
   )
-}
+})
 
 export default JustDraggableTitle

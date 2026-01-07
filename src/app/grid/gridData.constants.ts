@@ -1,4 +1,4 @@
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 export const GRID_DATA_ID = "GRID_DATA"
 

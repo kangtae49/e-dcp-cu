@@ -1,17 +1,13 @@
 import "./JustLayoutView.css"
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
-import {
-  createJustLayoutSlice,
-  type JustLayoutActions,
-  type JustLayoutState,
-  type JustNode,
-} from "../justLayoutSlice.ts";
 import useOnload from "@/hooks/useOnload.ts";
-import {JustNodeView} from "./JustNodeView.tsx";
+import JustNodeView from "./JustNodeView.tsx";
 import classNames from "classnames";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {JustNode} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   layoutId: string
@@ -24,16 +20,13 @@ interface Props {
 
 
 
-export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) {
+const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, onClickTitle, onDoubleClickTitle}: Props) => {
   const {onLoad} = useOnload();
-  const {
-    state: justLayoutState,
-    actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
-  const dispatch = useAppDispatch();
-  onLoad(() => {
-    dispatch(justLayoutActions.setLayout(initialValue))
 
+  const justLayoutStore = useJustLayoutStore(layoutId)
+
+  onLoad(() => {
+    justLayoutStore.setLayout(initialValue)
   })
   // const dndAccept = [JUST_DRAG_SOURCE]
   // const hideTitle: boolean | undefined = undefined
@@ -43,11 +36,11 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
         "just-layout",
         // "thema-dark"
       )}>
-        {justLayoutState && <JustNodeView
+        {justLayoutStore && <JustNodeView
             layoutId={layoutId}
-            hideTitle={justLayoutState.layout?.hideTitle}
-            dndAccept={justLayoutState.layout?.dndAccept ?? []}
-            node={justLayoutState.layout}
+            hideTitle={justLayoutStore.layout?.hideTitle}
+            dndAccept={justLayoutStore.layout?.dndAccept ?? []}
+            node={justLayoutStore.layout}
             justBranch={[]}
             getWinInfo={getWinInfo}
             closeWin={closeWin}
@@ -57,6 +50,6 @@ export function JustLayoutView({layoutId, getWinInfo, initialValue, closeWin, on
       </div>
     </DndProvider>
   )
-}
+})
 
 export default JustLayoutView

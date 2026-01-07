@@ -6,7 +6,6 @@ import Jdenticon from "react-jdenticon";
 import Page01View from "@/app/page/Page01View.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
 import GridView from "@/app/grid/ui/GridView.tsx";
-import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayoutSlice.ts";
 import ChartView from "@/app/chart/ui/ChartView.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import React from "react";
@@ -17,6 +16,7 @@ import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
 import JobListView from "@/app/job/ui/JobListView.tsx";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {CounterView} from "@/app/counter/CounterView.tsx";
+import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"

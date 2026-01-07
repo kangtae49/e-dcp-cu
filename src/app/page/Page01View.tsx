@@ -15,7 +15,6 @@ import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import {usePageStore} from "@/app/page/usePageStore.ts";
-import {JSONValue, JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
@@ -25,6 +24,7 @@ import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
+import {JSONValue, JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 interface Props {
   justId: JustId

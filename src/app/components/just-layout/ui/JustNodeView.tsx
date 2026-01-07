@@ -1,17 +1,12 @@
-import {
-  createJustLayoutSlice,
-  type JustBranch,
-  type JustLayoutActions,
-  type JustLayoutState,
-  type JustNode, type JustSplitDirection, type JustSplit,
-} from "../justLayoutSlice.ts";
 import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
-import {useAppDispatch, useDynamicSlice} from "@/store/hooks.ts";
 import JustSplitter, {type SplitSize} from "./JustSplitter.tsx";
 import {type CSSProperties, useRef} from "react";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
+import {JustBranch, JustNode, JustSplit, JustSplitDirection} from "@/app/components/just-layout/justLayout.types.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   layoutId: string
@@ -26,17 +21,19 @@ interface Props {
   // viewMap: Record<string, WinInfo>
 }
 
-export const JustNodeView: React.FC<Props> = ({ layoutId, hideTitle, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
+const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
 
-  const {
-    // state: justLayoutState,
-    actions: justLayoutActions
-  } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
-  const dispatch = useAppDispatch();
+  // const {
+  //   // state: justLayoutState,
+  //   actions: justLayoutActions
+  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
+  // const dispatch = useAppDispatch();
+
+  const justLayoutStore = useJustLayoutStore(layoutId)
 
   const onResize= ({size}: SplitSize) => {
-    dispatch(justLayoutActions.updateResize({ branch: justBranch, size: size }))
+    justLayoutStore.updateResize({ branch: justBranch, size: size })
   }
 
 
@@ -136,4 +133,6 @@ export const JustNodeView: React.FC<Props> = ({ layoutId, hideTitle, dndAccept, 
     </div>
   )
 
-};
+})
+
+export default JustNodeView

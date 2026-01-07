@@ -5,8 +5,6 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {
   aboutId, CONTENTS_VIEW,
@@ -17,25 +15,23 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {CONFIG_KEYS} from "@/app/grid/gridData.constants.ts";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 
 function JustToolBar() {
 
-  const {
-    toggleWin,
-    getSizeByNodeName,
-    addTabWinByNodeName,
-  } = useJustLayout(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
 
 
   const toggleSideMenu = () => {
-    toggleWin(SIDE_MENU_NODE_NAME)
+    justLayoutStore.toggleWin({nodeName: SIDE_MENU_NODE_NAME})
   }
 
   const openWin = (justId: JustId) => {
-    addTabWinByNodeName(justId, CONTENTS_VIEW)
+    justLayoutStore.addTabByNodeName({justId, nodeName: CONTENTS_VIEW})
   }
-  const size = getSizeByNodeName(SIDE_MENU_NODE_NAME) ?? INIT_SIDE_MENU_SIZE;
+  const size = justLayoutStore.getSizeByNodeName({nodeName: SIDE_MENU_NODE_NAME}) ?? INIT_SIDE_MENU_SIZE;
   // const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
   //   ? justLayoutState.layout.size
   //   : INIT_SIDE_MENU_SIZE;

@@ -1,5 +1,4 @@
 import {RowComponentProps} from "react-window";
-import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {
@@ -11,6 +10,7 @@ import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
 import {keys} from "mobx";
+import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 
 interface Props {
   count: number
@@ -24,9 +24,7 @@ const JobListRow = observer(({
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID)
 
-  const {
-    addTabWinByNodeName
-  } = useJustLayout(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
   const keyList = keys(jobMonitorStore.status)
   const idx = count - index - 1
   const jobId = keyList[idx] as string;
@@ -35,8 +33,8 @@ const JobListRow = observer(({
   const clickJobMonitor = (e: React.MouseEvent) => {
     e.preventDefault()
     if (jobId) {
-      addTabWinByNodeName({viewId: "job-monitor-view", title: jobId, params: {jobId}}, JOB_MONITOR_VIEW_NODE_NAME)
-      // showWin(BOTTOM_PANEL_NODE_NAME, true)
+      const jobMonitorJustId = {viewId: "job-monitor-view", title: jobId, params: {jobId}}
+      justLayoutStore.addTabByNodeName({justId: jobMonitorJustId, nodeName: JOB_MONITOR_VIEW_NODE_NAME})
     }
   }
   const clickStropScript = (e: React.MouseEvent) => {

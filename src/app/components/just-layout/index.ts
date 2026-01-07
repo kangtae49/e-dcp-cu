@@ -1,5 +1,5 @@
 import React, {JSX} from "react";
-import {JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 export const JUST_DRAG_SOURCE = "JUST_DRAG_SOURCE"
 
