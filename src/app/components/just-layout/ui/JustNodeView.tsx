@@ -2,7 +2,7 @@ import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import JustSplitter, {type SplitSize} from "./JustSplitter.tsx";
-import {type CSSProperties, useRef} from "react";
+import {Activity, type CSSProperties, useRef} from "react";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {JustBranch, JustNode, JustSplit, JustSplitDirection} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
@@ -77,6 +77,7 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
                  "just-row": node.direction === 'row'
                }
              )}>
+          <Activity mode={node.type==='split-pixels' && node.primary === 'first' && node.primaryHide === true ? 'hidden' : 'visible'}>
           <div
             className={classNames("just-first", {
               "just-primary": node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first'),
@@ -84,20 +85,21 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
             })}
             style={getStyle(node, 'first')}
           >
-            <JustNodeView
-              layoutId={layoutId}
-              hideTitle={node.hideTitle ?? hideTitle}
-              dndAccept={node.dndAccept ?? dndAccept}
-              node={node.first}
-              justBranch={[...justBranch, "first"]}
-              getWinInfo={getWinInfo}
-              closeWin={closeWin}
-              onClickTitle={onClickTitle}
-              onDoubleClickTitle={onDoubleClickTitle}
-            />
+              <JustNodeView
+                layoutId={layoutId}
+                hideTitle={node.hideTitle ?? hideTitle}
+                dndAccept={node.dndAccept ?? dndAccept}
+                node={node.first}
+                justBranch={[...justBranch, "first"]}
+                getWinInfo={getWinInfo}
+                closeWin={closeWin}
+                onClickTitle={onClickTitle}
+                onDoubleClickTitle={onDoubleClickTitle}
+              />
           </div>
+          </Activity>
           {
-            !(node.type === 'split-pixels' && node.noSplitter === true)
+            !(node.type === 'split-pixels' && (node.noSplitter === true || node.primaryHide === true))
             &&
             <JustSplitter
               layoutId={layoutId}
@@ -108,6 +110,7 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
               onRelease={onResize}
             />
           }
+          <Activity mode={node.type==='split-pixels' && node.primary === 'second' && node.primaryHide === true ? 'hidden' : 'visible'}>
           <div
                className={classNames("just-second", {
                  "just-primary": !(node.type === "split-percentage" || (node.type === 'split-pixels' && node.primary === 'first')),
@@ -115,18 +118,19 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
                })}
                style={getStyle(node, 'second')}
           >
-            <JustNodeView
-              layoutId={layoutId}
-              hideTitle={node.hideTitle ?? hideTitle}
-              dndAccept={node.dndAccept ?? dndAccept}
-              node={node.second}
-              justBranch={[...justBranch, "second"]}
-              getWinInfo={getWinInfo}
-              closeWin={closeWin}
-              onClickTitle={onClickTitle}
-              onDoubleClickTitle={onDoubleClickTitle}
-            />
+              <JustNodeView
+                layoutId={layoutId}
+                hideTitle={node.hideTitle ?? hideTitle}
+                dndAccept={node.dndAccept ?? dndAccept}
+                node={node.second}
+                justBranch={[...justBranch, "second"]}
+                getWinInfo={getWinInfo}
+                closeWin={closeWin}
+                onClickTitle={onClickTitle}
+                onDoubleClickTitle={onDoubleClickTitle}
+              />
           </div>
+          </Activity>
         </div>
       )}
 

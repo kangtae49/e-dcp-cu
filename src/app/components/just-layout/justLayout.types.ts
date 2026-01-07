@@ -57,6 +57,7 @@ export interface JustSplitPixels extends JustSplitBase {
   type: 'split-pixels'
   primary: JustSplitDirection
   primaryDefaultSize: number
+  primaryHide?: boolean
   noSplitter?: boolean
 }
 

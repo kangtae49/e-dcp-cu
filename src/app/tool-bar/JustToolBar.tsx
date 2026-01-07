@@ -5,7 +5,7 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
   aboutId, CONTENTS_VIEW,
   INIT_SIDE_MENU_SIZE,
@@ -32,21 +32,18 @@ function JustToolBar() {
     justLayoutStore.addTabByNodeName({justId, nodeName: CONTENTS_VIEW})
   }
   const size = justLayoutStore.getSizeByNodeName({nodeName: SIDE_MENU_NODE_NAME}) ?? INIT_SIDE_MENU_SIZE;
-  // const size = (justLayoutState?.layout?.type === "split-percentage" || justLayoutState?.layout?.type === "split-pixels")
-  //   ? justLayoutState.layout.size
-  //   : INIT_SIDE_MENU_SIZE;
-
+  const isHide = justLayoutStore.isPrimaryHide({nodeName: SIDE_MENU_NODE_NAME}) ?? false;
   return (
     <div className="just-tool-bar">
       <div
-        className={classNames("just-app-icon", {"on": size > 0})}
+        className={classNames("just-app-icon", {"on": !(size <= 40 || isHide)})}
         onClick={toggleSideMenu}
       >
         <IconLogo />
       </div>
       <div className="just-tool-center">
         {
-          size <= 0 &&
+          (size <= 40 || isHide) &&
           SIDE_MENU_ID_LIST.map(item =>
             <div key={JustUtil.toString(item.menuId)} className="just-tool-center-menu" onClick={() => openWin(item.menuId)} title={item.menuName}>
               <div className="just-icon">

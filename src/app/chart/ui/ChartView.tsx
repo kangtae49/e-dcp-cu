@@ -1,7 +1,7 @@
 import "./ChartView.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import {observer} from "mobx-react-lite";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";

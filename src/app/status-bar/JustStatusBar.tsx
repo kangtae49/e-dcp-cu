@@ -2,7 +2,7 @@ import "./JustStatusBar.css"
 import {
   BOTTOM_PANEL_NODE_NAME,
   INIT_BOTTOM_PANEL_SIZE,
-  LAYOUT_ID,
+  LAYOUT_ID, SIDE_MENU_NODE_NAME,
 } from "@/app/layout/layout.tsx";
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
@@ -22,13 +22,14 @@ function JustStatusBar({justId}: Props) {
   }
 
   const size = justLayoutStore.getSizeByNodeName({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? INIT_BOTTOM_PANEL_SIZE;
+  const isHide = justLayoutStore.isPrimaryHide({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? false;
   return (
     <div className="just-status-bar">
       <div className="just-status-center">
 
       </div>
       <div
-        className={classNames("just-status-icon", {"on": size > 0})}
+        className={classNames("just-status-icon", {"on": !(size <= 40 || isHide)})}
         onClick={toggleBottomPanel}
       >
         <Icon icon={faTerminal} />

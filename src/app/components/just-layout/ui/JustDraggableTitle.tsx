@@ -6,7 +6,7 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
@@ -112,7 +112,7 @@ const JustDraggableTitle = observer((props: Prop) => {
       if (justId === item.justId) {
         return
       }
-      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+      const hoverBoundingRect = ref.current.getBoundingClientRect()
       const clientOffset = monitor.getClientOffset()
       const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
       const hoverClientX = (clientOffset as XYCoord).x - hoverBoundingRect.left

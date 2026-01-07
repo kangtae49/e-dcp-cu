@@ -8,7 +8,7 @@ import JustDraggableTitle, {type JustDragItem} from "./JustDraggableTitle";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustId, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
@@ -102,7 +102,7 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
 
     function update() {
       if (ref.current === null) return;
-      const newRect = ref.current?.getBoundingClientRect() ?? null;
+      const newRect = ref.current.getBoundingClientRect() ?? null;
       // console.log("parent Rect:", newRect)
       setRect(newRect)
     }

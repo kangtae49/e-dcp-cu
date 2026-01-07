@@ -58,24 +58,24 @@ const Terminal = observer(({jobId}: Props) => {
     // if (termRef.current) {
     //   termRef.current?.dispose()
     // }
-    const term = new XTerm({
-      // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
-      fontFamily: '"Gulimche", "굴림체", dotum, sans-serif',
-      // fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
-      // fontFamily: 'Pretendard',
-      fontSize: 16,
-      // lineHeight: 1.2,
-      // fontWeight: 'normal',
-      // fontWeightBold: 'bold',
-      theme: {
-        background: '#0c0c0c',
-        foreground: '#cccccc'
-      },
-      cursorStyle: 'underline',
-      cursorBlink: false,
-    });
-
-    if (containerRef.current) {
+    let term: XTerm;
+    if (containerRef?.current) {
+      term = new XTerm({
+        // fontFamily: 'operator mono,SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace',
+        fontFamily: '"Gulimche", "굴림체", dotum, sans-serif',
+        // fontFamily: '"JetBrains Mono", Consolas, "Courier New", monospace',
+        // fontFamily: 'Pretendard',
+        fontSize: 16,
+        // lineHeight: 1.2,
+        // fontWeight: 'normal',
+        // fontWeightBold: 'bold',
+        theme: {
+          background: '#0c0c0c',
+          foreground: '#cccccc'
+        },
+        cursorStyle: 'underline',
+        cursorBlink: false,
+      });
 
       const fitAddon = new FitAddon();
       term.loadAddon(fitAddon);

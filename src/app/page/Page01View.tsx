@@ -15,7 +15,7 @@ import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
 import {usePageStore} from "@/app/page/usePageStore.ts";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
@@ -462,7 +462,6 @@ const Page01View = observer(({justId}: Props)=> {
           <Activity mode={pageStore.tab === "LOG" ? "visible" : "hidden"}>
             <div className="content">
               <Terminal
-                key={pageStore.jobInfo?.jobId ?? ''}
                 jobId={pageStore.jobInfo?.jobId ?? ''}
               />
             </div>

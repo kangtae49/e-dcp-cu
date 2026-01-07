@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import {type JustDragItem} from "./JustDraggableTitle.tsx";
 import {Activity, useLayoutEffect, useRef, useState} from "react";
 import {GetWinInfoFn} from "..";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
@@ -61,7 +61,7 @@ const JustWinBodyView = observer((props: Prop) => {
         if (!ref.current) {
           return
         }
-        const hoverBoundingRect = ref.current?.getBoundingClientRect()
+        const hoverBoundingRect = ref.current.getBoundingClientRect()
         const clientOffset = monitor.getClientOffset()
         const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2
         const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2

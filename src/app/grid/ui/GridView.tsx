@@ -2,7 +2,7 @@ import "./GridView.css"
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare, faDownload} from "@fortawesome/free-solid-svg-icons";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import React, {useLayoutEffect, useRef} from "react";
 import useGridData from "@/app/grid/useGridData.ts";
 import {useDrop} from "react-dnd";

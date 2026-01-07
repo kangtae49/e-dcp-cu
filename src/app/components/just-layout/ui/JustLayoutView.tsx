@@ -28,8 +28,6 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   onLoad(() => {
     justLayoutStore.setLayout(initialValue)
   })
-  // const dndAccept = [JUST_DRAG_SOURCE]
-  // const hideTitle: boolean | undefined = undefined
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={classNames(

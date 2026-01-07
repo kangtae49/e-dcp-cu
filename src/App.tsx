@@ -4,14 +4,7 @@ import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
 import React, {useEffect} from "react";
-// import {
-//   initialLayoutValue,
-//   JustUtil,
-//   LAYOUT_ID,
-//   SIDE_MENU_NODE_NAME,
-//   ViewId,
-//   viewMap
-// } from "@/app/layout/layout-util.tsx";
+
 import {WinInfo} from "@/app/components/just-layout";
 import useGridData from "@/app/grid/useGridData.ts";
 import {
@@ -21,11 +14,27 @@ import {
   ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+// import DevTools from 'mobx-react-devtools';
 
+// import remotedev from 'mobx-remotedev';
+// import {container} from "@/inversify.config.ts";
+// import {JustLayoutStore} from "@/app/components/just-layout/justLayout.store.ts";
+// if (process.env.NODE_ENV === 'development') {
+//   const hub = {
+//     'layout': container.get<JustLayoutStore>(JUST_LAYOUT_TYPES.JustLayoutStore),
+//
+//   };
+//   remotedev(hub, {
+//     name: 'Electron_App_All_Stores',
+//     remote: true,
+//     hostname: 'localhost',
+//     port: 8000
+//   });
+// }
 
 function getWinInfo(justId: JustId): WinInfo {
   const viewId = justId.viewId as ViewId;
@@ -66,6 +75,7 @@ function App() {
 
   return (
     <>
+      {/*<DevTools />*/}
       <JobListener />
       <WatchListener />
       <div className="just-app">

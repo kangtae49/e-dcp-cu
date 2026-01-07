@@ -14,14 +14,12 @@ import JustStatusBar from "@/app/status-bar/JustStatusBar.tsx";
 import JustUtilBar from "@/app/util-bar/JustUtilBar.tsx";
 import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
 import JobListView from "@/app/job/ui/JobListView.tsx";
-import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CounterView} from "@/app/counter/CounterView.tsx";
 import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
-// export const LAYOUT_DND_TYPE = "JUST_DRAG_SOURCE"
-// export const LAYOUT_DND_ACCEPT = ["JUST_DRAG_SOURCE"]
 
 export const STATUS_BAR_NODE_NAME = "STATUS_BAR_NODE"
 
@@ -244,8 +242,8 @@ export const viewMap: Record<ViewId, WinInfo> = {
 
 export const layoutSideMenu: JustNode = {
   type: 'split-pixels',
-  direction: 'row',
   name: SIDE_MENU_NODE_NAME,
+  direction: 'row',
   primary: 'first',
   primaryDefaultSize: 200,
   size: 200,
@@ -258,10 +256,10 @@ export const layoutSideMenu: JustNode = {
   },
   second: {
     type: 'split-percentage',
+    name: CONTENTS_VIEW,
     direction: 'column',
     size: 50,
     dndAccept: DND_ACCEPT_CONTENT,
-    name: CONTENTS_VIEW,
     first: {
       type: 'stack',
       tabs: [page01Id],
@@ -324,8 +322,9 @@ const layoutBottomPanel: JustSplitPixels  = {
   name: BOTTOM_PANEL_NODE_NAME,
   primary: 'second',
   primaryDefaultSize: INIT_BOTTOM_PANEL_SIZE,
-  size: 0,
-  noSplitter: false,
+  size: INIT_BOTTOM_PANEL_SIZE,
+  primaryHide: true,
+  // noSplitter: false,
   first: layoutUtilBar,
   second: layoutJobMonitor,
 }

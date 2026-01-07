@@ -1,7 +1,8 @@
-import {injectable} from "inversify";
+import {inject, injectable} from "inversify";
 import {makeAutoObservable} from "mobx";
 import {JobStatus} from "@/app/job/jobMonitor.constants.ts";
-import {JobEvent} from "@/app/job/jobMonitor.types.ts";
+import {JOB_MONITOR_TYPES, JobEvent} from "@/app/job/jobMonitor.types.ts";
+import {JobMonitorService} from "@/app/job/jobMonitor.service.ts";
 
 export interface JobMonitorSetStatus {
   jobId: string,
@@ -18,11 +19,14 @@ export interface JobMonitorClearEvent {
 
 @injectable()
 export class JobMonitorStore {
+  service: JobMonitorService;
   status: Record<string, JobStatus> = {}
   events: Record<string, JobEvent []> = {}
 
-  constructor() {
-    makeAutoObservable(this, {}, { autoBind: true })
+  constructor(
+    @inject(JOB_MONITOR_TYPES.JobMonitorService) service: JobMonitorService
+  ) {
+    makeAutoObservable(this, {service: false}, { autoBind: true })
   }
 
   setStatus = (payload: JobMonitorSetStatus) => {

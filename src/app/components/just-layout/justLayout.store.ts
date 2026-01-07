@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import {JUST_LAYOUT_TYPES, JustBranch, JustDirection, JustId, JustNode, JustPos} from "./justLayout.types.ts";
 import { JustLayoutService } from "./justLayout.service";
 import {makeAutoObservable} from "mobx";
-import { JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
+import { JustUtil} from "@/app/components/just-layout/justUtil.ts";
 
 
 export interface JustPayloadInsert {
@@ -56,6 +56,9 @@ interface PayloadGetSize {
   nodeName: string
 }
 
+interface PayloadIsPrimayHide {
+  nodeName: string
+}
 interface PayloadOpenWin {
   justId: JustId
 }
@@ -215,7 +218,6 @@ export class JustLayoutStore {
 
 
   toggleSideMenu = () => {
-    // const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     if (this.layout === null) return;
     if (this.layout.type !== 'split-pixels') {
       return;
@@ -228,17 +230,18 @@ export class JustLayoutStore {
   }
 
   toggleWin = ({nodeName}: PayloadToggleWin) => {
-    // const justLayoutActions = getActions<JustLayoutActions>(sliceId);
     const layout = this.layout;
     const branch = this.service.getBranchByNodeName(layout, nodeName, [])
     if (branch == null) return;
     const node = this.service.getNodeAtBranch(layout, branch)
     if (node == null) return;
     if (node.type !== 'split-pixels') return;
-    const newSize = node.size === 0 ? node.primaryDefaultSize : 0;
+    const newPrimaryHide = node.primaryHide !== true;
+    const newSize = (!newPrimaryHide || node.size < 10) ? node.primaryDefaultSize : 0;
     const updateSpec = this.service.buildSpecFromUpdateSpec(branch, {
       $merge: {
-        size: newSize
+        size: newSize,
+        primaryHide: newPrimaryHide
       }
     })
     const newLayout = this.service.updateNode(layout, updateSpec)
@@ -274,6 +277,19 @@ export class JustLayoutStore {
     if (node == null) return null;
     if (node.type === 'split-pixels' || node.type === 'split-percentage') {
       return node.size;
+    } else {
+      return null;
+    }
+  }
+
+  isPrimaryHide = ({nodeName}: PayloadIsPrimayHide) => {
+    const layout = this.layout;
+    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
+    if (branch == null) return null;
+    const node = this.service.getNodeAtBranch(layout, branch)
+    if (node == null) return null;
+    if (node.type === 'split-pixels') {
+      return node.primaryHide;
     } else {
       return null;
     }
@@ -318,7 +334,7 @@ export class JustLayoutStore {
 
   openWinMenu = ({justId, nodeName}: PayloadOpenWinMenu) => {
     const viewId = justId.viewId;
-    const winIds: JustId[] = this.getWinIds({viewId}) as unknown as JustId[];
+    const winIds: JustId[] = this.getWinIds({viewId});
     if (winIds.length === 0) {
       console.log('openWinMenu1', winIds, justId)
       this.openWinByNodeName({justId, nodeName})

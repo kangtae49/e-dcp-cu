@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".vite/build/main.js",
   "scripts": {
-    "start": "cross-env DEV_PORT=8000 electron-forge start -- --verbose",
+    "start": "electron-forge start -- --verbose",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "make-trace": "cross-env NODE_OPTIONS='--trace-deprecation' electron-forge make",
@@ -75,6 +75,7 @@
     "inversify": "^7.10.8",
     "lodash": "^4.17.21",
     "mobx": "^6.15.0",
+    "mobx-react-devtools": "^6.1.1",
     "mobx-react-lite": "^4.1.1",
     "natsort": "^2.0.3",
     "react": "^19.2.3",

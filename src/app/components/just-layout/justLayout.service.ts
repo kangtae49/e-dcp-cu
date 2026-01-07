@@ -2,7 +2,7 @@ import {injectable} from "inversify";
 import {JustBranch, JustId, JustNode, JustSplitDirection, JustStack } from "./justLayout.types";
 import {clamp, get, set} from "lodash";
 import {JustPayloadMoveWinSplit, JustPayloadMoveWinStack } from "./justLayout.store";
-import { JustUtil } from "./layoutUtil";
+import { JustUtil } from "./justUtil.ts";
 import update, {Spec } from "immutability-helper";
 
 export type JustUpdateSpec = Spec<JustNode>;
@@ -65,8 +65,8 @@ export class JustLayoutService {
 
   removeWinId = (layout: JustNode | null, justId: JustId): JustNode | null => {
     if (layout == null) return null;
-    const justStack = this.getNodeByWinId(layout, justId) as unknown as JustStack | null
-    if (justStack == null) return layout;
+    const justStack = this.getNodeByWinId(layout, justId)
+    if (justStack?.type !== 'stack') return layout;
     const curIdx = justStack.active ? JustUtil.indexOf(justStack.tabs, justStack.active) : 0
 
     const newTabs = justStack.tabs.filter((tab: JustId) => !JustUtil.isEquals(tab, justId))
@@ -104,7 +104,7 @@ export class JustLayoutService {
 
   activeWinId = (layout: JustNode | null, justId: JustId): JustNode | null => {
     if (layout == null) return null;
-    const justStack = this.getNodeByWinId(layout, justId) as unknown as JustStack | null
+    const justStack = this.getNodeByWinId(layout, justId)
     if (justStack == null) return layout;
     return this.updateNodeOfWinId(layout, justId, {
       $set: {
