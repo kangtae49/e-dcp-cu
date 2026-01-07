@@ -2,9 +2,7 @@ import "./JustStatusBar.css"
 import {
   BOTTOM_PANEL_NODE_NAME,
   INIT_BOTTOM_PANEL_SIZE,
-  INIT_SIDE_MENU_SIZE,
   LAYOUT_ID,
-  SIDE_MENU_NODE_NAME
 } from "@/app/layout/layout.tsx";
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"

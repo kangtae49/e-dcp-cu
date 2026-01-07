@@ -13,7 +13,6 @@ import React, {useEffect} from "react";
 //   viewMap
 // } from "@/app/layout/layout-util.tsx";
 import {WinInfo} from "@/app/components/just-layout";
-import {removeReducer} from "@/store";
 import useGridData from "@/app/grid/useGridData.ts";
 import {
   initialLayoutValue,
@@ -58,7 +57,6 @@ function App() {
 
   const closeWin = (justId: JustId) => {
     console.log('closeWin!!!', justId)
-    removeReducer(JustUtil.toString(justId))
   }
   const onClickTitle = (e: React.MouseEvent, justId: JustId) => {
   }

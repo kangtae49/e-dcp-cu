@@ -1,9 +1,7 @@
 import {injectable} from "inversify";
-import {keys, makeAutoObservable} from "mobx";
+import {makeAutoObservable} from "mobx";
 import {JobStatus} from "@/app/job/jobMonitor.constants.ts";
 import {JobEvent} from "@/app/job/jobMonitor.types.ts";
-import type {PayloadAction} from "@reduxjs/toolkit";
-import {createSliceThunk} from "@/store/hooks.ts";
 
 export interface JobMonitorSetStatus {
   jobId: string,

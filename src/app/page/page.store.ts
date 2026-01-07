@@ -4,7 +4,6 @@ import { PageService } from "./page.service";
 import {makeAutoObservable} from "mobx";
 import type {Option} from "@/app/components/select/SelectBox.tsx";
 import {format} from "date-fns";
-import type {PayloadAction} from "@reduxjs/toolkit";
 
 @injectable()
 export class PageStore {

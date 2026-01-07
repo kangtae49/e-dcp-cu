@@ -1,5 +1,4 @@
 import {injectable} from "inversify";
-import {stableStringify} from "@/app/components/just-layout/json-util.ts";
 import {JustBranch, JustId, JustNode, JustSplitDirection, JustStack } from "./justLayout.types";
 import {clamp, get, set} from "lodash";
 import {JustPayloadMoveWinSplit, JustPayloadMoveWinStack } from "./justLayout.store";

@@ -1,4 +1,3 @@
-import {CounterStore} from "@/app/counter/counter.store.ts";
 import {JustLayoutStore} from "@/app/components/just-layout/justLayout.store.ts";
 
 export type JustDirection = 'row' | 'column';
