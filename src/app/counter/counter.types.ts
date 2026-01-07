@@ -1,6 +1,6 @@
 import {CounterStore} from "@/app/counter/counter.store.ts";
 
-export type StoreFactory = (id: string) => CounterStore;
+export type CounterFactory = (id: string) => CounterStore;
 
 export const COUNTER_TYPES = {
   CounterService: Symbol.for("CounterService"),

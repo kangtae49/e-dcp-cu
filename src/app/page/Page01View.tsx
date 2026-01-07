@@ -14,7 +14,7 @@ import Terminal from "@/app/components/terminal/Terminal.tsx";
 import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridData from "@/app/grid/useGridData.ts";
-import usePage from "@/app/page/usePage.ts";
+import {usePageStore} from "@/app/page/usePageStore.ts";
 import {JSONValue, JustId} from "@/app/components/just-layout/justLayoutSlice.ts";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
@@ -24,6 +24,7 @@ import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.ts
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
@@ -31,7 +32,7 @@ interface Props {
 
 
 
-function Page01View({justId}: Props) {
+const Page01View = observer(({justId}: Props)=> {
   const dataKey = "data\\company.xlsx";
   const pagesDir = "pages";
   const xAxisCol =  "stdrYm";
@@ -56,14 +57,7 @@ function Page01View({justId}: Props) {
   //   showWin,
   //   addTabWinByNodeName
   // } = useJustLayout(LAYOUT_ID)
-  const {
-    state: pageState,
-    setCompany,
-    setJobInfo,
-    setStartDate,
-    setEndDate,
-    setTab,
-  } = usePage(JustUtil.toString(justId));
+  const pageStore = usePageStore(JustUtil.toString(justId));
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
 
@@ -81,15 +75,15 @@ function Page01View({justId}: Props) {
 
 
 
-  const startYm = pageState?.startDate ? format(pageState.startDate, "yyyyMM") : format(new Date(), "yyyyMM");
-  const endYm = pageState?.endDate ? format(pageState.endDate, "yyyyMM") : format(new Date(), "yyyyMM");
-  const companyVal = pageState?.company ? pageState.company.value : companyList[0]?.value;
+  const startYm = pageStore.startDate ? format(pageStore.startDate, "yyyyMM") : format(new Date(), "yyyyMM");
+  const endYm = pageStore.endDate ? format(pageStore.endDate, "yyyyMM") : format(new Date(), "yyyyMM");
+  const companyVal = pageStore.company ? pageStore.company.value : companyList[0]?.value;
   const condition = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm]
   const filename = condition.join("_")
   const outFile = `${filename}.xlsx`
   const outPath = `${pagesDir}\\${outFile}`
 
-  const jobStatus = jobMonitorStore.status[pageState?.jobInfo?.jobId ?? '']
+  const jobStatus = jobMonitorStore.status[pageStore.jobInfo?.jobId ?? '']
 
   useEffect(() => {
     window.api.readDataExcel(outPath)
@@ -101,10 +95,10 @@ function Page01View({justId}: Props) {
   }, [outPath])
 
   useEffect(() => {
-    if (companyList.length > 0 && !pageState?.company) {
-      setCompany(companyList[0]);
+    if (companyList.length > 0 && !pageStore.company) {
+      pageStore.setCompany(companyList[0]);
     }
-  }, [companyList, pageState?.company]);
+  }, [companyList, pageStore.company]);
 
   // const getCompanyName = (cdVlId: string) => {
   //   return companyList.find((opt) => opt.value === cdVlId)?.label || ''
@@ -115,30 +109,30 @@ function Page01View({justId}: Props) {
   }
 
   const getTitle = () => {
-    if (!pageState?.company) return ''
-    if (!pageState?.startDate) return ''
-    if (!pageState?.endDate) return ''
-    const companyName = pageState.company.label.slice(0, 2);
+    if (!pageStore.company) return ''
+    if (!pageStore.startDate) return ''
+    if (!pageStore.endDate) return ''
+    const companyName = pageStore.company.label.slice(0, 2);
     const viewName = '자산';
-    const startDate = formatYYMM(pageState.startDate);
-    const endDate = formatYYMM(pageState.endDate);
+    const startDate = formatYYMM(pageStore.startDate);
+    const endDate = formatYYMM(pageStore.endDate);
     return `${companyName} ${viewName} ${startDate}~${endDate}`
   }
 
   const onChangeStartDate = (date: string | null) => {
-    setStartDate(date)
+    pageStore.setStartDate(date)
   }
 
   const onChangeEndDate = (date: string | null) => {
-    setEndDate(date)
+    pageStore.setEndDate(date)
   }
 
   const handleCompany = (option: Option) => {
-    setCompany(option)
+    pageStore.setCompany(option)
   }
   const searchPage01 = async () => {
 
-    if (!pageState?.startDate || !pageState?.endDate || !pageState?.company) return;
+    if (!pageStore.startDate || !pageStore.endDate || !pageStore.company) return;
 
     // const isLock = await window.api.isLockScriptSubPath(outPath);
     if (gridDataStore.gridDataMap?.[outPath]?.isLocked) {
@@ -152,7 +146,7 @@ function Page01View({justId}: Props) {
     const jobId = `job-${new Date().getTime()}`
     const scriptPath = "page01.py"
     const args = [jobId, ...condition];
-    setJobInfo({jobId, path: scriptPath, args})
+    pageStore.setJobInfo({jobId, path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
   }
 
@@ -185,8 +179,8 @@ function Page01View({justId}: Props) {
 
   const clickStropScript = (e: React.MouseEvent) => {
     e.preventDefault()
-    if (pageState?.jobInfo?.jobId) {
-      window.api.stopScript(pageState?.jobInfo?.jobId).then()
+    if (pageStore.jobInfo?.jobId) {
+      window.api.stopScript(pageStore.jobInfo?.jobId).then()
     }
   }
 
@@ -254,13 +248,13 @@ function Page01View({justId}: Props) {
 
   const [, dragJob] = useDrag({
     type: 'job-monitor-view',
-    canDrag: () => !!pageState?.jobInfo?.jobId,
+    canDrag: () => !!pageStore.jobInfo?.jobId,
     item: () => {
-      const jobId = pageState?.jobInfo?.jobId ?? '';
+      const jobId = pageStore.jobInfo?.jobId ?? '';
       const item: JustDragItem = {
         justId: {
           viewId: "job-monitor-view",
-          title: pageState?.jobInfo?.jobId ?? '',
+          title: pageStore.jobInfo?.jobId ?? '',
           params: {
             jobId
           }
@@ -322,7 +316,7 @@ function Page01View({justId}: Props) {
               <div className="search-item-value">
                 <SelectBox
                   onChange={handleCompany}
-                  value={pageState?.company?.value}
+                  value={pageStore.company?.value}
                   options={companyList}
                 />
               </div>
@@ -330,11 +324,11 @@ function Page01View({justId}: Props) {
             <div className="search-item">
               <div className="search-item-label">조회기간</div>
               <div className="search-item-value">
-                <MonthPicker value={pageState?.startDate} onChange={onChangeStartDate} />
+                <MonthPicker value={pageStore.startDate} onChange={onChangeStartDate} />
               </div>
               <div>~</div>
               <div className="search-item-value">
-                <MonthPicker value={pageState?.endDate} onChange={onChangeEndDate} />
+                <MonthPicker value={pageStore.endDate} onChange={onChangeEndDate} />
               </div>
             </div>
             <div className="search-box">
@@ -373,10 +367,10 @@ function Page01View({justId}: Props) {
             className={classNames(
             "tab-title",
                 {
-                  "active": pageState?.tab === "GRAPH",
+                  "active": pageStore.tab === "GRAPH",
                 }
               )}
-              onClick={()=> setTab('GRAPH')}>
+              onClick={()=> pageStore.setTab('GRAPH')}>
             <Icon icon={faChartLine} />graph
           </div>
           <div
@@ -385,20 +379,20 @@ function Page01View({justId}: Props) {
             className={classNames(
             "tab-title",
                 {
-                  "active": pageState?.tab === "GRID",
+                  "active": pageStore.tab === "GRID",
                 }
               )}
-              onClick={()=> setTab('GRID')}>
+              onClick={()=> pageStore.setTab('GRID')}>
             <Icon icon={faTableList} />grid
           </div>
           <div
             ref={refJob}
             className={classNames("tab-title",
                 {
-                  "active": pageState?.tab === "LOG",
+                  "active": pageStore.tab === "LOG",
                 }
               )}
-              onClick={()=> setTab('LOG')}>
+              onClick={()=> pageStore.setTab('LOG')}>
             <Icon icon={faTerminal} />log
           </div>
           {gridDataStore.gridDataMap[outPath] &&
@@ -442,7 +436,7 @@ function Page01View({justId}: Props) {
 
         </div>
         <div className="tab-body">
-          <Activity mode={pageState?.tab === "GRID" ? "visible" : "hidden"}>
+          <Activity mode={pageStore.tab === "GRID" ? "visible" : "hidden"}>
             <div className="content">
               <JustGrid
                 key={outPath}
@@ -455,7 +449,7 @@ function Page01View({justId}: Props) {
             {/*    outFile={outPath}*/}
             {/*/>*/}
           </Activity>
-          <Activity mode={pageState?.tab === "GRAPH" ? "visible" : "hidden"}>
+          <Activity mode={pageStore.tab === "GRAPH" ? "visible" : "hidden"}>
             <div className="content">
               <JustLineChart
                 key={outPath}
@@ -465,11 +459,11 @@ function Page01View({justId}: Props) {
               />
             </div>
           </Activity>
-          <Activity mode={pageState?.tab === "LOG" ? "visible" : "hidden"}>
+          <Activity mode={pageStore.tab === "LOG" ? "visible" : "hidden"}>
             <div className="content">
               <Terminal
-                key={pageState?.jobInfo?.jobId ?? ''}
-                jobId={pageState?.jobInfo?.jobId ?? ''}
+                key={pageStore.jobInfo?.jobId ?? ''}
+                jobId={pageStore.jobInfo?.jobId ?? ''}
               />
             </div>
           </Activity>
@@ -479,6 +473,6 @@ function Page01View({justId}: Props) {
 
     </div>
   )
-}
+})
 
 export default Page01View;
