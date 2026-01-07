@@ -60,6 +60,11 @@ interface PayloadOpenWin {
   justId: JustId
 }
 
+interface PayloadOpenWinByNodeName {
+  justId: JustId
+  nodeName: string
+}
+
 interface PayloadGetWinIds {
   viewId: string
 }
@@ -74,6 +79,7 @@ interface PayloadGetWinIdsByBranch {
 
 interface PayloadOpenWinMenu {
   justId: JustId
+  nodeName: string
 }
 
 
@@ -285,6 +291,19 @@ export class JustLayoutStore {
     }
   }
 
+  openWinByNodeName = ({justId, nodeName}: PayloadOpenWinByNodeName) => {
+    if (this.service.hasWinId(this.layout ?? null, justId)) {
+      this.activeWin({
+        justId
+      })
+    } else {
+      this.addTabByNodeName({
+        justId: justId,
+        nodeName
+      })
+    }
+  }
+
   getWinIds = ({viewId}: PayloadGetWinIds) => {
     return this.service.queryWinIdsByViewId(this.layout ?? null, viewId, [])
   }
@@ -297,19 +316,19 @@ export class JustLayoutStore {
     return this.service.queryWinIdsByStack(this.layout ?? null, branch)
   }
 
-  openWinMenu = ({justId}: PayloadOpenWinMenu) => {
+  openWinMenu = ({justId, nodeName}: PayloadOpenWinMenu) => {
     const viewId = justId.viewId;
     const winIds: JustId[] = this.getWinIds({viewId}) as unknown as JustId[];
     if (winIds.length === 0) {
       console.log('openWinMenu1', winIds, justId)
-      this.openWin({justId})
+      this.openWinByNodeName({justId, nodeName})
     } else {
       const newJustId = winIds
         .toSorted((a, b) => (a.dupId ?? '') <= (b.dupId ?? '') ? -1: 1)
         .at(-1)
       if (newJustId) {
         console.log('openWinMenu2', winIds, newJustId)
-        this.openWin({justId: newJustId})
+        this.openWinByNodeName({justId: newJustId, nodeName})
       }
     }
   }
