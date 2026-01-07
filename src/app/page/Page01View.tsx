@@ -9,9 +9,6 @@ import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
-import {
-  JOB_MONITOR_ID,
-} from "@/app/job/jobMonitorSlice";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
 import {FileItem} from "@/types";
@@ -26,8 +23,7 @@ import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.t
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
-// import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
-// import {BOTTOM_PANEL_NODE_NAME, JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
+import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 
 interface Props {
   justId: JustId
@@ -69,9 +65,7 @@ function Page01View({justId}: Props) {
     setTab,
   } = usePage(JustUtil.toString(justId));
 
-  const {
-    state: jobState,
-  } = useJobMonitor(JOB_MONITOR_ID);
+  const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
 
   const gridDataStore = useGridData(GRID_DATA_ID)
 
@@ -95,7 +89,7 @@ function Page01View({justId}: Props) {
   const outFile = `${filename}.xlsx`
   const outPath = `${pagesDir}\\${outFile}`
 
-  const jobStatus = jobState?.status[pageState?.jobInfo?.jobId ?? '']
+  const jobStatus = jobMonitorStore.status[pageState?.jobInfo?.jobId ?? '']
 
   useEffect(() => {
     window.api.readDataExcel(outPath)

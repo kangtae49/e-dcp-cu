@@ -6,23 +6,24 @@ import useJustLayout from "@/app/components/just-layout/useJustLayout.ts";
 import {List} from "react-window";
 import JobListRow from "@/app/job/ui/JobListRow.tsx";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
-import {JOB_MONITOR_ID} from "@/app/job/jobMonitorSlice.ts";
+import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
+import {observer} from "mobx-react-lite";
+import {keys} from "mobx";
 interface Props {
   justId: JustId
 }
-function JobListView({justId}: Props) {
+
+const JobListView = observer(({justId}: Props)=> {
   const {
     toggleWin,
   } = useJustLayout(LAYOUT_ID)
 
-  const {
-    state: jobMonitorState,
-  } = useJobMonitor(JOB_MONITOR_ID)
+  const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID)
 
   const toggleView = () => {
     toggleWin(BOTTOM_PANEL_NODE_NAME)
   }
-  const count = jobMonitorState?.status ? Object.keys(jobMonitorState.status).length : 0
+  const count = keys(jobMonitorStore.status).length
   return (
     <div className="job-list-view">
       <div className="job-list-title">
@@ -32,7 +33,7 @@ function JobListView({justId}: Props) {
         </div>
       </div>
       <div className="job-list-content">
-        {jobMonitorState?.status &&
+        {jobMonitorStore.status &&
           <List
             className="job-list-table"
             rowComponent={JobListRow}
@@ -40,16 +41,14 @@ function JobListView({justId}: Props) {
             // rowCount={200}
             rowHeight={20}
             rowProps={{
-              jobMonitorState,
               count
             }}
             style={{}}
-
           />
         }
       </div>
     </div>
   )
-}
+})
 
-export default JobListView
+export default JobListView;

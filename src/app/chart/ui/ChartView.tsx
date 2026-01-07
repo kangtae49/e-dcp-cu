@@ -4,11 +4,12 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import {JustUtil} from "@/app/components/just-layout/layoutUtil.ts";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
 }
-function ChartView({ justId }: Props) {
+const ChartView = observer(({ justId }: Props)=> {
   const dataKey = JustUtil.getParamString(justId, 'file');
   const title = justId.title;
   const xAxisCol = JustUtil.getParamString(justId, 'xAxisCol');
@@ -34,6 +35,6 @@ function ChartView({ justId }: Props) {
       </div>
     </div>
   )
-}
+})
 
 export default ChartView

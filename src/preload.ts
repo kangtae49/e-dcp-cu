@@ -2,8 +2,9 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 import "reflect-metadata";
 import {contextBridge, ipcRenderer, webUtils } from 'electron'
-import {DragStartItem, Env, JobEvent, WatchEvent, DialogResult, Versions} from "@/types.ts";
+import {DragStartItem, Env, WatchEvent, DialogResult, Versions} from "@/types.ts";
 import {GridData} from "@/app/grid/gridData.types.ts";
+import {JobEvent} from "@/app/job/jobMonitor.types.ts";
 
 
 

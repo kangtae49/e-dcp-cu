@@ -3,25 +3,24 @@ import {useEffect, useRef} from "react";
 import {Terminal as XTerm} from "@xterm/xterm"
 import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from '@xterm/addon-fit';
-import {JobEvent, JobStreamData} from "@/types.ts";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
-import {JOB_MONITOR_ID} from "@/app/job/jobMonitorSlice.ts";
+import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
+import {JobEvent, JobStreamData} from "@/app/job/jobMonitor.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   jobId: string
 }
 
-function Terminal({jobId}: Props) {
+const Terminal = observer(({jobId}: Props) => {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const termRef = useRef<XTerm | null>(null);
   const fitAddonRef = useRef<FitAddon | null>(null);
 
-  const {
-    state: jobMonitorState,
-  } = useJobMonitor(JOB_MONITOR_ID);
+  const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
 
-  const events: JobEvent [] = jobMonitorState?.events[jobId] ?? []
+  const events: JobEvent [] = jobMonitorStore.events[jobId] ?? []
 
   const writeLine = (term: XTerm, event: JobEvent) => {
     if(event.action === 'JOB_STREAM') {
@@ -117,7 +116,7 @@ function Terminal({jobId}: Props) {
     // fitAddonRef.current.fit();
 
     // termRef?.current.scrollToBottom()
-  }, [jobMonitorState?.events[jobId]?.length]);
+  }, [jobMonitorStore.events[jobId]?.length]);
 
 
 
@@ -128,7 +127,7 @@ function Terminal({jobId}: Props) {
     >
     </div>
   )
-}
+})
 
 export default Terminal
 
