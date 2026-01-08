@@ -29,7 +29,7 @@ function JustStatusBar({justId}: Props) {
 
       </div>
       <div
-        className={classNames("just-status-icon", {"on": !(size <= 40 || isHide)})}
+        className={classNames("just-status-icon", {"on": !isHide})}
         onClick={toggleBottomPanel}
       >
         <Icon icon={faTerminal} />

@@ -36,7 +36,7 @@ function JustToolBar() {
   return (
     <div className="just-tool-bar">
       <div
-        className={classNames("just-app-icon", {"on": !(size <= 40 || isHide)})}
+        className={classNames("just-app-icon", {"on": !isHide})}
         onClick={toggleSideMenu}
       >
         <IconLogo />
