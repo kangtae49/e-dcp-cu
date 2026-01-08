@@ -17,9 +17,14 @@ import JobListView from "@/app/job/ui/JobListView.tsx";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CounterView} from "@/app/counter/CounterView.tsx";
 import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
+import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
+
+
+
+export const TOP_MENU_NODE_NAME = "TOP_MENU_NODE_NAME"
 
 export const STATUS_BAR_NODE_NAME = "STATUS_BAR_NODE"
 
@@ -39,7 +44,8 @@ export const CONTENTS_VIEW = "CONTENTS_VIEW"
 export const INIT_SIDE_MENU_SIZE = 200
 export const INIT_BOTTOM_PANEL_SIZE = 200
 
-export type ViewId = "status-bar" | "bottom-panel" | "tool-bar" | "util-bar"
+export type ViewId = "top-menu" | "status-bar"
+  | "bottom-panel" | "tool-bar" | "util-bar"
   | "side-menu"
   | "page01"
   | "about"
@@ -60,6 +66,8 @@ export interface SideMenuItem {
   menuId: JustId,
   menuName: string
 }
+
+export const topMenuId: JustId = {viewId: 'top-menu', title: 'Top Menu'};
 export const statusBarId: JustId = {viewId: 'status-bar', title: 'Status Bar'};
 export const bottomPanelId: JustId = {viewId: 'bottom-panel', title: 'Bottom Panel'};
 export const toolBarId: JustId = {viewId: 'tool-bar', title: 'Tool Bar'};
@@ -87,6 +95,15 @@ export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
 
 
 export const viewMap: Record<ViewId, WinInfo> = {
+  "top-menu": {
+    title: "Top Menu",
+    icon: <div/>,
+    getView: (justId) => {
+      return (
+        <TopMenuBar justId={justId}/>
+      )
+    }
+  },
   "status-bar": {
     title: "Status Bar",
     icon: <div/>,
@@ -362,7 +379,24 @@ const layoutStatusBar: JustSplitPixels  = {
   },
 }
 
+const layoutTopMenu: JustSplitPixels = {
+  type: 'split-pixels',
+  direction: 'column',
+  name: TOP_MENU_NODE_NAME,
+  primary: 'first',
+  primaryDefaultSize: 32,
+  size: 32,
+  noSplitter: true,
+  first: {
+    type: 'stack',
+    tabs: [topMenuId],
+    active: topMenuId,
+    hideTitle: true
+  },
+  second: layoutStatusBar
+}
 
-export const initialLayoutValue: JustNode = layoutStatusBar
+
+export const initialLayoutValue: JustNode = layoutTopMenu
 
 

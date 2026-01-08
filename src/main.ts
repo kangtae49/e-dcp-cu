@@ -34,6 +34,13 @@ const createWindow = () => {
       // contextIsolation: false,
       // nodeIntegration: true
     },
+    titleBarStyle: 'hidden',
+    // transparent: true,
+    titleBarOverlay: {
+      color: '#2e2e2e',
+      symbolColor: '#74b1be',
+      height: 32
+    }
   });
 
   // and load the index.html of the app.

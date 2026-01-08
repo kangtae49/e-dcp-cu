@@ -3,7 +3,7 @@
 
 .just-tool-bar {
     --icon-font-size: 17px;
-    --icon-color: white;
+    --icon-color: #ffc233;
     padding: 5px 0 5px 0;
     display: flex;
     flex-direction: column;
@@ -117,3 +117,5 @@
     background-color: rgba(53, 116, 240, 0.4);
 }
 
+/*.fa-bars { color: var(--icon-color); font-size: 10px;}*/
+/*.just-app-icon .fa-bars:hover { transform: var(--icon-hover-scale); }*/

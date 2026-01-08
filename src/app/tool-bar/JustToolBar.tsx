@@ -2,7 +2,7 @@ import './JustToolBar.css'
 import IconLogo from "../../assets/icon.svg?react"
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faGear} from "@fortawesome/free-solid-svg-icons"
+import {faBars, faGear} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
@@ -29,7 +29,8 @@ function JustToolBar() {
   }
 
   const openWin = (justId: JustId) => {
-    justLayoutStore.addTabByNodeName({justId, nodeName: CONTENTS_VIEW})
+    // justLayoutStore.addTabByNodeName({justId, nodeName: CONTENTS_VIEW})
+    justLayoutStore.openWinMenu({justId, nodeName: CONTENTS_VIEW})
   }
   const size = justLayoutStore.getSizeByNodeName({nodeName: SIDE_MENU_NODE_NAME}) ?? INIT_SIDE_MENU_SIZE;
   const isHide = justLayoutStore.isPrimaryHide({nodeName: SIDE_MENU_NODE_NAME}) ?? false;
@@ -39,7 +40,8 @@ function JustToolBar() {
         className={classNames("just-app-icon", {"on": !isHide})}
         onClick={toggleSideMenu}
       >
-        <IconLogo />
+        {/*<IconLogo />*/}
+        <Icon icon={faBars} />
       </div>
       <div className="just-tool-center">
         {
