@@ -9,7 +9,7 @@ interface Props {
   justId: JustId
 }
 
-function TopMenuBar({justId}: Props) {
+function TopMenuBar({justId: _}: Props) {
   const minimize = () => {
     window.api.minimize()
   }

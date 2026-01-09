@@ -217,7 +217,7 @@ const Page01View = observer(({justId}: Props)=> {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
+    end: (_item, _monitor) => {
     }
   })
 
@@ -242,7 +242,7 @@ const Page01View = observer(({justId}: Props)=> {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
+    end: (_item, _monitor) => {
     }
   })
 
@@ -265,7 +265,7 @@ const Page01View = observer(({justId}: Props)=> {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
+    end: (_item, _monitor) => {
     }
   })
 
