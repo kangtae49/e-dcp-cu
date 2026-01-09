@@ -18,6 +18,7 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import AppListener from "@/app/listeners/AppListener.tsx";
 // import DevTools from 'mobx-react-devtools';
 
 // import remotedev from 'mobx-remotedev';
@@ -76,6 +77,7 @@ function App() {
   return (
     <>
       {/*<DevTools />*/}
+      <AppListener />
       <JobListener />
       <WatchListener />
       <div className="just-app">

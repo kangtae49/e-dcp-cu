@@ -3,13 +3,15 @@ import {type DragSourceMonitor, useDrag, useDrop} from "react-dnd";
 import type { XYCoord } from 'react-dnd';
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faCircleXmark, faClone} from "@fortawesome/free-solid-svg-icons"
+import {faCircleXmark, faClone, faExpand} from "@fortawesome/free-solid-svg-icons"
 import {CloseWinFn, OnClickTitleFn, OnDoubleClickTitleFn, WinInfo} from "../index.ts";
 import {ControlledMenu, MenuItem, useMenuState} from "@szhsin/react-menu";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {useAppStore} from "@/app/listeners/useAppStore.ts";
+import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
 
 export interface JustDragItem {
   justId: JustId
@@ -52,6 +54,7 @@ const JustDraggableTitle = observer((props: Prop) => {
   // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const justLayoutStore = useJustLayoutStore(layoutId);
+  const appStore = useAppStore(APP_STORE_ID);
 
   const clickClose = (justId: JustId) => {
     justLayoutStore.removeWin({
@@ -68,6 +71,10 @@ const JustDraggableTitle = observer((props: Prop) => {
       justId,
       cloneJustId
     })
+  }
+  const fullScreenWin = (justId: JustId) => {
+    console.log("fullScreenWin", justId, appStore.isFullScreen)
+    justLayoutStore.setFullScreenId(justId)
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
@@ -214,6 +221,17 @@ const JustDraggableTitle = observer((props: Prop) => {
             </div>
             <div className="just-icon" />
           </MenuItem>
+        }
+        {(winInfo.canFullScreen ?? false) &&
+            <MenuItem onClick={() => fullScreenWin(justId)}>
+                <div className="just-icon">
+                    <Icon icon={faExpand} />
+                </div>
+                <div className="just-title">
+                    FullScreen
+                </div>
+                <div className="just-icon" />
+            </MenuItem>
         }
       </ControlledMenu>
     </div>

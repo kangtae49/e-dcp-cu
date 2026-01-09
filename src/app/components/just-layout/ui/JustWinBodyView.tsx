@@ -2,7 +2,7 @@
 import {type DropTargetMonitor, useDrop, type XYCoord} from "react-dnd";
 import classNames from 'classnames';
 import {type JustDragItem} from "./JustDraggableTitle.tsx";
-import {Activity, useLayoutEffect, useRef, useState} from "react";
+import {Activity, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {GetWinInfoFn} from "..";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
@@ -106,13 +106,25 @@ const JustWinBodyView = observer((props: Prop) => {
       drop(ref);
     }
   }, [drop]);
+
+
+  useEffect(() => {
+    if (JustUtil.isEquals(justLayoutStore.fullScreenId, justStack.active)) {
+      window.api.setFullScreen(true)
+      ref.current?.requestFullscreen()
+      // window.api.setFullScreen(true).then(() => {
+      // })
+    }
+  }, [justLayoutStore.fullScreenId])
+  const isFullScreen = JustUtil.isEquals(justLayoutStore.fullScreenId, justStack.active);
   return (
     <div
       className={classNames(
         "just-win-body",
         {
           "isOver": isOver,
-          "last-active": JustUtil.isEquals(justStack.active, justLayoutStore.lastActiveId)
+          "last-active": JustUtil.isEquals(justStack.active, justLayoutStore.lastActiveId),
+          "fullscreen": isFullScreen
         })
       }
       ref={ref}

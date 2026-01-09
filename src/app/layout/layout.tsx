@@ -153,6 +153,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "page01": {
     title: (justId) => justId.title,
     canDup: true,
+    canFullScreen: true,
     icon: <Jdenticon size="30" value={page01Id.viewId} />,
     getView: (justId) => {
       return (
@@ -212,7 +213,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     canDup: true,
     getView: (justId) => {
       return (
-        <CounterView />
+        <CounterView justId={justId} />
       )
     }
   }

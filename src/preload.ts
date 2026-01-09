@@ -5,11 +5,14 @@ import {contextBridge, ipcRenderer, webUtils } from 'electron'
 import {DragStartItem, Env, WatchEvent, DialogResult, Versions} from "@/types.ts";
 import {GridData} from "@/app/grid/gridData.types.ts";
 import {JobEvent} from "@/app/job/jobMonitor.types.ts";
+import * as Electron from "electron";
 
 
 
 export interface Api {
   echo(message: string): Promise<string>,
+  setFullScreen(flag: boolean): Promise<void>,
+  isFullScreen(): Promise<boolean>,
   getVersions: () => Promise<Versions>,
   getArgs: () => string [],
   getEnv: () => Promise<Env>,
@@ -25,17 +28,27 @@ export interface Api {
   stopScript(jobId: string): Promise<void>,
   isLockScriptSubPath(subpath: string): Promise<boolean>,
   startDrag(item: DragStartItem): void,
+  minimize(): void,
+  maximize(): void,
+  close(): void,
   // startDrag(filePath: string): void,
 
   onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void): void,
   onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void): void,
 
   onSuspend(callback: (event: Electron.IpcRendererEvent) => void): void,
+  onChangeFullScreen(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void): void,
 }
 
 const api: Api = {
   echo: (message: string): Promise<string> => {
     return ipcRenderer.invoke('echo', message);
+  },
+  setFullScreen(flag: boolean): Promise<void> {
+    return ipcRenderer.invoke('set-full-screen', flag)
+  },
+  isFullScreen(): Promise<boolean> {
+    return ipcRenderer.invoke('is-full-screen')
   },
   getVersions: (): Promise<Versions> => {
     return ipcRenderer.invoke('get-versions')
@@ -68,26 +81,38 @@ const api: Api = {
   isLockScriptSubPath(subpath) {
     return ipcRenderer.invoke("is-lock-script-path", subpath);
   },
-  startDrag(item: DragStartItem) {
-    ipcRenderer.send('ondragstart', item)
-  },
-  onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void) {
-    ipcRenderer.removeAllListeners('job-event');
-    ipcRenderer.on('job-event', callback)
-  },
-  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void) {
-    ipcRenderer.removeAllListeners('watch-event');
-    ipcRenderer.on('watch-event', callback)
-  },
   getPathForFile(file: File) {
     return webUtils.getPathForFile(file)
   },
+  startDrag(item: DragStartItem) {
+    ipcRenderer.send('ondragstart', item)
+  },
+  minimize() {
+    ipcRenderer.send('window-minimize')
+  },
+  maximize() {
+    ipcRenderer.send('window-maximize')
+  },
+  close() {
+    ipcRenderer.send('window-close')
+  },
+  onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void) {
+    ipcRenderer.removeAllListeners('on-job-event');
+    ipcRenderer.on('on-job-event', callback)
+  },
+  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void) {
+    ipcRenderer.removeAllListeners('on-watch-event');
+    ipcRenderer.on('on-watch-event', callback)
+  },
   onSuspend(callback: (event: Electron.IpcRendererEvent) => void) {
     console.log("onSuspend")
-    ipcRenderer.removeAllListeners('monitor-suspend');
-    ipcRenderer.on('monitor-suspend', callback)
+    ipcRenderer.removeAllListeners('on-suspend');
+    ipcRenderer.on('on-suspend', callback)
+  },
+  onChangeFullScreen(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void) {
+    ipcRenderer.removeAllListeners('on-change-full-screen');
+    ipcRenderer.on('on-change-full-screen', callback)
   }
-
 
 }
 

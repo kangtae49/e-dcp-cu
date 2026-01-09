@@ -112,6 +112,7 @@ export class JustLayoutStore {
   layout: JustNode | null = null
   lastActiveId: JustId | null = null
   lastActiveTm: number = new Date().getTime()
+  fullScreenId: JustId | null = null
 
   constructor(
     @inject(JUST_LAYOUT_TYPES.JustLayoutService) service: JustLayoutService
@@ -126,6 +127,13 @@ export class JustLayoutStore {
 
   setLayout = (payload: JustNode | null) => {
     this.layout = payload
+  }
+
+  setFullScreenId = (payload: JustId | null) => {
+    if (payload) {
+      this.activeWin({justId: payload})
+    }
+    this.fullScreenId = payload
   }
 
   addTab = (payload: JustPayloadAddTab) => {

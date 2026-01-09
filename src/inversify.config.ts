@@ -8,11 +8,13 @@ import {gridDataModule} from "@/app/grid/gridData.module.ts";
 import {jobMonitorModule} from "@/app/job/jobMonitor.module.ts";
 import {pageModule} from "@/app/page/page.module.ts";
 import {justLayoutModule} from "@/app/components/just-layout/justLayout.module.ts";
+import {appModule} from "@/app/listeners/app.module.ts";
 
 const container = new Container();
 
 
 const appModules = [
+  appModule,
   justLayoutModule,
   counterModule,
   gridDataModule,

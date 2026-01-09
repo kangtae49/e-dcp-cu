@@ -8,6 +8,9 @@ import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "..
 import {JustNode} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {useEffect} from "react";
+import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
+import {useAppStore} from "@/app/listeners/useAppStore.ts";
 
 interface Props {
   layoutId: string
@@ -24,10 +27,64 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   const {onLoad} = useOnload();
 
   const justLayoutStore = useJustLayoutStore(layoutId)
+  const appStore = useAppStore(APP_STORE_ID)
 
   onLoad(() => {
     justLayoutStore.setLayout(initialValue)
   })
+
+  useEffect(() => {
+    if (justLayoutStore.fullScreenId === null) {
+      window.api.setFullScreen(false).then(() => {
+        // document.exitFullscreen()
+      })
+    }
+
+  }, [justLayoutStore.fullScreenId])
+
+  useEffect(() => {
+    // const handleKeyDown = (e: KeyboardEvent) => {
+    //   e.preventDefault()
+    //   if (e.key === 'Escape') {
+    //     console.log('key:', e.key)
+    //     justLayoutStore.setFullScreenId(null)
+    //     if (document.fullscreenElement) {
+    //       document.exitFullscreen()
+    //     }
+    //     // justLayoutStore.setFullScreenId(null)
+    //   }
+    //
+    //   if (e.key === 'F11') {
+    //     const newFullScreen = !appStore.isFullScreen
+    //     appStore.changeFullScreen(newFullScreen)
+    //     if (!newFullScreen) {
+    //       justLayoutStore.setFullScreenId(null)
+    //       if (document.fullscreenElement) {
+    //         document.exitFullscreen()
+    //       }
+    //     }
+    //   }
+    //
+    // };
+    //
+    // window.addEventListener('keydown', handleKeyDown);
+    // return () => window.removeEventListener('keydown', handleKeyDown);
+
+
+    const handleFullScreenChange = () => {
+      if (!document.fullscreenElement) {
+        justLayoutStore.setFullScreenId(null)
+        document.exitFullscreen()
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, [appStore.isFullScreen])
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={classNames(

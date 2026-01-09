@@ -79,8 +79,6 @@ const Terminal = observer(({jobId}: Props) => {
 
       const fitAddon = new FitAddon();
       term.loadAddon(fitAddon);
-      console.log("containerRef.current1", containerRef?.current)
-      console.log("containerRef.current2", containerRef?.current)
       term.open(containerRef.current);
 
       termRef.current = term;

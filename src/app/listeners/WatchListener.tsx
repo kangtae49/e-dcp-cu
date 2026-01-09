@@ -2,8 +2,9 @@ import {useEffect} from "react";
 import useGridData from "@/app/grid/useGridData.ts";
 import pathUtils from "@/utils/pathUtils.ts";
 import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {observer} from "mobx-react-lite";
 
-function WatchListener(): null {
+const WatchListener = observer((): null => {
 
   const gridDataStore = useGridData(GRID_DATA_ID)
 
@@ -43,6 +44,6 @@ function WatchListener(): null {
     })
   }, [gridDataStore])
   return null
-}
+})
 
 export default WatchListener;

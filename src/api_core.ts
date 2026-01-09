@@ -26,6 +26,13 @@ const runningProcesses: Map<string, ChildProcess> = new Map();
 export function handleEcho(_event: IpcMainInvokeEvent, message: string) {
     return message;
 }
+export function handleSetFullScreen(window: BrowserWindow, flag: boolean) {
+  window.setFullScreen(flag)
+}
+
+export function handleIsFullScreen(window: BrowserWindow) {
+  return window.isFullScreen()
+}
 
 export function handleGetVersions(_event: IpcMainInvokeEvent): Versions {
   return {
@@ -168,7 +175,7 @@ function startDataFile(subpath: string) {
 }
 
 function dispatchJobEvent(window: BrowserWindow, jobEvent: JobEvent) {
-  window.webContents.send('job-event', jobEvent);
+  window.webContents.send('on-job-event', jobEvent);
 }
 
 export function startScript(window: BrowserWindow, jobId: string, subpath: string, args: string[] = []) {
@@ -333,6 +340,20 @@ export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
   }
 }
 
+const onWindowMinimize = (window: BrowserWindow) => {
+  window.minimize()
+}
+const onWindowMaximize = (window: BrowserWindow) => {
+  if (window.isMaximized()) {
+    window.unmaximize();
+  } else {
+    window.maximize();
+  }
+}
+const onWindowClose = (window: BrowserWindow) => {
+  window.close()
+}
+
 
 const openSaveDialog = async (subpath: string, defaultName: string): Promise<DialogResult> => {
   const { filePath, canceled } = await dialog.showSaveDialog({
@@ -370,6 +391,8 @@ function uploadFile (sourcePath: string, subpath: string) {
 
 export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('echo', handleEcho);
+  ipcMain.handle('set-full-screen', (_event, flag) => handleSetFullScreen(mainWindow, flag))
+  ipcMain.handle('is-full-screen', (_event) => handleIsFullScreen(mainWindow))
   ipcMain.handle('get-versions', handleGetVersions);
   ipcMain.handle('get-dirname', handleGetDirname);
   ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
@@ -381,6 +404,13 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('get-env', handleGetEnv)
   ipcMain.handle('open-save-dialog', handleOpenSaveDialog)
   ipcMain.handle('upload-file', handleUploadFile)
+
   ipcMain.on('ondragstart', onDragStart);
-  powerMonitor.on('suspend', () => mainWindow.webContents.send('monitor-suspend'))
+  ipcMain.on('window-minimize', () => onWindowMinimize(mainWindow))
+  ipcMain.on('window-maximize', () => onWindowMaximize(mainWindow))
+  ipcMain.on('window-close', () => onWindowClose(mainWindow))
+
+  powerMonitor.on('suspend', () => mainWindow.webContents.send('on-suspend'))
+  mainWindow.on('enter-full-screen', () => mainWindow.webContents.send('on-change-full-screen', true))
+  mainWindow.on('leave-full-screen', () => mainWindow.webContents.send('on-change-full-screen', false))
 }

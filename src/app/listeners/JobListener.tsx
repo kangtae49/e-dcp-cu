@@ -2,8 +2,9 @@ import {useEffect} from "react";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {JobStatusData} from "@/app/job/jobMonitor.types.ts";
+import {observer} from "mobx-react-lite";
 
-function JobListener(): null {
+const JobListener = observer((): null => {
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
 
@@ -18,6 +19,6 @@ function JobListener(): null {
     })
   }, [])
   return null
-}
+})
 
 export default JobListener

@@ -5,9 +5,10 @@ import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 export interface WinInfo {
   title: string | GetTitleFn
   icon: JSX.Element
+  getView: GetViewFn
   canDup?: boolean
   showClose?: boolean
-  getView: GetViewFn
+  canFullScreen?: boolean
 }
 export type GetWinInfoFn = (justId: JustId) => WinInfo;
 export type GetTitleFn = (justId: JustId) => string;

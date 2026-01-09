@@ -1,5 +1,5 @@
 .just-top-menu-bar {
-    -webkit-app-region: drag;
+
 
     flex: 0 0 40px;
     height: 40px;
@@ -9,6 +9,8 @@
     border-bottom: 1px solid #1e1f22;
 }
 .just-top-menu-bar .just-title {
+    -webkit-app-region: drag;
+    flex: 1;
     font-size: 13px;
     min-width: 0;
     font-weight: normal;
@@ -18,8 +20,15 @@
     overflow: hidden;
 
 }
-.just-top-menu-bar .just-menu-center {
-    flex: 1;
+/*.just-top-menu-bar .just-menu-center {*/
+/*    -webkit-app-region: drag;*/
+/*    flex: 1;*/
+/*}*/
+
+.just-icon-system-group {
+    display: flex;
+    flex: 0 0 120px;
+    width: 120px;
 }
 
 .just-top-menu-bar .just-icon-system {

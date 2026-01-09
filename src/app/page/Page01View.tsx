@@ -462,6 +462,7 @@ const Page01View = observer(({justId}: Props)=> {
           <Activity mode={pageStore.tab === "LOG" ? "visible" : "hidden"}>
             <div className="content">
               <Terminal
+                key={pageStore.jobInfo?.jobId ?? ''}
                 jobId={pageStore.jobInfo?.jobId ?? ''}
               />
             </div>

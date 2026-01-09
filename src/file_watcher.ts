@@ -75,7 +75,7 @@ export class FileWatcher {
       action: "WATCH_FILE",
       data: eventData
     }
-    this.window.webContents.send("watch-event", watchEvent);
+    this.window.webContents.send("on-watch-event", watchEvent);
 
   }
 
