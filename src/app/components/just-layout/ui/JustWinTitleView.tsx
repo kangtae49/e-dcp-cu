@@ -131,20 +131,13 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
     }
   }
   const fullScreenWin = async () => {
-    if(justLayoutStore.fullScreenBranch === null || !isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+    if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
       justLayoutStore.setFullScreenBranch(justBranch)
     } else {
-      await window.api.setFullScreen(false)
-      justLayoutStore.setFullScreenBranch(null)
       if (document.fullscreenElement) {
-        try {
-          await document.exitFullscreen()
-        } catch (_err) {
-          // nothing
-        }
+        document.exitFullscreen();
       }
     }
-
   }
   return (
     <div

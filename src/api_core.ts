@@ -34,6 +34,9 @@ export function handleSetFullScreen(window: BrowserWindow, flag: boolean) {
 export function handleIsFullScreen(window: BrowserWindow) {
   return window.isFullScreen()
 }
+export function handleIsMaximized(window: BrowserWindow) {
+  return window.isMaximized()
+}
 
 export function handleGetVersions(_event: IpcMainInvokeEvent): Versions {
   return {
@@ -345,12 +348,14 @@ const onWindowMinimize = (window: BrowserWindow) => {
   window.minimize()
 }
 const onWindowMaximize = (window: BrowserWindow) => {
-  if (window.isMaximized()) {
-    window.unmaximize();
-  } else {
-    window.maximize();
-  }
+  window.maximize();
 }
+
+const onWindowUnMaximize = (window: BrowserWindow) => {
+  window.unmaximize();
+}
+
+
 const onWindowClose = (window: BrowserWindow) => {
   window.close()
 }
@@ -394,6 +399,7 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('echo', handleEcho);
   ipcMain.handle('set-full-screen', (_event, flag) => handleSetFullScreen(mainWindow, flag))
   ipcMain.handle('is-full-screen', (_event) => handleIsFullScreen(mainWindow))
+  ipcMain.handle('is-maximized', (_event) => handleIsMaximized(mainWindow))
   ipcMain.handle('get-versions', handleGetVersions);
   ipcMain.handle('get-dirname', handleGetDirname);
   ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
@@ -409,9 +415,12 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.on('ondragstart', onDragStart);
   ipcMain.on('window-minimize', () => onWindowMinimize(mainWindow))
   ipcMain.on('window-maximize', () => onWindowMaximize(mainWindow))
+  ipcMain.on('window-unmaximize', () => onWindowUnMaximize(mainWindow))
   ipcMain.on('window-close', () => onWindowClose(mainWindow))
 
   powerMonitor.on('suspend', () => mainWindow.webContents.send('on-suspend'))
   mainWindow.on('enter-full-screen', () => mainWindow.webContents.send('on-change-full-screen', true))
   mainWindow.on('leave-full-screen', () => mainWindow.webContents.send('on-change-full-screen', false))
+  mainWindow.on('maximize', () => mainWindow.webContents.send('on-change-maximize', true))
+  mainWindow.on('unmaximize', () => mainWindow.webContents.send('on-change-maximize', false))
 }

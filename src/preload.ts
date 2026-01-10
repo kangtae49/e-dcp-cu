@@ -10,34 +10,37 @@ import * as Electron from "electron";
 
 
 export interface Api {
-  echo(message: string): Promise<string>,
-  setFullScreen(flag: boolean): Promise<void>,
-  isFullScreen(): Promise<boolean>,
-  getVersions: () => Promise<Versions>,
-  getArgs: () => string [],
-  getEnv: () => Promise<Env>,
-  openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>,
-  uploadFile: (sourcePath: string, subpath: string) => Promise<void>,
+  echo(message: string): Promise<string>
+  setFullScreen(flag: boolean): Promise<void>
+  isFullScreen(): Promise<boolean>
+  isMaximized(): Promise<boolean>
+  getVersions: () => Promise<Versions>
+  getArgs: () => string []
+  getEnv: () => Promise<Env>
+  openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>
+  uploadFile: (sourcePath: string, subpath: string) => Promise<void>
 
-  getResourcePath(): Promise<string>,
-  // getResourceSubPath(subpath: string): Promise<string>,
+  getResourcePath(): Promise<string>
+  // getResourceSubPath(subpath: string): Promise<string>
   getPathForFile(file: File): string
-  readDataExcel(subpath: string): Promise<GridData | null>,
-  startDataFile(subpath: string): Promise<void>,
-  startScript(jobId: string, subpath: string, args: string[]): Promise<void>,
-  stopScript(jobId: string): Promise<void>,
-  isLockScriptSubPath(subpath: string): Promise<boolean>,
-  startDrag(item: DragStartItem): void,
-  minimize(): void,
-  maximize(): void,
-  close(): void,
-  // startDrag(filePath: string): void,
+  readDataExcel(subpath: string): Promise<GridData | null>
+  startDataFile(subpath: string): Promise<void>
+  startScript(jobId: string, subpath: string, args: string[]): Promise<void>
+  stopScript(jobId: string): Promise<void>
+  isLockScriptSubPath(subpath: string): Promise<boolean>
+  startDrag(item: DragStartItem): void
+  minimize(): void
+  maximize(): void
+  unmaximize(): void
+  close(): void
+  // startDrag(filePath: string): void
 
-  onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void): void,
-  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void): void,
+  onJobEvent(callback: (event: Electron.IpcRendererEvent, data: JobEvent) => void): void
+  onWatchEvent(callback: (event: Electron.IpcRendererEvent, data: WatchEvent) => void): void
 
-  onSuspend(callback: (event: Electron.IpcRendererEvent) => void): void,
-  onChangeFullScreen(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void): void,
+  onSuspend(callback: (event: Electron.IpcRendererEvent) => void): void
+  onChangeFullScreen(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void): () => void
+  onChangeMaximize(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void): () => void
 }
 
 const api: Api = {
@@ -49,6 +52,9 @@ const api: Api = {
   },
   isFullScreen(): Promise<boolean> {
     return ipcRenderer.invoke('is-full-screen')
+  },
+  isMaximized(): Promise<boolean> {
+    return ipcRenderer.invoke('is-maximized')
   },
   getVersions: (): Promise<Versions> => {
     return ipcRenderer.invoke('get-versions')
@@ -93,6 +99,9 @@ const api: Api = {
   maximize() {
     ipcRenderer.send('window-maximize')
   },
+  unmaximize() {
+    ipcRenderer.send('window-unmaximize')
+  },
   close() {
     ipcRenderer.send('window-close')
   },
@@ -110,8 +119,17 @@ const api: Api = {
     ipcRenderer.on('on-suspend', callback)
   },
   onChangeFullScreen(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void) {
-    ipcRenderer.removeAllListeners('on-change-full-screen');
     ipcRenderer.on('on-change-full-screen', callback)
+    return () => {
+      ipcRenderer.removeListener('on-change-full-screen', callback);
+    }
+  },
+  onChangeMaximize(callback: (event: Electron.IpcRendererEvent, flag: boolean) => void) {
+    // ipcRenderer.removeAllListeners('on-change-maximize');
+    ipcRenderer.on('on-change-maximize', callback)
+    return () => {
+      ipcRenderer.removeListener('on-change-maximize', callback);
+    }
   }
 
 }

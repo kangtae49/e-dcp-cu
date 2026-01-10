@@ -13,8 +13,18 @@ function TopMenuBar({justId: _}: Props) {
   const minimize = () => {
     window.api.minimize()
   }
-  const maximize = () => {
-    window.api.maximize()
+  const maximize = async () => {
+    console.log("maximize")
+    const isFullScreen = await window.api.isFullScreen();
+    const isMaximized = await window.api.isMaximized();
+    if (isFullScreen) {
+      await window.api.setFullScreen(false)
+    } else if (isMaximized) {
+      window.api.unmaximize()
+    } else {
+      window.api.maximize()
+    }
+
   }
   const close = () => {
     window.api.close()

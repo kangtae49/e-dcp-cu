@@ -7,7 +7,8 @@ import {AppService} from "@/app/listeners/app.service.ts";
 export class AppStore {
   service: AppService;
 
-  isFullScreen: boolean = false
+  // isFullScreen: boolean = false
+  // isMaximize: boolean = false
 
   constructor(
     @inject(APP_TYPES.AppService) service: AppService
@@ -16,5 +17,6 @@ export class AppStore {
     makeAutoObservable(this, {service: false}, { autoBind: true })
   }
 
-  changeFullScreen = (flag: boolean) => { this.isFullScreen = flag }
+  // setFullScreen = (flag: boolean) => { this.isFullScreen = flag }
+  // setMaximize = (flag: boolean) => { this.isMaximize = flag }
 }

@@ -56,7 +56,7 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
 
   useEffect(() => {
     if (isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-      window.api.setFullScreen(true)
+      // window.api.setFullScreen(true)
       refNode.current?.requestFullscreen()
     }
   }, [justLayoutStore.fullScreenBranch])

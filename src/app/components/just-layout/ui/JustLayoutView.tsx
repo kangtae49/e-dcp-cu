@@ -33,56 +33,56 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
     justLayoutStore.setLayout(initialValue)
   })
 
+
   useEffect(() => {
-    if (justLayoutStore.fullScreenBranch === null) {
-      window.api.setFullScreen(false).then(() => {
-        // document.exitFullscreen()
-      })
+    const isFullScreen = justLayoutStore.isFullScreen
+    console.log('isFullScreen', isFullScreen, 'isMaximize', justLayoutStore.isMaximize, 'justLayoutStore.fullScreenBranch', justLayoutStore.fullScreenBranch, 'document.fullscreenElement', document.fullscreenElement)
+    if (isFullScreen) {
+      //
+    } else {
+      justLayoutStore.setFullScreenBranch(null)
+      if (document.fullscreenElement) {
+        document.exitFullscreen()
+      }
+    }
+  }, [justLayoutStore.isFullScreen])
+
+  useEffect(() => {
+    const removeFullScreen = window.api.onChangeFullScreen((_event, flag) => {
+      justLayoutStore.setFullScreen(flag)
+    })
+    const removeMaximize = window.api.onChangeMaximize((_event, flag) => {
+      justLayoutStore.setMaximize(flag)
+    })
+
+    const handleFullScreenChange = () => {
     }
 
-  }, [justLayoutStore.fullScreenBranch])
-
-  useEffect(() => {
-    // const handleKeyDown = (e: KeyboardEvent) => {
-    //   e.preventDefault()
-    //   if (e.key === 'Escape') {
-    //     console.log('key:', e.key)
-    //     justLayoutStore.setFullScreenId(null)
-    //     if (document.fullscreenElement) {
-    //       document.exitFullscreen()
-    //     }
-    //     // justLayoutStore.setFullScreenId(null)
-    //   }
-    //
-    //   if (e.key === 'F11') {
-    //     const newFullScreen = !appStore.isFullScreen
-    //     appStore.changeFullScreen(newFullScreen)
-    //     if (!newFullScreen) {
-    //       justLayoutStore.setFullScreenId(null)
-    //       if (document.fullscreenElement) {
-    //         document.exitFullscreen()
-    //       }
-    //     }
-    //   }
-    //
-    // };
-    //
-    // window.addEventListener('keydown', handleKeyDown);
-    // return () => window.removeEventListener('keydown', handleKeyDown);
-
-
-    const handleFullScreenChange = async () => {
-      if (!document.fullscreenElement) {
-        justLayoutStore.setFullScreenBranch(null)
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        console.log('esc')
+        const isMaximized = await window.api.isMaximized();
+        if (isMaximized) {
+          window.api.unmaximize()
+        }
       }
-    };
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
 
     document.addEventListener('fullscreenchange', handleFullScreenChange);
 
     return () => {
+      removeFullScreen()
+      removeMaximize()
+      window.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
-    };
-  }, [appStore.isFullScreen])
+    }
+  }, [])
+
+  useEffect(() => {
+    console.log('isMaximize', justLayoutStore.isMaximize)
+  }, [justLayoutStore.isMaximize])
 
   return (
     <DndProvider backend={HTML5Backend}>

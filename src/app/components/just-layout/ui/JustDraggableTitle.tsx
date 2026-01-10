@@ -10,8 +10,6 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {useAppStore} from "@/app/listeners/useAppStore.ts";
-import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
 import {isEqual} from "lodash";
 
 export interface JustDragItem {
@@ -55,7 +53,6 @@ const JustDraggableTitle = observer((props: Prop) => {
   // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const justLayoutStore = useJustLayoutStore(layoutId);
-  const appStore = useAppStore(APP_STORE_ID);
 
   const clickClose = (justId: JustId) => {
     justLayoutStore.removeWin({
@@ -74,19 +71,13 @@ const JustDraggableTitle = observer((props: Prop) => {
     })
   }
   const fullScreenWin = async (justId: JustId) => {
-    console.log("fullScreenWin", justId, appStore.isFullScreen)
+    console.log("fullScreenWin", justId, justLayoutStore.isFullScreen)
     justLayoutStore.activeWin({justId})
     if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
       justLayoutStore.setFullScreenBranch(justBranch)
     } else {
-      await window.api.setFullScreen(false)
-      justLayoutStore.setFullScreenBranch(null)
       if (document.fullscreenElement) {
-        try {
-          await document.exitFullscreen()
-        } catch (_err) {
-          // nothing
-        }
+        document.exitFullscreen();
       }
     }
   }

@@ -114,6 +114,9 @@ export class JustLayoutStore {
   lastActiveTm: number = new Date().getTime()
   fullScreenBranch: JustBranch | null = null
 
+  isFullScreen: boolean = false
+  isMaximize: boolean = false
+
   constructor(
     @inject(JUST_LAYOUT_TYPES.JustLayoutService) service: JustLayoutService
   ) {
@@ -132,6 +135,8 @@ export class JustLayoutStore {
   setFullScreenBranch = (payload: JustBranch | null) => {
     this.fullScreenBranch = payload
   }
+  setFullScreen = (flag: boolean) => { this.isFullScreen = flag }
+  setMaximize = (flag: boolean) => { this.isMaximize = flag }
 
   addTab = (payload: JustPayloadAddTab) => {
     const branch = this.service.getTabBranch(this.layout, [])
