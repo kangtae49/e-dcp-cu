@@ -1,17 +1,20 @@
 import {type DropTargetMonitor, useDrop} from "react-dnd";
 import classNames from 'classnames';
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faEllipsisVertical, faAngleDown, faCircleXmark} from "@fortawesome/free-solid-svg-icons"
+import {faEllipsisVertical, faAngleDown, faCircleXmark, faExpand} from "@fortawesome/free-solid-svg-icons"
 
 
 import JustDraggableTitle, {type JustDragItem} from "./JustDraggableTitle";
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustId, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {isEqual} from "lodash";
+import {useAppStore} from "@/app/listeners/useAppStore.ts";
+import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
 
 
 interface Prop {
@@ -29,6 +32,7 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
 
+  const appStore = useAppStore(APP_STORE_ID);
   const justLayoutStore = useJustLayoutStore(layoutId);
 
   const clickClose = (justId: JustId) => {
@@ -127,7 +131,22 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
       return title(justId)
     }
   }
+  const fullScreenWin = async () => {
+    if(justLayoutStore.fullScreenBranch === null || !isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+      justLayoutStore.setFullScreenBranch(justBranch)
+    } else {
+      await window.api.setFullScreen(false)
+      justLayoutStore.setFullScreenBranch(null)
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen()
+        } catch (_err) {
+          // nothing
+        }
+      }
+    }
 
+  }
   return (
     <div
       className={classNames("just-win-title")}
@@ -184,7 +203,15 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
               Close All
             </div>
             <div className="just-icon" />
-
+          </MenuItem>
+          <MenuItem className="just-menu-item" onClick={() => fullScreenWin()}>
+            <div className="just-icon">
+              <Icon icon={faExpand} />
+            </div>
+            <div className="just-title">
+              FullScreen
+            </div>
+            <div className="just-icon" />
           </MenuItem>
         </Menu>
       </div>

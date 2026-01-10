@@ -12,6 +12,7 @@ import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStor
 import {observer} from "mobx-react-lite";
 import {useAppStore} from "@/app/listeners/useAppStore.ts";
 import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
+import {isEqual} from "lodash";
 
 export interface JustDragItem {
   justId: JustId
@@ -72,10 +73,22 @@ const JustDraggableTitle = observer((props: Prop) => {
       cloneJustId
     })
   }
-  const fullScreenWin = (justId: JustId) => {
+  const fullScreenWin = async (justId: JustId) => {
     console.log("fullScreenWin", justId, appStore.isFullScreen)
     justLayoutStore.activeWin({justId})
-    justLayoutStore.setFullScreenBranch(justBranch)
+    if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+      justLayoutStore.setFullScreenBranch(justBranch)
+    } else {
+      await window.api.setFullScreen(false)
+      justLayoutStore.setFullScreenBranch(null)
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen()
+        } catch (_err) {
+          // nothing
+        }
+      }
+    }
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
@@ -224,15 +237,15 @@ const JustDraggableTitle = observer((props: Prop) => {
           </MenuItem>
         }
         {(winInfo.canFullScreen ?? false) &&
-            <MenuItem onClick={() => fullScreenWin(justId)}>
-                <div className="just-icon">
-                    <Icon icon={faExpand} />
-                </div>
-                <div className="just-title">
-                    FullScreen
-                </div>
-                <div className="just-icon" />
-            </MenuItem>
+          <MenuItem onClick={() => fullScreenWin(justId)}>
+              <div className="just-icon">
+                  <Icon icon={faExpand} />
+              </div>
+              <div className="just-title">
+                  FullScreen
+              </div>
+              <div className="just-icon" />
+          </MenuItem>
         }
       </ControlledMenu>
     </div>

@@ -71,10 +71,9 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
     // return () => window.removeEventListener('keydown', handleKeyDown);
 
 
-    const handleFullScreenChange = () => {
+    const handleFullScreenChange = async () => {
       if (!document.fullscreenElement) {
         justLayoutStore.setFullScreenBranch(null)
-        document.exitFullscreen()
       }
     };
 

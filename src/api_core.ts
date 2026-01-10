@@ -27,6 +27,7 @@ export function handleEcho(_event: IpcMainInvokeEvent, message: string) {
     return message;
 }
 export function handleSetFullScreen(window: BrowserWindow, flag: boolean) {
+  console.log('handleSetFullScreen', flag)
   window.setFullScreen(flag)
 }
 
