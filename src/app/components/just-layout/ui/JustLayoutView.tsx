@@ -60,8 +60,14 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
     const handleKeyDown = async (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         console.log('esc')
-        const isMaximized = await window.api.isMaximized();
-        if (isMaximized) {
+        const isMaximized = justLayoutStore.isMaximize;
+        const isFullScreen = justLayoutStore.isFullScreen;
+        console.log('isFullScreen', isFullScreen, 'isMaximized', isMaximized)
+        console.log('isFullScreen', await window.api.isFullScreen(), 'isMaximized', await window.api.isMaximized())
+        if (isFullScreen) {
+          justLayoutStore.setFullScreenBranch(null)
+          window.api.setFullScreen(false)
+        } else if (isMaximized) {
           window.api.unmaximize()
         }
       }
