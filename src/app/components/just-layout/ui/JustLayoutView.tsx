@@ -9,8 +9,6 @@ import {JustNode} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
 import {useEffect} from "react";
-import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
-import {useAppStore} from "@/app/listeners/useAppStore.ts";
 
 interface Props {
   layoutId: string
