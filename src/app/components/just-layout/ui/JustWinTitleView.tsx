@@ -12,7 +12,6 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustId, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {isEqual} from "lodash";
 
 
 interface Prop {

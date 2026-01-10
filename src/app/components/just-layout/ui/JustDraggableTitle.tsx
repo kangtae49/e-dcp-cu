@@ -10,8 +10,6 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {isEqual} from "lodash";
-import {CONTENTS_VIEW} from "@/app/layout/layout.tsx";
 
 export interface JustDragItem {
   justId: JustId
