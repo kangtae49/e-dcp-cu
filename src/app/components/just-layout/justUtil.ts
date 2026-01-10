@@ -1,6 +1,7 @@
 
 import {stableStringify} from "@/app/components/just-layout/json-util.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import { isEqual } from "lodash";
 
 
 
@@ -21,8 +22,9 @@ export class JustUtil {
   }
 
   static isEquals(justId1: JustId | null | undefined, justId2: JustId | null | undefined): boolean {
-    if (justId1 == null || justId2 == null) return false
-    return JustUtil.toString(justId1) === JustUtil.toString(justId2)
+    return isEqual(justId1, justId2)
+    // if (justId1 == null || justId2 == null) return false
+    // return JustUtil.toString(justId1) === JustUtil.toString(justId2)
   }
 
   static indexOf(tab: JustId[], justId: JustId): number {

@@ -4,8 +4,6 @@ import {useCounterStore} from "@/app/counter/useCounterStore.tsx";
 import {useAppStore} from "@/app/listeners/useAppStore.ts";
 import {APP_STORE_ID} from "@/app/listeners/app.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
-import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
