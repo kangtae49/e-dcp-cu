@@ -129,7 +129,8 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
     }
   }
   const fullScreenWin = async () => {
-    if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+    if(justLayoutStore.fullScreenBranch == null) {
       justLayoutStore.setFullScreenBranch(justBranch)
     } else {
       if (document.fullscreenElement) {
@@ -137,6 +138,27 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
       }
     }
   }
+
+  const fullScreenBranch = async (branch: JustBranch) => {
+    // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
+    if(justLayoutStore.fullScreenBranch == null) {
+      justLayoutStore.setFullScreenBranch(branch)
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    }
+  }
+
+  const isParentBranch = () => {
+    if(justLayoutStore.fullScreenBranch !== null) return false
+    if (justBranch.length === 0) return false;
+    const node = justLayoutStore.getNodeAtBranch({branch: justBranch})
+    if (node === null) return false;
+    return !node.name
+  }
+
+
   return (
     <div
       className={classNames("just-win-title")}
@@ -199,10 +221,21 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
               <Icon icon={faExpand} />
             </div>
             <div className="just-title">
-              FullScreen
+              Screen
             </div>
             <div className="just-icon" />
           </MenuItem>
+          { isParentBranch() &&
+            <MenuItem className="just-menu-item" onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
+                <div className="just-icon">
+                    <Icon icon={faExpand} />
+                </div>
+                <div className="just-title">
+                    P-Screen
+                </div>
+                <div className="just-icon" />
+            </MenuItem>
+          }
         </Menu>
       </div>
     </div>

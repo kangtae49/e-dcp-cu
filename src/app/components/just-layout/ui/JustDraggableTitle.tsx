@@ -11,6 +11,7 @@ import {JustBranch, JustDirection, JustId, JustPos, JustStack} from "../justLayo
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
 import {isEqual} from "lodash";
+import {CONTENTS_VIEW} from "@/app/layout/layout.tsx";
 
 export interface JustDragItem {
   justId: JustId
@@ -73,13 +74,33 @@ const JustDraggableTitle = observer((props: Prop) => {
   const fullScreenWin = async (justId: JustId) => {
     console.log("fullScreenWin", justId, justLayoutStore.isFullScreen)
     justLayoutStore.activeWin({justId})
-    if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+
+    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+    if(justLayoutStore.fullScreenBranch == null) {
       justLayoutStore.setFullScreenBranch(justBranch)
     } else {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       }
     }
+  }
+  const fullScreenBranch = async (branch: JustBranch) => {
+    // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
+    if(justLayoutStore.fullScreenBranch == null) {
+      justLayoutStore.setFullScreenBranch(branch)
+    } else {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+    }
+  }
+
+  const isParentBranch = () => {
+    if(justLayoutStore.fullScreenBranch !== null) return false
+    if (justBranch.length === 0) return false;
+    const node = justLayoutStore.getNodeAtBranch({branch: justBranch})
+    if (node === null) return false;
+    return !node.name
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
@@ -171,6 +192,8 @@ const JustDraggableTitle = observer((props: Prop) => {
     toggleMenu(true);
   }, [toggleMenu]);
 
+
+
   // console.log("JustDraggableTitle", winId, winInfo)
   return (
     <div
@@ -228,15 +251,28 @@ const JustDraggableTitle = observer((props: Prop) => {
           </MenuItem>
         }
         {(winInfo.canFullScreen ?? false) &&
-          <MenuItem onClick={() => fullScreenWin(justId)}>
-              <div className="just-icon">
-                  <Icon icon={faExpand} />
-              </div>
-              <div className="just-title">
-                  FullScreen
-              </div>
-              <div className="just-icon" />
-          </MenuItem>
+          <>
+            <MenuItem onClick={() => fullScreenWin(justId)}>
+                <div className="just-icon">
+                    <Icon icon={faExpand} />
+                </div>
+                <div className="just-title">
+                    Screen
+                </div>
+                <div className="just-icon" />
+            </MenuItem>
+            { isParentBranch() &&
+              <MenuItem onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
+                  <div className="just-icon">
+                      <Icon icon={faExpand} />
+                  </div>
+                  <div className="just-title">
+                      P-Screen
+                  </div>
+                  <div className="just-icon" />
+              </MenuItem>
+            }
+          </>
         }
       </ControlledMenu>
     </div>

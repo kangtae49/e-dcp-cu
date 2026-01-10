@@ -1,8 +1,8 @@
-import { injectable, inject } from "inversify";
+import {inject, injectable} from "inversify";
 import {JUST_LAYOUT_TYPES, JustBranch, JustDirection, JustId, JustNode, JustPos} from "./justLayout.types.ts";
-import { JustLayoutService } from "./justLayout.service";
+import {JustLayoutService} from "./justLayout.service";
 import {makeAutoObservable} from "mobx";
-import { JustUtil} from "@/app/components/just-layout/justUtil.ts";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 
 
 export interface JustPayloadInsert {
@@ -77,6 +77,10 @@ interface PayloadGetDupWinIds{
 }
 
 interface PayloadGetWinIdsByBranch {
+  branch: JustBranch
+}
+
+interface PayloadGetNodeAtBranch {
   branch: JustBranch
 }
 
@@ -279,6 +283,13 @@ export class JustLayoutStore {
     }
   }
 
+  getNodeByNodeName = ({nodeName}: PayloadGetSize) => {
+    const layout = this.layout;
+    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
+    if (branch == null) return null;
+    return this.service.getNodeAtBranch(layout, branch)
+  }
+
   getSizeByNodeName = ({nodeName}: PayloadGetSize) => {
     const layout = this.layout;
     const branch = this.service.getBranchByNodeName(layout, nodeName, [])
@@ -340,6 +351,10 @@ export class JustLayoutStore {
 
   getWinIdsByBranch = ({branch}: PayloadGetWinIdsByBranch) => {
     return this.service.queryWinIdsByStack(this.layout ?? null, branch)
+  }
+
+  getNodeAtBranch = ({branch}: PayloadGetNodeAtBranch) => {
+    return this.service.getNodeAtBranch(this.layout ?? null, branch)
   }
 
   openWinMenu = ({justId, nodeName}: PayloadOpenWinMenu) => {
