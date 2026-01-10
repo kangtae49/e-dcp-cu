@@ -27,7 +27,6 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   const {onLoad} = useOnload();
 
   const justLayoutStore = useJustLayoutStore(layoutId)
-  const appStore = useAppStore(APP_STORE_ID)
 
   onLoad(() => {
     justLayoutStore.setLayout(initialValue)
