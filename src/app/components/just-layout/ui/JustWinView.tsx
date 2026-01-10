@@ -5,7 +5,6 @@ import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {isEqual} from "lodash";
 
 interface Prop {
   layoutId: string

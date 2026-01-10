@@ -7,7 +7,6 @@ import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "..
 import {JustBranch, JustNode, JustSplit, JustSplitDirection} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {isEqual} from "lodash";
 
 interface Props {

@@ -5,7 +5,7 @@ import useOnload from "@/hooks/useOnload.ts";
 import JustNodeView from "./JustNodeView.tsx";
 import classNames from "classnames";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import {JustBranch, JustNode} from "@/app/components/just-layout/justLayout.types.ts";
+import {JustNode} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
 import {useEffect} from "react";

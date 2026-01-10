@@ -10,11 +10,11 @@ import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 interface Props {
   justId: JustId
 }
-export const CounterView = observer(({justId}: Props) => {
+export const CounterView = observer(({justId: _}: Props) => {
 
   const counterStore = useCounterStore("abc")
   const appStore = useAppStore(APP_STORE_ID)
-  const layoutStore = useJustLayoutStore(LAYOUT_ID)
+  // const layoutStore = useJustLayoutStore(LAYOUT_ID)
 
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc' }}>
