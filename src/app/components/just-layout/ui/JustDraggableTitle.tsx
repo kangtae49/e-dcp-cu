@@ -74,7 +74,8 @@ const JustDraggableTitle = observer((props: Prop) => {
   }
   const fullScreenWin = (justId: JustId) => {
     console.log("fullScreenWin", justId, appStore.isFullScreen)
-    justLayoutStore.setFullScreenId(justId)
+    justLayoutStore.activeWin({justId})
+    justLayoutStore.setFullScreenBranch(justBranch)
   }
 
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {

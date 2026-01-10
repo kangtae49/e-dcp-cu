@@ -107,16 +107,6 @@ const JustWinBodyView = observer((props: Prop) => {
     }
   }, [drop]);
 
-
-  useEffect(() => {
-    if (JustUtil.isEquals(justLayoutStore.fullScreenId, justStack.active)) {
-      window.api.setFullScreen(true)
-      ref.current?.requestFullscreen()
-      // window.api.setFullScreen(true).then(() => {
-      // })
-    }
-  }, [justLayoutStore.fullScreenId])
-  const isFullScreen = JustUtil.isEquals(justLayoutStore.fullScreenId, justStack.active);
   return (
     <div
       className={classNames(
@@ -124,7 +114,6 @@ const JustWinBodyView = observer((props: Prop) => {
         {
           "isOver": isOver,
           "last-active": JustUtil.isEquals(justStack.active, justLayoutStore.lastActiveId),
-          "fullscreen": isFullScreen
         })
       }
       ref={ref}

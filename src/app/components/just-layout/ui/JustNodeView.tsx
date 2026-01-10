@@ -2,11 +2,13 @@ import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import JustSplitter, {type SplitSize} from "./JustSplitter.tsx";
-import {Activity, type CSSProperties, useRef} from "react";
+import {Activity, type CSSProperties, useEffect, useRef} from "react";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {JustBranch, JustNode, JustSplit, JustSplitDirection} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
+import {isEqual} from "lodash";
 
 interface Props {
   layoutId: string
@@ -53,8 +55,24 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
     return {}
   }
 
+  useEffect(() => {
+    if (isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+      window.api.setFullScreen(true)
+      refNode.current?.requestFullscreen()
+    }
+  }, [justLayoutStore.fullScreenBranch])
+
+  const isFullScreen = isEqual(justLayoutStore.fullScreenBranch, justBranch);
+
   return (
-    <div className="just-node" ref={refNode}>
+    <div ref={refNode}
+      className={classNames(
+        "just-node",
+        {
+          "fullscreen": isFullScreen,
+        })
+      }
+    >
       {node?.type === 'stack' && (
         <JustWinView
           hideTitle={node.hideTitle ?? hideTitle}

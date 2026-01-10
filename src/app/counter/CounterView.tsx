@@ -21,8 +21,8 @@ export const CounterView = observer(({justId}: Props) => {
       <h2>Counter: {counterStore.count}</h2>
       <button onClick={() => counterStore.increment()}>+</button>
       <div>isFullScreen: {appStore.isFullScreen ? 'true' : 'false'}</div>
-      <button onClick={() => layoutStore.setFullScreenId(justId)}>setFullScreen(true)</button>
-      <button onClick={() => layoutStore.setFullScreenId(null)}>setFullScreen(false)</button>
+      {/*<button onClick={() => layoutStore.setFullScreenId(justId)}>setFullScreen(true)</button>*/}
+      {/*<button onClick={() => layoutStore.setFullScreenId(null)}>setFullScreen(false)</button>*/}
       {/*<button onClick={() => window.api.setFullScreen(true)}>setFullScreen(true)</button>*/}
       {/*<button onClick={() => window.api.setFullScreen(false)}>setFullScreen(false)</button>*/}
     </div>

@@ -5,6 +5,7 @@ import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {isEqual} from "lodash";
 
 interface Prop {
   layoutId: string
@@ -21,6 +22,8 @@ interface Prop {
 const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+  // const isFullScreen = isEqual(justLayoutStore.fullScreenBranch, justBranch);
+
   const showTitle = hideTitle !== true
   const onFocus = () => {
     if (justStack.active) {

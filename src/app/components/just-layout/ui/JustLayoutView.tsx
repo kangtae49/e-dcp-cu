@@ -5,7 +5,7 @@ import useOnload from "@/hooks/useOnload.ts";
 import JustNodeView from "./JustNodeView.tsx";
 import classNames from "classnames";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import {JustNode} from "@/app/components/just-layout/justLayout.types.ts";
+import {JustBranch, JustNode} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
 import {useEffect} from "react";
@@ -34,13 +34,13 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   })
 
   useEffect(() => {
-    if (justLayoutStore.fullScreenId === null) {
+    if (justLayoutStore.fullScreenBranch === null) {
       window.api.setFullScreen(false).then(() => {
         // document.exitFullscreen()
       })
     }
 
-  }, [justLayoutStore.fullScreenId])
+  }, [justLayoutStore.fullScreenBranch])
 
   useEffect(() => {
     // const handleKeyDown = (e: KeyboardEvent) => {
@@ -73,7 +73,7 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
 
     const handleFullScreenChange = () => {
       if (!document.fullscreenElement) {
-        justLayoutStore.setFullScreenId(null)
+        justLayoutStore.setFullScreenBranch(null)
         document.exitFullscreen()
       }
     };
