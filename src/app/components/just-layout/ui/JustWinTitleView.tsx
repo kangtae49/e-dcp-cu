@@ -32,7 +32,6 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
 
-  const appStore = useAppStore(APP_STORE_ID);
   const justLayoutStore = useJustLayoutStore(layoutId);
 
   const clickClose = (justId: JustId) => {
