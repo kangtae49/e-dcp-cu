@@ -3,7 +3,6 @@ import { JUST_LAYOUT_TYPES } from "./justLayout.types";
 import { JustLayoutService } from "./justLayout.service";
 import { JustLayoutStore } from "./justLayout.store";
 import {container} from "@/inversify.config.ts";
-import {toJS} from "mobx";
 
 const storeCache = new Map<string, JustLayoutStore>();
 (window as any).justLayoutStore = storeCache;
