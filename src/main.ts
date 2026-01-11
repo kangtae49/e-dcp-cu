@@ -8,7 +8,7 @@ import {
   registerHandlers,
 } from "./api_core";
 import {FileWatcher} from "./file_watcher.ts";
-
+import { enableLogging } from "mobx-logger";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -81,6 +81,14 @@ app.on('ready', () => {
   // const cur_path = await getCurPath(process.argv, app.isPackaged);
 
   // installExtensions()
+  if (process.env.NODE_ENV === 'development') {
+    enableLogging({
+      action: true,      // 어떤 액션이 실행되었는지 표시
+      reaction: false,   // 리액션(자동 업데이트) 로그는 너무 많을 수 있으니 일단 false
+      transaction: true, // 트랜잭션 단위 로그 표시
+      compute: true,     // computed 값의 변화 표시
+    });
+  }
 
 
   const mainWindow = createWindow()
