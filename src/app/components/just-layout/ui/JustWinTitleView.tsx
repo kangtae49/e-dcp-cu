@@ -129,25 +129,46 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
   }
   const fullScreenWin = async (hideTitle: boolean = false) => {
     // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-    if(justLayoutStore.fullScreenBranch == null) {
-      justLayoutStore.setFullScreenBranch(justBranch)
-      justLayoutStore.setFullScreenHideTitle(hideTitle)
-    } else {
+    const isFullScreen = justLayoutStore.isFullScreen;
+    if (isFullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else {
+        window.api.setFullScreen(false)
       }
+    } else {
+      justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenHideTitle(hideTitle)
     }
+    // if(justLayoutStore.fullScreenBranch == null) {
+    //   justLayoutStore.setFullScreenBranch(justBranch)
+    //   justLayoutStore.setFullScreenHideTitle(hideTitle)
+    // } else {
+    //   if (document.fullscreenElement) {
+    //     document.exitFullscreen();
+    //   }
+    // }
   }
 
   const fullScreenBranch = async (branch: JustBranch) => {
     // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
-    if(justLayoutStore.fullScreenBranch == null) {
-      justLayoutStore.setFullScreenBranch(branch)
-    } else {
+    const isFullScreen = justLayoutStore.isFullScreen;
+    if (isFullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else {
+        window.api.setFullScreen(false)
       }
+    } else {
+      justLayoutStore.setFullScreenBranch(branch)
     }
+    // if(justLayoutStore.fullScreenBranch == null) {
+    //   justLayoutStore.setFullScreenBranch(branch)
+    // } else {
+    //   if (document.fullscreenElement) {
+    //     document.exitFullscreen();
+    //   }
+    // }
   }
 
   const isParentBranch = () => {

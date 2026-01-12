@@ -58,6 +58,7 @@
     "vite-tsconfig-paths": "^5.1.4"
   },
   "dependencies": {
+    "@excalidraw/excalidraw": "^0.18.0",
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
     "@fortawesome/free-solid-svg-icons": "^7.1.0",
     "@fortawesome/react-fontawesome": "^3.1.1",

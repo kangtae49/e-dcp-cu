@@ -1,6 +1,6 @@
 import {WinInfo} from "@/app/components/just-layout/index.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
-import {faCircleQuestion, faCircleInfo, faChartLine, faTableList, faTerminal} from "@fortawesome/free-solid-svg-icons";
+import {faCircleQuestion, faCircleInfo, faChartLine, faTableList, faTerminal, faPen} from "@fortawesome/free-solid-svg-icons";
 import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
 import Jdenticon from "react-jdenticon";
 import Page01View from "@/app/page/Page01View.tsx";
@@ -18,6 +18,7 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CounterView} from "@/app/counter/CounterView.tsx";
 import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
 import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
+import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
 
 
 export const LAYOUT_ID = "JUST-LAYOUT"
@@ -53,6 +54,7 @@ export type ViewId = "top-menu" | "status-bar"
   | "chart-view"
   | "job-list-view"
   | "job-monitor-view"
+  | "excalidraw-view"
   | "counter-view"
   // | "demo" | "demo-grid" | "demo-line-chart"
 
@@ -60,6 +62,7 @@ export const DND_ACCEPT_CONTENT = [
   "page01",
   "grid-view", "chart-view", "job-monitor-view",
   "about",
+  "excalidraw-view"
 ]
 
 export interface SideMenuItem {
@@ -84,6 +87,7 @@ export const jobListViewId: JustId = {viewId: 'job-list-view', title: 'Job List'
 // export const jobMonitorViewId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor' , params: {jobId: 'XXX'}};
 
 export const counterViewId: JustId = {viewId: 'counter-view', title: 'Counter View'};
+export const excalidrawViewId: JustId = {viewId: 'excalidraw-view', title: 'Excalidraw View'};
 
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   {menuId: page01Id, menuName: page01Id.title},
@@ -207,6 +211,17 @@ export const viewMap: Record<ViewId, WinInfo> = {
       )
     }
   },
+  "excalidraw-view": {
+    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
+    icon: <Icon icon={faPen} />,
+    canDup: true,
+    canFullScreen: true,
+    getView: (justId) => {
+      return (
+        <ExcalidrawView justId={justId} />
+      )
+    }
+  },
   "counter-view": {
     title: (justId) => JustUtil.getParamString(justId, 'jobId'),
     icon: <Jdenticon size="30" value="counter-view" />,
@@ -285,8 +300,8 @@ export const layoutSideMenu: JustNode = {
     },
     second: {
       type: 'stack',
-      tabs: [aboutId, counterViewId],
-      active: aboutId
+      tabs: [aboutId, excalidrawViewId],
+      active: excalidrawViewId
     }
   },
 }

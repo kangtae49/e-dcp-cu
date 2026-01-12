@@ -70,28 +70,62 @@ const JustDraggableTitle = observer((props: Prop) => {
     })
   }
   const fullScreenWin = async (justId: JustId, hideTitle: boolean = false) => {
-    console.log("fullScreenWin", justId, justLayoutStore.isFullScreen)
-    justLayoutStore.activeWin({justId})
+    const isFullScreen = justLayoutStore.isFullScreen;
+    // const isMaximized = justLayoutStore.isMaximize;
+    // console.log("fullScreenWin", justId, isFullScreen, isMaximized)
+    // console.log("fullScreenWin2", justId, await window.api.isFullScreen(), await window.api.isMaximized())
 
-    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-    if(justLayoutStore.fullScreenBranch == null) {
-      justLayoutStore.setFullScreenBranch(justBranch)
-      justLayoutStore.setFullScreenHideTitle(hideTitle)
-    } else {
+    justLayoutStore.activeWin({justId})
+    if (isFullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else {
+        window.api.setFullScreen(false)
       }
+    } else {
+      justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenHideTitle(hideTitle)
     }
+
+
+    // const isMaximized = justLayoutStore.isMaximize;
+    // if(isMaximized) {
+    //   window.api.unmaximize()
+    // }
+    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
+    // if(justLayoutStore.fullScreenBranch == null) {
+    //   justLayoutStore.setFullScreenBranch(justBranch)
+    //   justLayoutStore.setFullScreenHideTitle(hideTitle)
+    // } else {
+    //   if (document.fullscreenElement) {
+    //     document.exitFullscreen();
+    //   }
+    // }
   }
   const fullScreenBranch = async (branch: JustBranch) => {
     // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
-    if(justLayoutStore.fullScreenBranch == null) {
-      justLayoutStore.setFullScreenBranch(branch)
-    } else {
+    const isFullScreen = justLayoutStore.isFullScreen;
+    if (isFullScreen) {
       if (document.fullscreenElement) {
         document.exitFullscreen();
+      } else {
+        window.api.setFullScreen(false)
       }
+    } else {
+      justLayoutStore.setFullScreenBranch(branch)
     }
+    // const isMaximized = justLayoutStore.isMaximize;
+    // if(isMaximized) {
+    //   window.api.unmaximize()
+    // }
+
+    // if(justLayoutStore.fullScreenBranch == null) {
+    //   justLayoutStore.setFullScreenBranch(branch)
+    // } else {
+    //   if (document.fullscreenElement) {
+    //     document.exitFullscreen();
+    //   }
+    // }
   }
 
   const isParentBranch = () => {

@@ -41,9 +41,6 @@
     height: 100%;
 }
 
-.just-win .just-win-body.fullscreen {
-    background-color: white;
-}
 
 .just-win-title .just-title-list {
     flex: 1;
