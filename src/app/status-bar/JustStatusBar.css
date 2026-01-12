@@ -2,7 +2,7 @@
     --icon-color: white;
     padding: 0 5px 0 5px;
     display: flex;
-    background-color: rgba(0, 0, 0, 0.82);
+    /*background-color: rgba(0, 0, 0, 0.82);*/
     /*border-top: 1px solid #1e1f22;*/
     column-gap: 5px;
     align-items: center;

@@ -23,6 +23,11 @@ export type JustNode = JustStack | JustSplit
 
 export type JustBranch = JustSplitDirection []
 
+export interface NodeInfo {
+  node: JustNode
+  branch: JustBranch
+}
+
 
 export interface JustNodeBase {
   type: JustType

@@ -101,6 +101,7 @@ const JustDraggableTitle = observer((props: Prop) => {
     return !node.name
   }
 
+
   const clickTitle = (e: React.MouseEvent<HTMLDivElement>, justId: JustId) => {
     justLayoutStore.activeWin({
       justId

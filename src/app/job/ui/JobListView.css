@@ -6,8 +6,11 @@
     background-color: #2b2d30;
     height: 100%;
     color: rgb(255, 255, 255, 0.7);
-    border-left: 1px solid #1e1f22;
-    border-top: 1px solid #1e1f22;
+    /*border-left: 1px solid #1e1f22;*/
+    /*border-top: 1px solid #1e1f22;*/
+    border: 1px solid #1e1f22;
+    border-radius: 15px;
+    box-sizing: border-box;
 }
 
 .job-list-view .job-list-title {
@@ -20,6 +23,8 @@
     min-width: 0;
     padding-left: 10px;
     border-bottom: 1px solid #1e1f22;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     box-sizing: border-box;
 }
 

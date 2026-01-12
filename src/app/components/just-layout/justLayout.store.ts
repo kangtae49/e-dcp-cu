@@ -155,12 +155,13 @@ export class JustLayoutStore {
   }
 
   addTabByNodeName = (payload: JustPayloadAddTabByNodeName) => {
-    const branch = this.service.getTabBranchByNodeName(this.layout, payload.nodeName, [])
-    if (branch == null) return;
+    // const branch = this.service.getTabBranchByNodeName(this.layout, payload.nodeName, [])
+    const nodeInfo = this.service.getTabNodeInfoByNodeName(this.layout, payload.nodeName, [])
+    if (nodeInfo == null) return;
     if (this.service.hasWinId(this.layout, payload.justId)) {
       this.layout = this.service.activeWinId(this.layout, payload.justId)
     } else {
-      this.layout = this.service.addTabWin(this.layout, branch, payload.justId, -1)
+      this.layout = this.service.addTabWin(this.layout, nodeInfo.branch, payload.justId, -1)
     }
     this.lastActiveId = payload.justId
     this.lastActiveTm = new Date().getTime()
@@ -245,14 +246,13 @@ export class JustLayoutStore {
 
   toggleWin = ({nodeName}: PayloadToggleWin) => {
     const layout = this.layout;
-    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
-    if (branch == null) return;
-    const node = this.service.getNodeAtBranch(layout, branch)
-    if (node == null) return;
-    if (node.type !== 'split-pixels') return;
-    const newPrimaryHide = node.primaryHide !== true;
-    const newSize = (!newPrimaryHide || node.size < 10) ? node.primaryDefaultSize : 0;
-    const updateSpec = this.service.buildSpecFromUpdateSpec(branch, {
+    const nodeInfo = this.service.getNodeInfoByNodeName(layout, nodeName, [])
+    if (nodeInfo == null) return;
+
+    if (nodeInfo.node.type !== 'split-pixels') return;
+    const newPrimaryHide = nodeInfo.node.primaryHide !== true;
+    const newSize = (!newPrimaryHide || nodeInfo.node.size < 10) ? nodeInfo.node.primaryDefaultSize : 0;
+    const updateSpec = this.service.buildSpecFromUpdateSpec(nodeInfo.branch, {
       $merge: {
         size: newSize,
         primaryHide: newPrimaryHide
@@ -265,14 +265,12 @@ export class JustLayoutStore {
 
   showWin = ({nodeName, show}: PayloadShowWin) => {
     const layout = this.layout;
-    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
-    if (branch == null) return;
-    const node = this.service.getNodeAtBranch(layout, branch)
-    if (node == null) return;
-    if (node.type !== 'split-pixels') return;
-    if (show === (node.size === 0)) {
-      const newSize = show ? node.primaryDefaultSize : 0;
-      const updateSpec = this.service.buildSpecFromUpdateSpec(branch, {
+    const nodeInfo = this.service.getNodeInfoByNodeName(layout, nodeName, [])
+    if (nodeInfo == null) return;
+    if (nodeInfo.node.type !== 'split-pixels') return;
+    if (show === (nodeInfo.node.size === 0)) {
+      const newSize = show ? nodeInfo.node.primaryDefaultSize : 0;
+      const updateSpec = this.service.buildSpecFromUpdateSpec(nodeInfo.branch, {
         $merge: {
           size: newSize
         }
@@ -283,21 +281,24 @@ export class JustLayoutStore {
     }
   }
 
-  getNodeByNodeName = ({nodeName}: PayloadGetSize) => {
-    const layout = this.layout;
-    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
-    if (branch == null) return null;
-    return this.service.getNodeAtBranch(layout, branch)
-  }
+  // getNodeByNodeName = ({nodeName}: PayloadGetSize) => {
+  //   const layout = this.layout;
+  //   const branch = this.service.getBranchByNodeName(layout, nodeName, [])
+  //   if (branch == null) return null;
+  //   return this.service.getNodeAtBranch(layout, branch)
+  // }
 
   getSizeByNodeName = ({nodeName}: PayloadGetSize) => {
     const layout = this.layout;
-    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
-    if (branch == null) return null;
-    const node = this.service.getNodeAtBranch(layout, branch)
-    if (node == null) return null;
-    if (node.type === 'split-pixels' || node.type === 'split-percentage') {
-      return node.size;
+    const nodeInfo = this.service.getNodeInfoByNodeName(layout, nodeName, [])
+    if (nodeInfo == null) return;
+
+    // const branch = this.service.getBranchByNodeName(layout, nodeName, [])
+    // if (branch == null) return null;
+    // const node = this.service.getNodeAtBranch(layout, branch)
+    // if (node == null) return null;
+    if (nodeInfo.node.type === 'split-pixels' || nodeInfo.node.type === 'split-percentage') {
+      return nodeInfo.node.size;
     } else {
       return null;
     }
@@ -305,12 +306,11 @@ export class JustLayoutStore {
 
   isPrimaryHide = ({nodeName}: PayloadIsPrimayHide) => {
     const layout = this.layout;
-    const branch = this.service.getBranchByNodeName(layout, nodeName, [])
-    if (branch == null) return null;
-    const node = this.service.getNodeAtBranch(layout, branch)
-    if (node == null) return null;
-    if (node.type === 'split-pixels') {
-      return node.primaryHide;
+    const nodeInfo = this.service.getNodeInfoByNodeName(layout, nodeName, [])
+    if (nodeInfo == null) return;
+
+    if (nodeInfo.node.type === 'split-pixels') {
+      return nodeInfo.node.primaryHide;
     } else {
       return null;
     }

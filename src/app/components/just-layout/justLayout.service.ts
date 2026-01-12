@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {JustBranch, JustId, JustNode, JustSplitDirection, JustStack } from "./justLayout.types";
+import {JustBranch, JustId, JustNode, NodeInfo, JustSplitDirection, JustStack} from "./justLayout.types";
 import {clamp, get, set} from "lodash";
 import {JustPayloadMoveWinSplit, JustPayloadMoveWinStack } from "./justLayout.store";
 import { JustUtil } from "./justUtil.ts";
@@ -217,39 +217,81 @@ export class JustLayoutService {
   getBranchByWinId = (layout: JustNode | null, justId: JustId): JustBranch | null => {
     return this.getBranch(layout, justId, [])
   }
-  getBranchByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null => {
+  // getBranchByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null => {
+  //   if( layout === null) return null
+  //   if (layout.name == nodeName) {
+  //     return [...curBranch]
+  //   }
+  //   if (layout.type != 'stack') {
+  //     const nodeFirst = this.getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
+  //     if (nodeFirst != null) {
+  //       return nodeFirst
+  //     }
+  //     const nodeSecond = this.getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
+  //     if (nodeSecond != null) {
+  //       return nodeSecond
+  //     }
+  //   }
+  //   return null
+  // }
+
+
+  // getTabBranchByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null => {
+  //   if( layout === null) return null
+  //   const branchHead = this.getBranchByNodeName(layout, nodeName, curBranch)
+  //   if( branchHead == null) return null
+  //   const node = this.getNodeByBranch(layout, branchHead)
+  //   if (node.type === 'stack') {
+  //     return branchHead
+  //   } else {
+  //     const restBranch = this.getTabBranch(node, [])
+  //     if (restBranch != null) {
+  //       return [...branchHead, ...restBranch]
+  //     }
+  //   }
+  //   return null
+  // }
+
+  getNodeInfoByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): NodeInfo | null => {
     if( layout === null) return null
     if (layout.name == nodeName) {
-      return [...curBranch]
+      return {
+        node: layout,
+        branch: [...curBranch]
+      }
     }
     if (layout.type != 'stack') {
-      const nodeFirst = this.getBranchByNodeName(layout.first, nodeName, [...curBranch, 'first'])
-      if (nodeFirst != null) {
-        return nodeFirst
+      const firstNodeInfo = this.getNodeInfoByNodeName(layout.first, nodeName, [...curBranch, 'first'])
+      if (firstNodeInfo != null) {
+        return firstNodeInfo
       }
-      const nodeSecond = this.getBranchByNodeName(layout.second, nodeName, [...curBranch, 'second'])
-      if (nodeSecond != null) {
-        return nodeSecond
+      const secondNodeInfo = this.getNodeInfoByNodeName(layout.second, nodeName, [...curBranch, 'second'])
+      if (secondNodeInfo != null) {
+        return secondNodeInfo
       }
     }
     return null
   }
 
-  getTabBranchByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): JustBranch | null => {
+  getTabNodeInfoByNodeName = (layout: JustNode | null, nodeName: string, curBranch: JustBranch): NodeInfo | null => {
     if( layout === null) return null
-    const branchHead = this.getBranchByNodeName(layout, nodeName, curBranch)
-    if( branchHead == null) return null
-    const node = this.getNodeByBranch(layout, branchHead)
-    if (node.type === 'stack') {
-      return branchHead
+    const nodeInfo = this.getNodeInfoByNodeName(layout, nodeName, curBranch)
+    if( nodeInfo == null) return null
+
+    if (nodeInfo.node.type === 'stack') {
+      return nodeInfo
     } else {
-      const restBranch = this.getTabBranch(node, [])
-      if (restBranch != null) {
-        return [...branchHead, ...restBranch]
+      const restNodeInfo = this.getTabNodeInfo(nodeInfo.node, [])
+      if (restNodeInfo != null) {
+        return {
+          node: restNodeInfo.node,
+          branch: [...nodeInfo.branch, ...restNodeInfo.branch]
+        }
       }
     }
     return null
   }
+
 
   getNodeByWinId = (layout: JustNode | null, justId: JustId): JustNode | null => {
     if( layout === null) return null
@@ -286,6 +328,28 @@ export class JustLayoutService {
       const retBranch = this.getTabBranch(layout[targetBranch], [...curBranch, targetBranch])
       if (retBranch != null) {
         return retBranch
+      }
+    }
+    return null
+  }
+
+  getTabNodeInfo = (layout: JustNode | null, curBranch: JustBranch): NodeInfo | null => {
+    if( layout === null) return null
+    if (layout.type === 'stack') {
+      return {
+        node: layout,
+        branch: curBranch
+      }
+    } else {
+      let targetBranch: JustSplitDirection;
+      if (layout.type === 'split-pixels') {
+        targetBranch = layout.primary === 'first' ? 'second' : 'first'
+      } else {
+        targetBranch = layout.direction === 'row' ? 'second' : 'first'
+      }
+      const nodeInfo = this.getTabNodeInfo(layout[targetBranch], [...curBranch, targetBranch])
+      if (nodeInfo != null) {
+        return nodeInfo
       }
     }
     return null
