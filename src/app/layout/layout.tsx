@@ -385,8 +385,8 @@ const layoutTopMenu: JustSplitPixels = {
   direction: 'column',
   name: TOP_MENU_NODE_NAME,
   primary: 'first',
-  primaryDefaultSize: 32,
-  size: 32,
+  primaryDefaultSize: 40,
+  size: 40,
   noSplitter: true,
   first: {
     type: 'stack',
