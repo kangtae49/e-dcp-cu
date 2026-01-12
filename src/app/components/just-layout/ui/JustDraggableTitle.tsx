@@ -69,13 +69,14 @@ const JustDraggableTitle = observer((props: Prop) => {
       cloneJustId
     })
   }
-  const fullScreenWin = async (justId: JustId) => {
+  const fullScreenWin = async (justId: JustId, hideTitle: boolean = false) => {
     console.log("fullScreenWin", justId, justLayoutStore.isFullScreen)
     justLayoutStore.activeWin({justId})
 
     // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
     if(justLayoutStore.fullScreenBranch == null) {
       justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenHideTitle(hideTitle)
     } else {
       if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -244,29 +245,40 @@ const JustDraggableTitle = observer((props: Prop) => {
                 <Icon icon={faClone} />
             </div>
             <div className="just-title">
-                Clone
+                New
             </div>
             <div className="just-icon" />
           </MenuItem>
         }
         {(winInfo.canFullScreen ?? false) &&
           <>
-            <MenuItem onClick={() => fullScreenWin(justId)}>
+            <MenuItem onClick={() => fullScreenWin(justId, true)}>
                 <div className="just-icon">
                     <Icon icon={faExpand} />
                 </div>
                 <div className="just-title">
-                    Screen
+                  {justLayoutStore.isFullScreen ? 'Esc' : 'Full'}
                 </div>
                 <div className="just-icon" />
             </MenuItem>
-            { isParentBranch() &&
+            { !justLayoutStore.isFullScreen &&
+              <MenuItem onClick={() => fullScreenWin(justId)}>
+                  <div className="just-icon">
+                      <Icon icon={faExpand} />
+                  </div>
+                  <div className="just-title">
+                    1
+                  </div>
+                  <div className="just-icon" />
+              </MenuItem>
+            }
+            { (!justLayoutStore.isFullScreen && isParentBranch()) &&
               <MenuItem onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
                   <div className="just-icon">
                       <Icon icon={faExpand} />
                   </div>
                   <div className="just-title">
-                      P-Screen
+                      2
                   </div>
                   <div className="just-icon" />
               </MenuItem>

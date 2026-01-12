@@ -127,10 +127,11 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
       return title(justId)
     }
   }
-  const fullScreenWin = async () => {
+  const fullScreenWin = async (hideTitle: boolean = false) => {
     // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
     if(justLayoutStore.fullScreenBranch == null) {
       justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenHideTitle(hideTitle)
     } else {
       if (document.fullscreenElement) {
         document.exitFullscreen();
@@ -215,22 +216,33 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
             </div>
             <div className="just-icon" />
           </MenuItem>
-          <MenuItem className="just-menu-item" onClick={() => fullScreenWin()}>
+          <MenuItem className="just-menu-item" onClick={() => fullScreenWin(true)}>
             <div className="just-icon">
               <Icon icon={faExpand} />
             </div>
             <div className="just-title">
-              Screen
+              {justLayoutStore.isFullScreen ? 'Esc' : 'Full'}
             </div>
             <div className="just-icon" />
           </MenuItem>
-          { isParentBranch() &&
+          { !justLayoutStore.isFullScreen &&
+            <MenuItem className="just-menu-item"onClick={() => fullScreenWin(false)}>
+              <div className="just-icon">
+                <Icon icon={faExpand} />
+              </div>
+              <div className="just-title">
+                1
+              </div>
+              <div className="just-icon" />
+            </MenuItem>
+          }
+          { (!justLayoutStore.isFullScreen && isParentBranch()) &&
             <MenuItem className="just-menu-item" onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
               <div className="just-icon">
                   <Icon icon={faExpand} />
               </div>
               <div className="just-title">
-                  P-Screen
+                  2
               </div>
               <div className="just-icon" />
             </MenuItem>
