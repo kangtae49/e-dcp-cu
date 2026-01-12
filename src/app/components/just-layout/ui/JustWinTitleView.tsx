@@ -226,13 +226,13 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
           </MenuItem>
           { isParentBranch() &&
             <MenuItem className="just-menu-item" onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
-                <div className="just-icon">
-                    <Icon icon={faExpand} />
-                </div>
-                <div className="just-title">
-                    P-Screen
-                </div>
-                <div className="just-icon" />
+              <div className="just-icon">
+                  <Icon icon={faExpand} />
+              </div>
+              <div className="just-title">
+                  P-Screen
+              </div>
+              <div className="just-icon" />
             </MenuItem>
           }
         </Menu>

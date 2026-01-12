@@ -3,13 +3,11 @@
     height: 40px;
     display: flex;
     align-items: center;
-    /*background-color: rgba(0, 0, 0, 0.82);*/
-    /*border-bottom: 1px solid #1e1f22;*/
     box-sizing: border-box;
 }
 .just-top-menu-bar .just-title {
-    display: flex;
     -webkit-app-region: drag;
+    display: flex;
     flex: 1;
     height: 100%;
     font-size: 13px;

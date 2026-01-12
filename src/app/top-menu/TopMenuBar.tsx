@@ -34,7 +34,9 @@ function TopMenuBar({justId: _}: Props) {
       <div className="just-app-icon">
         <IconLogo />
       </div>
-      <div className="just-title">DcpCu - Data Capitalism Pro Credit Union</div>
+      <div className="just-title">
+        DcpCu - Data Capitalism Pro Credit Union
+      </div>
       {/*<div className="just-menu-center">*/}
       {/*</div>*/}
       <div className="just-icon-system-group">

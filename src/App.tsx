@@ -81,7 +81,7 @@ function App() {
       <JobListener />
       <WatchListener />
       <div className="just-app">
-        <div className="just-container">
+        <div className="just-con">
           <JustLayoutView
             layoutId={LAYOUT_ID}
             getWinInfo={getWinInfo}

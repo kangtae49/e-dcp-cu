@@ -15,10 +15,13 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    background-color: black;
 }
 
-.just-container {
+.just-con {
     display: flex;
+    /*display: none;*/
+    /*flex: 1;*/
     height: 100%;
 }
 
