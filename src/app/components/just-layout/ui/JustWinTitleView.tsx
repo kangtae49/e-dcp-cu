@@ -226,7 +226,7 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
             <div className="just-icon" />
           </MenuItem>
           { !justLayoutStore.isFullScreen &&
-            <MenuItem className="just-menu-item"onClick={() => fullScreenWin(false)}>
+            <MenuItem className="just-menu-item" onClick={() => fullScreenWin(false)}>
               <div className="just-icon">
                 <Icon icon={faExpand} />
               </div>
