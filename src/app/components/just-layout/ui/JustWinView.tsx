@@ -21,8 +21,7 @@ interface Prop {
 const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
-  const isFullScreen = justLayoutStore.isFullScreen;
-  // const isFullScreen = isEqual(justLayoutStore.fullScreenBranch, justBranch);
+  const fullScreenHideTitle = justLayoutStore.fullScreenHideTitle;
 
   const showTitle = hideTitle !== true
   const onFocus = () => {
@@ -32,7 +31,7 @@ const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justS
   }
   return (
     <div className="just-win" onFocusCapture={onFocus} tabIndex={1}>
-      {(showTitle && !isFullScreen) &&
+      {(showTitle && !fullScreenHideTitle)  &&
         <JustWinTitleView
           layoutId={layoutId}
           dndAccept={dndAccept}

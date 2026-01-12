@@ -117,6 +117,7 @@ export class JustLayoutStore {
   lastActiveId: JustId | null = null
   lastActiveTm: number = new Date().getTime()
   fullScreenBranch: JustBranch | null = null
+  fullScreenHideTitle: boolean = false
 
   isFullScreen: boolean = false
   isMaximize: boolean = false
@@ -141,6 +142,8 @@ export class JustLayoutStore {
   }
   setFullScreen = (flag: boolean) => { this.isFullScreen = flag }
   setMaximize = (flag: boolean) => { this.isMaximize = flag }
+
+  setFullScreenHideTitle = (flag: boolean) => { this.fullScreenHideTitle = flag }
 
   addTab = (payload: JustPayloadAddTab) => {
     const branch = this.service.getTabBranch(this.layout, [])

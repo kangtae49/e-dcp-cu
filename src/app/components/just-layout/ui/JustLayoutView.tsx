@@ -38,6 +38,7 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
       //
     } else {
       justLayoutStore.setFullScreenBranch(null)
+      justLayoutStore.setFullScreenHideTitle(false)
       if (document.fullscreenElement) {
         document.exitFullscreen()
       }
@@ -64,6 +65,7 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
         console.log('isFullScreen', await window.api.isFullScreen(), 'isMaximized', await window.api.isMaximized())
         if (isFullScreen) {
           justLayoutStore.setFullScreenBranch(null)
+          justLayoutStore.setFullScreenHideTitle(false)
           window.api.setFullScreen(false)
         } else if (isMaximized) {
           window.api.unmaximize()
