@@ -26,8 +26,13 @@ const ChartView = observer(({ justId }: Props)=> {
   return (
     <div className="chart-view">
       <div className="chart-head">
-        <div className="chart-title" onClick={clickTitle}>
-          <Icon icon={faPenToSquare} /> {title}
+        <div className="chart-title">
+          <div className="chart-icon" onClick={clickTitle}>
+            <Icon icon={faPenToSquare} />
+          </div>
+          <div  className="chart-label">
+            {title}
+          </div>
         </div>
       </div>
       <div className="chart-container">

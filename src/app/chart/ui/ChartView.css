@@ -7,12 +7,19 @@
 
     padding: 5px;
     box-sizing: border-box;
+    background-color: white;
+    --icon-color: #f4a261;
+    --icon-hover-scale: scale(1.2);
 }
 
 .chart-view .chart-head {
     flex: 0 0 25px;
     display: flex;
     padding: 3px;
+}
+
+.chart-title {
+    display: flex;
 }
 
 .chart-view .chart-container {
@@ -23,3 +30,5 @@
 }
 
 .chart-view svg { color: #f4a261 }
+.fa-pen-to-square { color: var(--icon-color); }
+.fa-pen-to-square:hover { transform: var(--icon-hover-scale); }

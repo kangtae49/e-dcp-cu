@@ -9,6 +9,7 @@
     box-sizing: border-box;
     --icon-color: #f4a261;
     --icon-hover-scale: scale(1.2);
+    background-color: white;
 }
 
 .grid-view .grid-head {
