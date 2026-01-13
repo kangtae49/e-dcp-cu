@@ -1,7 +1,6 @@
 import "./JustStatusBar.css"
 import {
   BOTTOM_PANEL_NODE_NAME,
-  INIT_BOTTOM_PANEL_SIZE,
 } from "@/app/layout/layout.tsx";
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
