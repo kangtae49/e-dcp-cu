@@ -2,13 +2,12 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import {useCounterStore} from "@/app/counter/useCounterStore.tsx";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
-export const CounterView = observer(({justId: _justId, layoutId}: Props) => {
+export const CounterView = observer(({justId: _justId}: Props) => {
 
   const counterStore = useCounterStore("abc")
 
