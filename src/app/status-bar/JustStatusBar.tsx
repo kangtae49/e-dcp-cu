@@ -21,7 +21,7 @@ function JustStatusBar({justId: _justId, layoutId}: Props) {
     justLayoutStore.toggleWin({nodeName: BOTTOM_PANEL_NODE_NAME})
   }
 
-  const size = justLayoutStore.getSizeByNodeName({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? INIT_BOTTOM_PANEL_SIZE;
+  // const size = justLayoutStore.getSizeByNodeName({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? INIT_BOTTOM_PANEL_SIZE;
   const isHide = justLayoutStore.isPrimaryHide({nodeName: BOTTOM_PANEL_NODE_NAME}) ?? false;
   return (
     <div className="just-status-bar">
