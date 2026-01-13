@@ -16,6 +16,7 @@ import {observer} from "mobx-react-lite";
 
 interface Prop {
   layoutId: string
+  isFullScreenView: boolean
   dndAccept: string[]
   justBranch: JustBranch
   justStack: JustStack
@@ -25,7 +26,7 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
+const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   const ref = useRef<HTMLDivElement>(null)
   const [rect, setRect] = useState<DOMRect | null>(null)
 
@@ -128,55 +129,12 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
     }
   }
   const fullScreenWin = async (hideTitle: boolean = false) => {
-    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-    const isFullScreen = justLayoutStore.isFullScreen;
-    if (isFullScreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        window.api.setFullScreen(false)
-      }
+    if (isFullScreenView) {
+      justLayoutStore.setLayout(null)
     } else {
-      justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenLayoutByBranch(justBranch)
       justLayoutStore.setFullScreenHideTitle(hideTitle)
     }
-    // if(justLayoutStore.fullScreenBranch == null) {
-    //   justLayoutStore.setFullScreenBranch(justBranch)
-    //   justLayoutStore.setFullScreenHideTitle(hideTitle)
-    // } else {
-    //   if (document.fullscreenElement) {
-    //     document.exitFullscreen();
-    //   }
-    // }
-  }
-
-  const fullScreenBranch = async (branch: JustBranch) => {
-    // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
-    const isFullScreen = justLayoutStore.isFullScreen;
-    if (isFullScreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        window.api.setFullScreen(false)
-      }
-    } else {
-      justLayoutStore.setFullScreenBranch(branch)
-    }
-    // if(justLayoutStore.fullScreenBranch == null) {
-    //   justLayoutStore.setFullScreenBranch(branch)
-    // } else {
-    //   if (document.fullscreenElement) {
-    //     document.exitFullscreen();
-    //   }
-    // }
-  }
-
-  const isParentBranch = () => {
-    if(justLayoutStore.fullScreenBranch !== null) return false
-    if (justBranch.length === 0) return false;
-    const node = justLayoutStore.getNodeAtBranch({branch: justBranch})
-    if (node === null) return false;
-    return !node.name
   }
 
 
@@ -190,6 +148,7 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
           <JustDraggableTitle
             key={[...justBranch, JustUtil.toString(justId)].join(",")}
             layoutId={layoutId}
+            isFullScreenView={isFullScreenView}
             dndAccept={dndAccept}
             rect={rect}
             justId={justId}
@@ -242,32 +201,32 @@ const JustWinTitleView = observer(({layoutId, dndAccept, justBranch, justStack, 
               <Icon icon={faExpand} />
             </div>
             <div className="just-title">
-              {justLayoutStore.isFullScreen ? 'Esc' : 'Full'}
+              {isFullScreenView ? 'Esc' : 'Full'}
             </div>
             <div className="just-icon" />
           </MenuItem>
-          { !justLayoutStore.isFullScreen &&
-            <MenuItem className="just-menu-item" onClick={() => fullScreenWin(false)}>
-              <div className="just-icon">
-                <Icon icon={faExpand} />
-              </div>
-              <div className="just-title">
-                1
-              </div>
-              <div className="just-icon" />
-            </MenuItem>
-          }
-          { (!justLayoutStore.isFullScreen && isParentBranch()) &&
-            <MenuItem className="just-menu-item" onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
-              <div className="just-icon">
-                  <Icon icon={faExpand} />
-              </div>
-              <div className="just-title">
-                  2
-              </div>
-              <div className="just-icon" />
-            </MenuItem>
-          }
+          {/*{ !justLayoutStore.fullScreenLayout &&*/}
+          {/*  <MenuItem className="just-menu-item" onClick={() => fullScreenWin(false)}>*/}
+          {/*    <div className="just-icon">*/}
+          {/*      <Icon icon={faExpand} />*/}
+          {/*    </div>*/}
+          {/*    <div className="just-title">*/}
+          {/*      1*/}
+          {/*    </div>*/}
+          {/*    <div className="just-icon" />*/}
+          {/*  </MenuItem>*/}
+          {/*}*/}
+          {/*{ (!justLayoutStore.isFullScreen && isParentBranch()) &&*/}
+          {/*  <MenuItem className="just-menu-item" onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>*/}
+          {/*    <div className="just-icon">*/}
+          {/*        <Icon icon={faExpand} />*/}
+          {/*    </div>*/}
+          {/*    <div className="just-title">*/}
+          {/*        2*/}
+          {/*    </div>*/}
+          {/*    <div className="just-icon" />*/}
+          {/*  </MenuItem>*/}
+          {/*}*/}
         </Menu>
       </div>
     </div>

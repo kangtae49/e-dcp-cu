@@ -7,4 +7,4 @@ pnpm start
 ```shell
 pnpm add mobx-logger
 ```
-`toJS(justLayoutStore.get('JUST-LAYOUT').layout)`
+`toJS(storeJustLayout.get('JUST-LAYOUT').layout)`

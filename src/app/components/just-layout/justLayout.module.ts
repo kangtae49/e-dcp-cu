@@ -5,7 +5,7 @@ import { JustLayoutStore } from "./justLayout.store";
 import {container} from "@/inversify.config.ts";
 
 const storeCache = new Map<string, JustLayoutStore>();
-(window as any).justLayoutStore = storeCache;
+(window as any).storeJustLayout = storeCache;
 
 
 export const justLayoutModule = new ContainerModule(({bind}) => {

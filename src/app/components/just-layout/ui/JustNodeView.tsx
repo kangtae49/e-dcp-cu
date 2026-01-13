@@ -11,6 +11,7 @@ import {isEqual} from "lodash";
 
 interface Props {
   layoutId: string
+  isFullScreenView: boolean
   justBranch: JustBranch
   node: JustNode | null
   getWinInfo: GetWinInfoFn
@@ -19,17 +20,10 @@ interface Props {
   closeWin?: CloseWinFn
   onClickTitle?: OnClickTitleFn
   onDoubleClickTitle?: OnDoubleClickTitleFn
-  // viewMap: Record<string, WinInfo>
 }
 
-const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
+const JustNodeView: React.FC<Props> = observer(({ layoutId, isFullScreenView, hideTitle, dndAccept, node, justBranch, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle }) => {
   const refNode = useRef<HTMLDivElement>(null);
-
-  // const {
-  //   // state: justLayoutState,
-  //   actions: justLayoutActions
-  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice)
-  // const dispatch = useAppDispatch();
 
   const justLayoutStore = useJustLayoutStore(layoutId)
 
@@ -54,28 +48,18 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
     return {}
   }
 
-  useEffect(() => {
-    if (isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-      // window.api.setFullScreen(true)
-      refNode.current?.requestFullscreen()
-    }
-  }, [justLayoutStore.fullScreenBranch])
-
-  const isFullScreen = isEqual(justLayoutStore.fullScreenBranch, justBranch);
-
   return (
     <div ref={refNode}
       className={classNames(
         "just-node",
-        {
-          "fullscreen": isFullScreen,
-        })
+        )
       }
     >
       {node?.type === 'stack' && (
         <JustWinView
           hideTitle={node.hideTitle ?? hideTitle}
           layoutId={layoutId}
+          isFullScreenView={isFullScreenView}
           dndAccept={node.dndAccept ?? dndAccept}
           justStack={node}
           justBranch={justBranch}
@@ -104,6 +88,7 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
           >
               <JustNodeView
                 layoutId={layoutId}
+                isFullScreenView={isFullScreenView}
                 hideTitle={node.hideTitle ?? hideTitle}
                 dndAccept={node.dndAccept ?? dndAccept}
                 node={node.first}
@@ -137,6 +122,7 @@ const JustNodeView: React.FC<Props> = observer(({ layoutId, hideTitle, dndAccept
           >
               <JustNodeView
                 layoutId={layoutId}
+                isFullScreenView={isFullScreenView}
                 hideTitle={node.hideTitle ?? hideTitle}
                 dndAccept={node.dndAccept ?? dndAccept}
                 node={node.second}

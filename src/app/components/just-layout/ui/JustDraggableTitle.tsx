@@ -20,6 +20,7 @@ export interface JustDragItem {
 
 interface Prop {
   layoutId: string
+  isFullScreenView: boolean
   dndAccept: string[]
   justBranch: JustBranch
   justId: JustId
@@ -34,6 +35,7 @@ interface Prop {
 const JustDraggableTitle = observer((props: Prop) => {
   const {
     layoutId,
+    isFullScreenView,
     dndAccept,
     winInfo, justBranch, justId, justStack,
     closeWin,
@@ -44,12 +46,6 @@ const JustDraggableTitle = observer((props: Prop) => {
   const ref = useRef<HTMLDivElement>(null)
   const [menuProps, toggleMenu] = useMenuState();
   const [anchorPoint, setAnchorPoint] = useState({ x: 0, y: 0 });
-  // const {
-  //   state: justLayoutState,
-  //   actions: justLayoutActions,
-  //   // thunks: justLayoutThunks,
-  //   dispatch,
-  // } = useDynamicSlice<JustLayoutState, JustLayoutActions>(layoutId, createJustLayoutSlice, createJustLayoutThunks)
 
   const justLayoutStore = useJustLayoutStore(layoutId);
 
@@ -69,71 +65,16 @@ const JustDraggableTitle = observer((props: Prop) => {
       cloneJustId
     })
   }
-  const fullScreenWin = async (justId: JustId, hideTitle: boolean = false) => {
-    const isFullScreen = justLayoutStore.isFullScreen;
-    // const isMaximized = justLayoutStore.isMaximize;
-    // console.log("fullScreenWin", justId, isFullScreen, isMaximized)
-    // console.log("fullScreenWin2", justId, await window.api.isFullScreen(), await window.api.isMaximized())
+  const fullScreenWin = (justId: JustId, hideTitle: boolean = false) => {
 
     justLayoutStore.activeWin({justId})
-    if (isFullScreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        window.api.setFullScreen(false)
-      }
+    console.log('fullScreenWin isFullScreenView', isFullScreenView)
+    if (isFullScreenView) {
+      justLayoutStore.setLayout(null)
     } else {
-      justLayoutStore.setFullScreenBranch(justBranch)
+      justLayoutStore.setFullScreenLayoutByBranch(justBranch)
       justLayoutStore.setFullScreenHideTitle(hideTitle)
     }
-
-
-    // const isMaximized = justLayoutStore.isMaximize;
-    // if(isMaximized) {
-    //   window.api.unmaximize()
-    // }
-    // if(!isEqual(justLayoutStore.fullScreenBranch, justBranch)) {
-    // if(justLayoutStore.fullScreenBranch == null) {
-    //   justLayoutStore.setFullScreenBranch(justBranch)
-    //   justLayoutStore.setFullScreenHideTitle(hideTitle)
-    // } else {
-    //   if (document.fullscreenElement) {
-    //     document.exitFullscreen();
-    //   }
-    // }
-  }
-  const fullScreenBranch = async (branch: JustBranch) => {
-    // if(!isEqual(justLayoutStore.fullScreenBranch, branch)) {
-    const isFullScreen = justLayoutStore.isFullScreen;
-    if (isFullScreen) {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      } else {
-        window.api.setFullScreen(false)
-      }
-    } else {
-      justLayoutStore.setFullScreenBranch(branch)
-    }
-    // const isMaximized = justLayoutStore.isMaximize;
-    // if(isMaximized) {
-    //   window.api.unmaximize()
-    // }
-
-    // if(justLayoutStore.fullScreenBranch == null) {
-    //   justLayoutStore.setFullScreenBranch(branch)
-    // } else {
-    //   if (document.fullscreenElement) {
-    //     document.exitFullscreen();
-    //   }
-    // }
-  }
-
-  const isParentBranch = () => {
-    if(justLayoutStore.fullScreenBranch !== null) return false
-    if (justBranch.length === 0) return false;
-    const node = justLayoutStore.getNodeAtBranch({branch: justBranch})
-    if (node === null) return false;
-    return !node.name
   }
 
 
@@ -226,9 +167,6 @@ const JustDraggableTitle = observer((props: Prop) => {
     toggleMenu(true);
   }, [toggleMenu]);
 
-
-
-  // console.log("JustDraggableTitle", winId, winInfo)
   return (
     <div
       className={classNames(
@@ -291,32 +229,10 @@ const JustDraggableTitle = observer((props: Prop) => {
                     <Icon icon={faExpand} />
                 </div>
                 <div className="just-title">
-                  {justLayoutStore.isFullScreen ? 'Esc' : 'Full'}
+                  {isFullScreenView ? 'Esc' : 'Full'}
                 </div>
                 <div className="just-icon" />
             </MenuItem>
-            { !justLayoutStore.isFullScreen &&
-              <MenuItem onClick={() => fullScreenWin(justId)}>
-                  <div className="just-icon">
-                      <Icon icon={faExpand} />
-                  </div>
-                  <div className="just-title">
-                    1
-                  </div>
-                  <div className="just-icon" />
-              </MenuItem>
-            }
-            { (!justLayoutStore.isFullScreen && isParentBranch()) &&
-              <MenuItem onClick={() => fullScreenBranch(justBranch.slice(0, -1))}>
-                  <div className="just-icon">
-                      <Icon icon={faExpand} />
-                  </div>
-                  <div className="just-title">
-                      2
-                  </div>
-                  <div className="just-icon" />
-              </MenuItem>
-            }
           </>
         }
       </ControlledMenu>

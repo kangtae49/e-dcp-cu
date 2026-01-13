@@ -7,6 +7,7 @@ import {observer} from "mobx-react-lite";
 
 interface Prop {
   layoutId: string
+  isFullScreenView: boolean
   hideTitle?: boolean
   dndAccept: string[]
   justBranch: JustBranch
@@ -17,8 +18,7 @@ interface Prop {
   onDoubleClickTitle?: OnDoubleClickTitleFn
 }
 
-const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
-  // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
+const JustWinView = observer(({layoutId, isFullScreenView, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   const justLayoutStore = useJustLayoutStore(layoutId)
   const fullScreenHideTitle = justLayoutStore.fullScreenHideTitle;
 
@@ -33,6 +33,7 @@ const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justS
       {(showTitle && !fullScreenHideTitle)  &&
         <JustWinTitleView
           layoutId={layoutId}
+          isFullScreenView={isFullScreenView}
           dndAccept={dndAccept}
           justBranch={justBranch}
           justStack={justStack}

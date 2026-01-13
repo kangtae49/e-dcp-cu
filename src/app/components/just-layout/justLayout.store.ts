@@ -116,11 +116,11 @@ export class JustLayoutStore {
   layout: JustNode | null = null
   lastActiveId: JustId | null = null
   lastActiveTm: number = new Date().getTime()
-  fullScreenBranch: JustBranch | null = null
+  fullScreenLayout: JustNode | null = null
   fullScreenHideTitle: boolean = false
 
-  isFullScreen: boolean = false
-  isMaximize: boolean = false
+  // isFullScreen: boolean = false
+  // isMaximize: boolean = false
 
   constructor(
     @inject(JUST_LAYOUT_TYPES.JustLayoutService) service: JustLayoutService
@@ -137,11 +137,18 @@ export class JustLayoutStore {
     this.layout = payload
   }
 
-  setFullScreenBranch = (payload: JustBranch | null) => {
-    this.fullScreenBranch = payload
+  // setFullScreenLayout = (payload: JustNode | null) => {
+  //   this.fullScreenLayout = payload
+  // }
+  setFullScreenLayoutByBranch = (payload: JustBranch | null) => {
+    if (payload === null) {
+      this.fullScreenLayout = null
+    } else {
+      this.fullScreenLayout = this.service.getNodeAtBranch(this.layout, payload)
+    }
   }
-  setFullScreen = (flag: boolean) => { this.isFullScreen = flag }
-  setMaximize = (flag: boolean) => { this.isMaximize = flag }
+  // setFullScreen = (flag: boolean) => { this.isFullScreen = flag }
+  // setMaximize = (flag: boolean) => { this.isMaximize = flag }
 
   setFullScreenHideTitle = (flag: boolean) => { this.fullScreenHideTitle = flag }
 

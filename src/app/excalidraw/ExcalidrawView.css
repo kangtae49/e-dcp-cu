@@ -9,6 +9,10 @@
 .excalidraw.excalidraw-modal-container {
     z-index: 9999 !important;
 }
+.excalidraw .popover {
+    height: 100%;
+}
+
 
 /*.excalidraw-container,*/
 /*.excalidraw .modal-container,*/
