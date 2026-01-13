@@ -12,9 +12,10 @@ import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStor
 
 interface Props {
   justId: JustId
+  layoutId: string
 }
-function JustStatusBar({justId}: Props) {
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+function JustStatusBar({justId: _justId, layoutId}: Props) {
+  const justLayoutStore = useJustLayoutStore(layoutId)
 
 
   const toggleBottomPanel = () => {

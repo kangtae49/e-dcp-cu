@@ -5,6 +5,7 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 interface Props {
   justId: JustId
+  layoutId: string
 }
 function JobMonitorView({justId}: Props) {
 

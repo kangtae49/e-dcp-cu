@@ -1,6 +1,6 @@
 import "./JobListView.css"
 import IconMinimize from "@/assets/minimize.svg?react"
-import {BOTTOM_PANEL_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
+import {BOTTOM_PANEL_NODE_NAME} from "@/app/layout/layout.tsx";
 import {List} from "react-window";
 import JobListRow from "@/app/job/ui/JobListRow.tsx";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
@@ -11,10 +11,11 @@ import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 interface Props {
   justId: JustId
+  layoutId: string
 }
 
-const JobListView = observer(({justId}: Props)=> {
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+const JobListView = observer(({justId: _justId, layoutId}: Props)=> {
+  const justLayoutStore = useJustLayoutStore(layoutId)
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID)
 
@@ -39,7 +40,8 @@ const JobListView = observer(({justId}: Props)=> {
             // rowCount={200}
             rowHeight={20}
             rowProps={{
-              count
+              count,
+              layoutId
             }}
             style={{}}
           />

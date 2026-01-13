@@ -19,6 +19,7 @@ import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
+import {observer} from "mobx-react-lite";
 // import DevTools from 'mobx-react-devtools';
 
 // import remotedev from 'mobx-remotedev';
@@ -42,7 +43,7 @@ function getWinInfo(justId: JustId): WinInfo {
   return viewMap[viewId]
 }
 
-function App() {
+const App = observer(() => {
 
 
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
@@ -94,7 +95,7 @@ function App() {
       </div>
     </>
   )
-}
+})
 
 export default App
 

@@ -12,8 +12,8 @@ export interface WinInfo {
 }
 export type GetWinInfoFn = (justId: JustId) => WinInfo;
 export type GetTitleFn = (justId: JustId) => string;
-export type GetViewFn = (justId: JustId) => JSX.Element;
-export type CloseWinFn = (justId?: JustId) => void;
-export type OnClickTitleFn = (event?: React.MouseEvent, justId?: JustId) => void;
-export type OnDoubleClickTitleFn = (event?: React.MouseEvent, justId?: JustId) => void;
+export type GetViewFn = (justId: JustId, layoutId: string) => JSX.Element;
+export type CloseWinFn = (justId: JustId) => void;
+export type OnClickTitleFn = (event: React.MouseEvent, justId: JustId) => void;
+export type OnDoubleClickTitleFn = (event: React.MouseEvent, justId: JustId) => void;
 

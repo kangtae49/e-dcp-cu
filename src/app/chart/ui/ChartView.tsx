@@ -8,6 +8,7 @@ import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 interface Props {
   justId: JustId
+  layoutId: string
 }
 const ChartView = observer(({ justId }: Props)=> {
   const dataKey = JustUtil.getParamString(justId, 'file');

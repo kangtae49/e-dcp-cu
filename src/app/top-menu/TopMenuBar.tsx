@@ -7,9 +7,10 @@ import IconMaximize from "../../assets/maximize.svg?react"
 
 interface Props {
   justId: JustId
+  layoutId: string
 }
 
-function TopMenuBar({justId: _}: Props) {
+function TopMenuBar({justId: _justId, layoutId: _layoutId}: Props) {
   const minimize = () => {
     window.api.minimize()
   }

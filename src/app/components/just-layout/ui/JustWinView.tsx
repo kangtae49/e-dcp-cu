@@ -1,7 +1,6 @@
 import JustWinTitleView from "./JustWinTitleView.tsx";
 import JustWinBodyView from "./JustWinBodyView.tsx";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
-import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 import {JustBranch, JustStack} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
@@ -20,7 +19,7 @@ interface Prop {
 
 const JustWinView = observer(({layoutId, hideTitle, dndAccept, justBranch, justStack, getWinInfo, closeWin, onClickTitle, onDoubleClickTitle}: Prop) => {
   // const winInfo = justStack?.active ? getWinInfo(justStack?.active) : null;
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(layoutId)
   const fullScreenHideTitle = justLayoutStore.fullScreenHideTitle;
 
   const showTitle = hideTitle !== true

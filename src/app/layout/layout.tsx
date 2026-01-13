@@ -72,21 +72,16 @@ export interface SideMenuItem {
 
 export const topMenuId: JustId = {viewId: 'top-menu', title: 'Top Menu'};
 export const statusBarId: JustId = {viewId: 'status-bar', title: 'Status Bar'};
-export const bottomPanelId: JustId = {viewId: 'bottom-panel', title: 'Bottom Panel'};
 export const toolBarId: JustId = {viewId: 'tool-bar', title: 'Tool Bar'};
 export const utilBarId: JustId = {viewId: 'util-bar', title: 'Util Bar'};
 export const sideMenuId: JustId = {viewId: 'side-menu', title: 'Menu'};
-// export const demoGridId: JustId = {viewId: 'demo-grid'};
 export const aboutId: JustId = {viewId: 'about', title: 'About'};
 
 export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 
 export const jobListViewId: JustId = {viewId: 'job-list-view', title: 'Job List'};
-// export const jobMonitorId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor'};
 
-// export const jobMonitorViewId: JustId = {viewId: 'job-monitor-view', title: 'Job Monitor' , params: {jobId: 'XXX'}};
 
-export const counterViewId: JustId = {viewId: 'counter-view', title: 'Counter View'};
 export const excalidrawViewId: JustId = {viewId: 'excalidraw-view', title: 'Excalidraw View'};
 
 export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
@@ -102,45 +97,45 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "top-menu": {
     title: "Top Menu",
     icon: <div/>,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <TopMenuBar justId={justId}/>
+        <TopMenuBar justId={justId} layoutId={layoutId}/>
       )
     }
   },
   "status-bar": {
     title: "Status Bar",
     icon: <div/>,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <JustStatusBar justId={justId}/>
+        <JustStatusBar justId={justId} layoutId={layoutId} />
       )
     }
   },
   "bottom-panel": {
     title: "Bottom Panel",
     icon: <div/>,
-    getView: () => {
+    getView: (justId, layoutId) => {
       return (
-        <JustBottomPanel />
+        <JustBottomPanel justId={justId} layoutId={layoutId} />
       )
     }
   },
   "util-bar": {
     title: "Util Bar",
     icon: <div/>,
-    getView: () => {
+    getView: (justId, layoutId) => {
       return (
-        <JustUtilBar/>
+        <JustUtilBar justId={justId} layoutId={layoutId} />
       )
     }
   },
   "tool-bar": {
     title: "Toolbar",
     icon: <div/>,
-    getView: () => {
+    getView: (justId, layoutId) => {
       return (
-        <JustToolBar/>
+        <JustToolBar justId={justId} layoutId={layoutId} />
       )
     }
   },
@@ -148,9 +143,9 @@ export const viewMap: Record<ViewId, WinInfo> = {
     title: "Menu",
     icon: <Icon icon={faCircleQuestion} />,
     // showClose: false,
-    getView: () => {
+    getView: (justId, layoutId) => {
       return (
-        <SideMenu />
+        <SideMenu justId={justId} layoutId={layoutId} />
       )
     }
   },
@@ -159,45 +154,45 @@ export const viewMap: Record<ViewId, WinInfo> = {
     canDup: true,
     canFullScreen: true,
     icon: <Jdenticon size="30" value={page01Id.viewId} />,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <Page01View justId={justId!} />
+        <Page01View justId={justId} layoutId={layoutId} />
       )
     }
   },
   "about": {
     title: "About",
     icon: <Icon icon={faCircleInfo} />,
-    getView: () => {
+    getView: (justId, layoutId) => {
       return (
-        <AboutView />
+        <AboutView justId={justId} layoutId={layoutId} />
       )
     }
   },
   "chart-view": {
     title: (justId) => justId.title,
     icon: <Icon icon={faChartLine} />,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <ChartView justId={justId}/>
+        <ChartView justId={justId} layoutId={layoutId} />
       )
     }
   },
   "grid-view": {
     title: (justId) => justId.title,
     icon: <Icon icon={faTableList} />,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <GridView justId={justId}/>
+        <GridView justId={justId} layoutId={layoutId} />
       )
     }
   },
   "job-list-view": {
     title: "Job Monitor",
     icon: <Icon icon={faTerminal} />,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <JobListView justId={justId}/>
+        <JobListView justId={justId} layoutId={layoutId} />
       )
     }
 
@@ -205,9 +200,9 @@ export const viewMap: Record<ViewId, WinInfo> = {
   "job-monitor-view": {
     title: (justId) => JustUtil.getParamString(justId, 'jobId'),
     icon: <Icon icon={faTerminal} />,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <JobMonitorView justId={justId}/>
+        <JobMonitorView justId={justId} layoutId={layoutId} />
       )
     }
   },
@@ -216,9 +211,9 @@ export const viewMap: Record<ViewId, WinInfo> = {
     icon: <Icon icon={faPen} />,
     canDup: true,
     canFullScreen: true,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <ExcalidrawView justId={justId} />
+        <ExcalidrawView justId={justId} layoutId={layoutId} />
       )
     }
   },
@@ -226,9 +221,9 @@ export const viewMap: Record<ViewId, WinInfo> = {
     title: (justId) => JustUtil.getParamString(justId, 'jobId'),
     icon: <Jdenticon size="30" value="counter-view" />,
     canDup: true,
-    getView: (justId) => {
+    getView: (justId, layoutId) => {
       return (
-        <CounterView justId={justId} />
+        <CounterView justId={justId} layoutId={layoutId} />
       )
     }
   }

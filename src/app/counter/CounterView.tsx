@@ -3,15 +3,15 @@ import { observer } from "mobx-react-lite";
 import {useCounterStore} from "@/app/counter/useCounterStore.tsx";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
-import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
+  layoutId: string
 }
-export const CounterView = observer(({justId: _}: Props) => {
+export const CounterView = observer(({justId: _justId, layoutId}: Props) => {
 
   const counterStore = useCounterStore("abc")
-  const layoutStore = useJustLayoutStore(LAYOUT_ID)
+  const layoutStore = useJustLayoutStore(layoutId)
 
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc' }}>

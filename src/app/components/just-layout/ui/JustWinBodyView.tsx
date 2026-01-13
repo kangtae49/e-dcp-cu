@@ -120,7 +120,7 @@ const JustWinBodyView = observer((props: Prop) => {
     >
       {justStack.tabs.map(justId =>
         <Activity key={JustUtil.toString(justId)} mode={JustUtil.isEquals(justStack.active, justId) ? 'visible' : 'hidden'}>
-          {getWinInfo(justId).getView(justId)}
+          {getWinInfo(justId).getView(justId, layoutId)}
         </Activity>
       )}
 

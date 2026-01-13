@@ -18,10 +18,14 @@ import {CONFIG_KEYS} from "@/app/grid/gridData.constants.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
+interface Props {
+  justId: JustId
+  layoutId: string
+}
 
-function JustToolBar() {
+function JustToolBar({justId: _justId, layoutId}: Props) {
 
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(layoutId)
 
 
   const toggleSideMenu = () => {

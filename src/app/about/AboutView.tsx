@@ -3,8 +3,14 @@ import useOnload from "../../hooks/useOnload.ts";
 import IconLogo from "../../assets/icon.svg?react"
 import {useState} from "react";
 import {Versions} from "@/types.ts";
+import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
-export default function AboutView() {
+interface Props {
+  justId: JustId
+  layoutId: string
+}
+
+export default function AboutView({justId: _justId, layoutId: _layoutId}: Props) {
   const {onLoad} = useOnload();
   const [versions, setVersions] = useState<Versions | null>(null)
 

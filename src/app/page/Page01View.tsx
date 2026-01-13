@@ -28,6 +28,7 @@ import {JSONValue, JustId} from "@/app/components/just-layout/justLayout.types.t
 
 interface Props {
   justId: JustId
+  layoutId: string
 }
 
 

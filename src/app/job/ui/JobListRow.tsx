@@ -14,17 +14,19 @@ import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStor
 
 interface Props {
   count: number
+  layoutId: string
 }
 
 const JobListRow = observer(({
   index,
   style,
   count,
+  layoutId
 }: RowComponentProps<Props>) => {
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID)
 
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(layoutId)
   const keyList = keys(jobMonitorStore.status)
   const idx = count - index - 1
   const jobId = keyList[idx] as string;

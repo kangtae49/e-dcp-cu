@@ -6,10 +6,13 @@ import {CONTENTS_VIEW, LAYOUT_ID, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
+interface Props {
+  justId: JustId
+  layoutId: string
+}
+function SideMenu({justId: _justId, layoutId}: Props) {
 
-function SideMenu() {
-
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID)
+  const justLayoutStore = useJustLayoutStore(layoutId)
 
   const toggleSideMenu = () => {
     justLayoutStore.toggleWin({nodeName: SIDE_MENU_NODE_NAME})
