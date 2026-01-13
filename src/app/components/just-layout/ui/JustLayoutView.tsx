@@ -34,9 +34,9 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   })
 
   useEffect(() => {
-    const removeFullScreen = window.api.onChangeFullScreen((_event, flag) => {
+    const removeFullScreen = window.api.onChangeFullScreen((_event, _flag) => {
     })
-    const removeMaximize = window.api.onChangeMaximize((_event, flag) => {
+    const removeMaximize = window.api.onChangeMaximize((_event, _flag) => {
     })
 
     const handleFullScreenChange = () => {

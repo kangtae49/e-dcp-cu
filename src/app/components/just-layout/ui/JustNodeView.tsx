@@ -2,12 +2,11 @@ import JustWinView from "./JustWinView.tsx";
 import classNames from "classnames";
 import * as React from "react";
 import JustSplitter, {type SplitSize} from "./JustSplitter.tsx";
-import {Activity, type CSSProperties, useEffect, useRef} from "react";
+import {Activity, type CSSProperties, useRef} from "react";
 import {CloseWinFn, GetWinInfoFn, OnClickTitleFn, OnDoubleClickTitleFn} from "../index.ts";
 import {JustBranch, JustNode, JustSplit, JustSplitDirection} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
-import {isEqual} from "lodash";
 
 interface Props {
   layoutId: string

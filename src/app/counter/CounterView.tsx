@@ -11,7 +11,6 @@ interface Props {
 export const CounterView = observer(({justId: _justId, layoutId}: Props) => {
 
   const counterStore = useCounterStore("abc")
-  const layoutStore = useJustLayoutStore(layoutId)
 
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc' }}>
