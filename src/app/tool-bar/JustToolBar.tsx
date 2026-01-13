@@ -1,5 +1,4 @@
 import './JustToolBar.css'
-import IconLogo from "../../assets/icon.svg?react"
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faBars, faGear} from "@fortawesome/free-solid-svg-icons"
@@ -9,7 +8,6 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
   aboutId, CONTENTS_VIEW,
   INIT_SIDE_MENU_SIZE,
-  LAYOUT_ID,
   SIDE_MENU_ID_LIST,
   SIDE_MENU_NODE_NAME, ViewId,
   viewMap

@@ -1,5 +1,5 @@
 import {RowComponentProps} from "react-window";
-import {JOB_MONITOR_VIEW_NODE_NAME, LAYOUT_ID} from "@/app/layout/layout.tsx";
+import {JOB_MONITOR_VIEW_NODE_NAME} from "@/app/layout/layout.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {
   faCircleStop,
