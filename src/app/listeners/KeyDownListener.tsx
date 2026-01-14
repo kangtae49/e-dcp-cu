@@ -3,7 +3,7 @@ import {useEffect} from "react";
 
 const KeyDownListener = observer(() => {
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (_event: KeyboardEvent) => {
     }
 
     window.addEventListener('keydown', handleKeyDown);
