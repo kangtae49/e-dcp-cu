@@ -207,7 +207,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "excalidraw-view": {
-    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
+    title: 'Excalidraw',
     icon: <Icon icon={faPen} />,
     canDup: true,
     canFullScreen: true,

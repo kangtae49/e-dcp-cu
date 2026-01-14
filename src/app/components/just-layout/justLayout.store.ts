@@ -56,6 +56,10 @@ interface PayloadGetSize {
   nodeName: string
 }
 
+interface PayloadGetBranchByJustId {
+  justId: JustId
+}
+
 interface PayloadIsPrimayHide {
   nodeName: string
 }
@@ -312,6 +316,11 @@ export class JustLayoutStore {
     } else {
       return null;
     }
+  }
+
+  getBranchByJustId = ({justId}: PayloadGetBranchByJustId) => {
+    const layout = this.layout;
+    return this.service.getBranchByWinId(layout, justId)
   }
 
   isPrimaryHide = ({nodeName}: PayloadIsPrimayHide) => {
