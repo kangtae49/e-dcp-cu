@@ -1,8 +1,8 @@
 import "./chart.css"
-import useGridData from "@/app/grid/useGridData.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
-import {GridData} from "@/app/grid/gridData.types.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
+import {GridData} from "@/app/grid-data/gridData.types.ts";
 import {toJS} from "mobx";
 
 export interface LegendItem {
@@ -18,7 +18,7 @@ interface Props {
 }
 
 function JustLineChart({dataKey, legend, xAxisCol}: Props) {
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
   const defaultGridData: GridData = {key: dataKey, header: [], data: []}
   const gridData = gridDataStore.gridDataMap[dataKey] ?? defaultGridData;
   return (

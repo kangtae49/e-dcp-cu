@@ -1,4 +1,4 @@
-import {GridDataStore} from "@/app/grid/gridData.store.ts";
+import {GridDataStore} from "@/app/grid-data/gridData.store.ts";
 
 export interface GridData {
   key: string,

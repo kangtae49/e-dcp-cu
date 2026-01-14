@@ -11,9 +11,11 @@ import { spawn, ChildProcess } from 'child_process';
 import {Env, DragStartItem, DialogResult, Versions} from "./types.ts";
 import iconv from 'iconv-lite';
 import * as os from "node:os";
-import {GridData} from "@/app/grid/gridData.types.ts";
+import {GridData} from "@/app/grid-data/gridData.types.ts";
 import {JobEvent} from "@/app/job/jobMonitor.types.ts";
 import {JobStatus} from "@/app/job/jobMonitor.constants.ts";
+import {ExcalidrawData} from "@/app/excalidraw-data/excalidrawData.types.ts";
+import {ExcalidrawState} from "@/app/excalidraw/excalidraw.types.ts";
 // import nativeImage = Electron.nativeImage;
 
 
@@ -60,6 +62,10 @@ export function handleGetAppResourcePath(_event: IpcMainInvokeEvent) {
 
 export function handleReadDataExcel(_event: IpcMainInvokeEvent, subpath: string) {
   return readDataExcel(subpath);
+}
+
+export function handleReadDataExcalidraw(_event: IpcMainInvokeEvent, subpath: string) {
+  return readDataExcalidraw(subpath);
 }
 
 export function handleStartDataFile(_event: IpcMainInvokeEvent, subpath: string) {
@@ -128,6 +134,31 @@ function readDataExcel(subpath: string): GridData | null {
     timestamp,
     header,
     data
+  }
+}
+
+
+function readDataExcalidraw(subpath: string): ExcalidrawData | null {
+  const filePath = getScriptSubPath(subpath)
+
+  if (!fs.existsSync(filePath)) {
+    return null
+  }
+
+  if (isLockScriptSubPath(filePath)) {
+    return null
+  }
+
+  const fileBuffer = fs.readFileSync(filePath);
+  const fileStats = fs.statSync(filePath);
+  const timestamp = fileStats.mtime.getTime();
+
+  const excalidrawState = JSON.parse(fileBuffer.toString()) as ExcalidrawState;
+
+  return {
+    key: subpath,
+    timestamp,
+    data: excalidrawState
   }
 }
 
@@ -404,6 +435,7 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('get-dirname', handleGetDirname);
   ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
   ipcMain.handle('read-data-excel', handleReadDataExcel);
+  ipcMain.handle('read-data-excalidraw', handleReadDataExcalidraw);
   ipcMain.handle('start-data-file', handleStartDataFile);
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))

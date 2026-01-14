@@ -6,13 +6,13 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
-  aboutId, CONTENTS_VIEW,
+  aboutId, CONTENTS_VIEW, helpId,
   INIT_SIDE_MENU_SIZE,
   SIDE_MENU_ID_LIST,
   SIDE_MENU_NODE_NAME, ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
-import {CONFIG_KEYS} from "@/app/grid/gridData.constants.ts";
+import {CONFIG_KEYS} from "@/app/grid-data/gridData.constants.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
@@ -78,6 +78,15 @@ function JustToolBar({justId: _justId, layoutId}: Props) {
               </MenuItem>
             )
           }
+          <MenuItem className="just-menu-item" onClick={() => openWin(helpId)}>
+            <div className="just-icon">
+              {viewMap[helpId.viewId as ViewId].icon}
+            </div>
+            <div className="just-title">
+              {helpId.title}
+            </div>
+            <div className="just-icon" />
+          </MenuItem>
           <MenuItem className="just-menu-item" onClick={() => openWin(aboutId)}>
             <div className="just-icon">
               {viewMap[aboutId.viewId as ViewId].icon}

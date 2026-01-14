@@ -1,8 +1,8 @@
 import "./chart.css"
 import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
-import useGridData from "@/app/grid/useGridData.ts";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
-import {GridData} from "@/app/grid/gridData.types.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
+import {GridData} from "@/app/grid-data/gridData.types.ts";
 
 interface DataKey {
   id: string
@@ -18,7 +18,7 @@ interface Props {
 
 function PageLineChart({title, outFile, legend}: Props) {
 
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
   const defaultConfigTable: GridData = {key: outFile, header: [], data: []}
 

@@ -1,11 +1,12 @@
-import "./ExcalidrawView.css"
+import "./ExcalidrawDataView.css"
 import "@excalidraw/excalidraw/index.css";
 import {observer} from "mobx-react-lite";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {Excalidraw, MainMenu, restore} from "@excalidraw/excalidraw";
 import {AppState, BinaryFiles} from "@excalidraw/excalidraw/types";
 import {OrderedExcalidrawElement} from "@excalidraw/excalidraw/element/types";
-import {useExcalidrawStore} from "@/app/excalidraw/useExcalidrawStore.ts";
+import {useExcalidrawDataStore} from "./useExcalidrawDataStore.ts";
+import {EXCALIDRAW_DATA_ID} from "./excalidrawData.constants.ts";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useEffect, useMemo, useState} from "react";
 import {toJS} from "mobx";
@@ -18,10 +19,14 @@ interface Props {
   justId: JustId
   layoutId: string
 }
-const ExcalidrawView = observer(({justId, layoutId}: Props) => {
+const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
   console.log('file', justId.params?.file)
   const justLayoutStore = useJustLayoutStore(layoutId);
-  const excalidrawStore = useExcalidrawStore(JustUtil.toString(justId))
+  const excalidrawDataStore = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
+
+  const dataKey = JustUtil.getParamString(justId, 'file');
+
+
   const [isFullScreen, setIsFullScreen] = useState(false)
 
 
@@ -63,31 +68,27 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
     }
   }
 
-  const handleChange = async (elements: readonly OrderedExcalidrawElement[], appState: AppState, files: BinaryFiles) => {
-    if (!appState) return;
-    if (appState.openMenu) {
-      await changeFullScreen()
-    }
-    // console.log('appState', appState)
-    const strState = JSON.stringify(toJS({elements, appState: filterAppState(appState), files}))
-    const strStoreState = JSON.stringify(toJS({elements: excalidrawStore.elements, appState: filterAppState(excalidrawStore.appState), files: excalidrawStore.files}))
-
-    if (strState === strStoreState) return;
-    console.log("handleChange", elements, appState, files)
-    excalidrawStore.setState({elements, appState: filterAppState(appState), files})
-  }
+  // const handleChange = async (elements: readonly OrderedExcalidrawElement[], appState: AppState, files: BinaryFiles) => {
+  //   if (!appState) return;
+  //   if (appState.openMenu) {
+  //     await changeFullScreen()
+  //   }
+  //   // console.log('appState', appState)
+  //   const strState = JSON.stringify(toJS({elements, appState: filterAppState(appState), files}))
+  //   const strStoreState = JSON.stringify(toJS({elements: excalidrawStore.elements, appState: filterAppState(excalidrawStore.appState), files: excalidrawStore.files}))
+  //
+  //   if (strState === strStoreState) return;
+  //   console.log("handleChange", elements, appState, files)
+  //   excalidrawStore.setState({elements, appState: filterAppState(appState), files})
+  // }
   return (
     <div className="excalidraw-view">
       <Excalidraw
         UIOptions={{
         //   dockedSidebarBreakpoint: 0
         }}
-        initialData={{
-          elements: excalidrawStore.elements,
-          files: excalidrawStore.files,
-          appState: excalidrawStore.appState
-        }}
-        onChange={handleChange}
+        initialData={excalidrawDataStore.excalidrawDataMap[dataKey].data}
+        // onChange={handleChange}
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>
@@ -111,5 +112,5 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
   )
 })
 
-export default ExcalidrawView
+export default ExcalidrawDataView
 

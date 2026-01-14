@@ -1,12 +1,12 @@
 import {useEffect} from "react";
-import useGridData from "@/app/grid/useGridData.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import pathUtils from "@/utils/pathUtils.ts";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {observer} from "mobx-react-lite";
 
 const WatchListener = observer((): null => {
 
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
   useEffect(() => {
 

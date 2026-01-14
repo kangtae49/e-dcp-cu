@@ -3,9 +3,9 @@ import "@silevis/reactgrid/styles.css";
 import {useEffect, useRef, useState} from "react";
 import {type Column, type DefaultCellTypes, type Id, ReactGrid, type Row} from "@silevis/reactgrid";
 import throttle from "lodash/throttle";
-import useGridData from "@/app/grid/useGridData.ts";
-import {GridData} from "@/app/grid/gridData.types.ts";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
+import {GridData} from "@/app/grid-data/gridData.types.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 
 interface Props {
   dataKey: string
@@ -67,7 +67,7 @@ const getTableRows = (table: GridData): Row[] => {
 
 function JustGrid({dataKey}: Props) {
 
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
   const [columnsSize, setColumnsSize] = useState({});
 
   const ref = useRef<ReactGrid>(null)

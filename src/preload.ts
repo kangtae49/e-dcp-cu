@@ -3,9 +3,10 @@
 import "reflect-metadata";
 import {contextBridge, ipcRenderer, webUtils } from 'electron'
 import {DragStartItem, Env, WatchEvent, DialogResult, Versions} from "@/types.ts";
-import {GridData} from "@/app/grid/gridData.types.ts";
+import {GridData} from "@/app/grid-data/gridData.types.ts";
 import {JobEvent} from "@/app/job/jobMonitor.types.ts";
 import * as Electron from "electron";
+import {ExcalidrawData} from "@/app/excalidraw-data/excalidrawData.types.ts";
 
 
 
@@ -24,6 +25,7 @@ export interface Api {
   // getResourceSubPath(subpath: string): Promise<string>
   getPathForFile(file: File): string
   readDataExcel(subpath: string): Promise<GridData | null>
+  readDataExcalidraw(subpath: string): Promise<ExcalidrawData | null>
   startDataFile(subpath: string): Promise<void>
   startScript(jobId: string, subpath: string, args: string[]): Promise<void>
   stopScript(jobId: string): Promise<void>
@@ -74,6 +76,9 @@ const api: Api = {
   },
   readDataExcel(subpath: string): Promise<GridData | null> {
     return ipcRenderer.invoke('read-data-excel', subpath);
+  },
+  readDataExcalidraw(subpath: string): Promise<ExcalidrawData | null> {
+    return ipcRenderer.invoke('read-data-excalidraw', subpath);
   },
   startDataFile(subpath: string) {
     return ipcRenderer.invoke('start-data-file', subpath);

@@ -35,7 +35,7 @@ export class FileWatcher {
           }
 
           const fileName = path.basename(currentPath);
-          return !(path.extname(fileName) === '.xlsx');
+          return !(['.xlsx', '.excalidraw'].includes(path.extname(fileName)));
         }
       ],
       persistent: true,

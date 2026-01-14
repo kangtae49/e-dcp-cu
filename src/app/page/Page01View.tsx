@@ -13,7 +13,7 @@ import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
 import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
-import useGridData from "@/app/grid/useGridData.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {usePageStore} from "@/app/page/usePageStore.ts";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
@@ -21,7 +21,7 @@ import {NativeTypes} from "react-dnd-html5-backend";
 import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
 import {JSONValue, JustId} from "@/app/components/just-layout/justLayout.types.ts";
@@ -62,7 +62,7 @@ const Page01View = observer(({justId}: Props)=> {
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
 
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
 
   const toOptions = (data: Record<string, string | number | boolean | null>[]): Option[] => {
@@ -206,7 +206,7 @@ const Page01View = observer(({justId}: Props)=> {
     item: () => {
       const item: JustDragItem = {
         justId: {
-          viewId: "grid-view",
+          viewId: "grid-data-view",
           title: getTitle(),
           params: {
             file: outPath,

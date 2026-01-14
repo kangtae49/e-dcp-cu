@@ -1,14 +1,14 @@
-import "./GridView.css"
+import "./GridDataView.css"
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare, faDownload} from "@fortawesome/free-solid-svg-icons";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import React, {useLayoutEffect, useRef} from "react";
-import useGridData from "@/app/grid/useGridData.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
-import {GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 
 interface Props {
@@ -16,10 +16,10 @@ interface Props {
   layoutId: string
 }
 
-function GridView({justId}: Props) {
+function GridDataView({justId}: Props) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const gridDataStore = useGridData(GRID_DATA_ID)
+  const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
   const dataKey = JustUtil.getParamString(justId, 'file');
   const title = justId.title;
@@ -43,7 +43,7 @@ function GridView({justId}: Props) {
 
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
-    drop(item: FileItem, monitor) {
+    drop(_item: FileItem, monitor) {
       if (gridDataStore.gridDataMap?.[dataKey]?.isLocked) {
         alert(`Close Excel: ${dataKey}`)
         window.api.startDataFile(dataKey).then()
@@ -67,7 +67,7 @@ function GridView({justId}: Props) {
 
 
   return (
-    <div ref={ref} className="grid-view">
+    <div ref={ref} className="grid-data-view">
       <div className="grid-head">
         <div
           draggable={true}
@@ -92,5 +92,5 @@ function GridView({justId}: Props) {
   )
 }
 
-export default GridView;
+export default GridDataView;
 

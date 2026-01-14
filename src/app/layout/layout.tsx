@@ -5,7 +5,7 @@ import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
 import Jdenticon from "react-jdenticon";
 import Page01View from "@/app/page/Page01View.tsx";
 import AboutView from "@/app/about/AboutView.tsx";
-import GridView from "@/app/grid/ui/GridView.tsx";
+import GridDataView from "@/app/grid-data/ui/GridDataView.tsx";
 import ChartView from "@/app/chart/ui/ChartView.tsx";
 import JustToolBar from "@/app/tool-bar/JustToolBar.tsx";
 import React from "react";
@@ -19,9 +19,10 @@ import {CounterView} from "@/app/counter/CounterView.tsx";
 import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
 import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
+import ExcalidrawDataView from "@/app/excalidraw-data/ExcalidrawDataView.tsx";
 
 
-export const LAYOUT_ID = "JUST-LAYOUT"
+export const LAYOUT_ID = "LAYOUT_ID"
 
 
 
@@ -49,20 +50,20 @@ export type ViewId = "top-menu" | "status-bar"
   | "bottom-panel" | "tool-bar" | "util-bar"
   | "side-menu"
   | "page01"
-  | "about"
-  | "grid-view"
+  | "about" | "help"
+  | "grid-data-view"
   | "chart-view"
   | "job-list-view"
   | "job-monitor-view"
-  | "excalidraw-view"
+  | "excalidraw-data-view" | "excalidraw-view"
   | "counter-view"
   // | "demo" | "demo-grid" | "demo-line-chart"
 
 export const DND_ACCEPT_CONTENT = [
   "page01",
-  "grid-view", "chart-view", "job-monitor-view",
-  "about",
-  "excalidraw-view"
+  "grid-data-view", "chart-view", "job-monitor-view",
+  "about", "help",
+  "excalidraw-view", "excalidraw-data-view",
 ]
 
 export interface SideMenuItem {
@@ -76,6 +77,7 @@ export const toolBarId: JustId = {viewId: 'tool-bar', title: 'Tool Bar'};
 export const utilBarId: JustId = {viewId: 'util-bar', title: 'Util Bar'};
 export const sideMenuId: JustId = {viewId: 'side-menu', title: 'Menu'};
 export const aboutId: JustId = {viewId: 'about', title: 'About'};
+export const helpId: JustId = {viewId: 'help', title: 'Help', params: {file: 'data\\help.excalidraw'}};
 
 export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 
@@ -169,6 +171,16 @@ export const viewMap: Record<ViewId, WinInfo> = {
       )
     }
   },
+  "help": {
+    title: "Help",
+    canFullScreen: true,
+    icon: <Icon icon={faCircleQuestion} />,
+    getView: (justId, layoutId) => {
+      return (
+        <ExcalidrawDataView justId={justId} layoutId={layoutId} />
+      )
+    }
+  },
   "chart-view": {
     title: (justId) => justId.title,
     icon: <Icon icon={faChartLine} />,
@@ -178,12 +190,12 @@ export const viewMap: Record<ViewId, WinInfo> = {
       )
     }
   },
-  "grid-view": {
+  "grid-data-view": {
     title: (justId) => justId.title,
     icon: <Icon icon={faTableList} />,
     getView: (justId, layoutId) => {
       return (
-        <GridView justId={justId} layoutId={layoutId} />
+        <GridDataView justId={justId} layoutId={layoutId} />
       )
     }
   },
@@ -214,6 +226,16 @@ export const viewMap: Record<ViewId, WinInfo> = {
     getView: (justId, layoutId) => {
       return (
         <ExcalidrawView justId={justId} layoutId={layoutId} />
+      )
+    }
+  },
+  "excalidraw-data-view": {
+    title: (justId) => justId.title,
+    icon: <Icon icon={faPen} />,
+    canFullScreen: true,
+    getView: (justId, layoutId) => {
+      return (
+        <ExcalidrawDataView justId={justId} layoutId={layoutId} />
       )
     }
   },

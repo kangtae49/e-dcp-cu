@@ -6,7 +6,7 @@ import WatchListener from "@/app/listeners/WatchListener";
 import React, {useEffect} from "react";
 
 import {WinInfo} from "@/app/components/just-layout";
-import useGridData from "@/app/grid/useGridData.ts";
+import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {
   initialLayoutValue,
   LAYOUT_ID,
@@ -15,11 +15,13 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid/gridData.constants.ts";
+import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
+import {EXCALIDRAW_DATA_ID, EXCALIDRAW_DATA_KEYS} from "@/app/excalidraw-data/excalidrawData.constants.ts";
+import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
 // import DevTools from 'mobx-react-devtools';
 
 // import remotedev from 'mobx-remotedev';
@@ -48,7 +50,8 @@ const App = observer(() => {
 
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
 
-  const {updateGridData} = useGridData(GRID_DATA_ID)
+  const {updateGridData} = useGridDataStore(GRID_DATA_ID)
+  const {updateExcalidrawData} = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
 
   useEffect(() => {
     window.api.onSuspend((event) => {
@@ -60,6 +63,15 @@ const App = observer(() => {
         .then(gridData => {
           if (gridData) {
             updateGridData(gridData)
+          }
+        })
+    })
+    EXCALIDRAW_DATA_KEYS.forEach((justId: JustId) => {
+      const file: string = JustUtil.getParamString(justId, 'file');
+      window.api.readDataExcalidraw(file)
+        .then(excalidrawData => {
+          if (excalidrawData) {
+            updateExcalidrawData(excalidrawData)
           }
         })
     })
