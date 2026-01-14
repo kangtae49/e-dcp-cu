@@ -1,6 +1,4 @@
 import {ExcalidrawDataStore} from "./excalidrawData.store.ts";
-import {OrderedExcalidrawElement} from "@excalidraw/excalidraw/element/types";
-import {AppState, BinaryFiles} from "@excalidraw/excalidraw/types";
 import {ExcalidrawState} from "@/app/excalidraw/excalidraw.types.ts";
 
 export type ExcalidrawDataFactory = (id: string) => ExcalidrawDataStore;
