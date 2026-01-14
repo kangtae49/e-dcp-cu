@@ -229,7 +229,7 @@ const JustDraggableTitle = observer((props: Prop) => {
                     <Icon icon={faExpand} />
                 </div>
                 <div className="just-title">
-                  {isFullScreenView ? 'Esc' : 'Full'}
+                  {isFullScreenView ? 'F11' : 'Full'}
                 </div>
                 <div className="just-icon" />
             </MenuItem>

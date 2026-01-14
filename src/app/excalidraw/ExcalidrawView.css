@@ -14,8 +14,13 @@
 }
 
 
-/*.excalidraw-container,*/
-/*.excalidraw .modal-container,*/
-/*.excalidraw .overlay {*/
-/*    z-index: 9999 !important;*/
-/*}*/
+.excalidraw .Island.App-menu__left {
+    left: auto !important;
+    right: 15px !important;
+    top: 70px !important;
+    box-shadow: -2px 0 8px rgba(0,0,0,0.1) !important;
+}
+
+.excalidraw .Island.App-menu__left .panelColumn {
+    align-items: flex-end !important;
+}

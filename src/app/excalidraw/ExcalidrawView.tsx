@@ -7,7 +7,7 @@ import {AppState, BinaryFiles} from "@excalidraw/excalidraw/types";
 import {OrderedExcalidrawElement} from "@excalidraw/excalidraw/element/types";
 import {useExcalidrawStore} from "@/app/excalidraw/useExcalidrawStore.ts";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {toJS} from "mobx";
 import {restoreAppState} from "@excalidraw/excalidraw";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
@@ -21,14 +21,13 @@ interface Props {
 const ExcalidrawView = observer(({justId, layoutId}: Props) => {
   const justLayoutStore = useJustLayoutStore(layoutId);
   const excalidrawStore = useExcalidrawStore(JustUtil.toString(justId))
+  const [isFullScreen, setIsFullScreen] = useState(false)
 
+  const changeFullScreen = async () => {
+    setIsFullScreen(await window.api.isFullScreen())
+  }
+  changeFullScreen()
 
-  useEffect(() => {
-    console.log("useEffect")
-    return () => {
-      console.log("useEffect return")
-    }
-  }, []);
 
   const filterAppState = (appState: AppState): AppState => {
     if (!appState) {
@@ -62,9 +61,12 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
     }
   }
 
-  const handleChange = (elements: readonly OrderedExcalidrawElement[], appState: AppState, files: BinaryFiles) => {
+  const handleChange = async (elements: readonly OrderedExcalidrawElement[], appState: AppState, files: BinaryFiles) => {
     if (!appState) return;
-    console.log('appState', appState)
+    if (appState.openMenu) {
+      await changeFullScreen()
+    }
+    // console.log('appState', appState)
     const strState = JSON.stringify(toJS({elements, appState: filterAppState(appState), files}))
     const strStoreState = JSON.stringify(toJS({elements: excalidrawStore.elements, appState: filterAppState(excalidrawStore.appState), files: excalidrawStore.files}))
 
@@ -87,7 +89,7 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>
-            <Icon icon={faExpand} /> Full
+            <Icon icon={faExpand} /> {isFullScreen ? 'F11' : 'Full'}
           </MainMenu.Item>
           <MainMenu.DefaultItems.LoadScene />
           <MainMenu.DefaultItems.SaveToActiveFile />

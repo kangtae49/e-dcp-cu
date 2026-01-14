@@ -201,7 +201,7 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
               <Icon icon={faExpand} />
             </div>
             <div className="just-title">
-              {isFullScreenView ? 'Esc' : 'Full'}
+              {isFullScreenView ? 'F11' : 'Full'}
             </div>
             <div className="just-icon" />
           </MenuItem>
