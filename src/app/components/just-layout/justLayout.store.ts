@@ -220,6 +220,44 @@ export class JustLayoutStore {
     this.lastActiveTm = new Date().getTime()
   }
 
+  activePrevWin = () => {
+    const curJustId = this.lastActiveId
+    if (curJustId == null) return;
+    // const winIds = this.queryWinIdsByViewId(curJustId.viewId)
+    const stackNode = this.service.getNodeByWinId(this.layout, curJustId)
+    if (stackNode?.type !== 'stack') {
+      return
+    }
+    if (stackNode.tabs.length === 0) {
+      return
+    }
+    const idx = JustUtil.indexOf(stackNode.tabs, curJustId);
+    const newIdx = (idx -1 + stackNode.tabs.length) % stackNode.tabs.length;
+    const newJustId = stackNode.tabs[newIdx]
+    this.activeWin({
+      justId: newJustId
+    })
+  }
+
+  activeNextWin = () => {
+    const curJustId = this.lastActiveId
+    if (curJustId == null) return;
+    // const winIds = this.queryWinIdsByViewId(curJustId.viewId)
+    const stackNode = this.service.getNodeByWinId(this.layout, curJustId)
+    if (stackNode?.type !== 'stack') {
+      return
+    }
+    if (stackNode.tabs.length === 0) {
+      return
+    }
+    const idx = JustUtil.indexOf(stackNode.tabs, curJustId);
+    const newIdx = (idx + 1) % stackNode.tabs.length;
+    const newJustId = stackNode.tabs[newIdx]
+    this.activeWin({
+      justId: newJustId
+    })
+  }
+
   updateResize = (payload: JustPayloadResize) => {
     this.layout = this.service.updateSplitSize(
       this.layout,

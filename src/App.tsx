@@ -22,6 +22,7 @@ import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
 import {EXCALIDRAW_DATA_ID, EXCALIDRAW_DATA_KEYS} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
+import KeyDownListener from "@/app/listeners/KeyDownListener.tsx";
 // import DevTools from 'mobx-react-devtools';
 
 // import remotedev from 'mobx-remotedev';
@@ -91,6 +92,7 @@ const App = observer(() => {
     <>
       {/*<DevTools />*/}
       <AppListener />
+      <KeyDownListener />
       <JobListener />
       <WatchListener />
       <div className="just-app">

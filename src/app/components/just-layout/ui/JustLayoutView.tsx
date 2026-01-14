@@ -52,6 +52,21 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
           justLayoutStore.setFullScreenLayoutByBranch(null)
         }
       }
+      if (e.altKey) {
+        if (e.key === 'ArrowRight') {
+          if (justLayoutFullScreenStore.layout !== null) {
+            justLayoutFullScreenStore.activeNextWin()
+          } else {
+            justLayoutStore.activeNextWin()
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (justLayoutFullScreenStore.layout !== null) {
+            justLayoutFullScreenStore.activePrevWin()
+          } else {
+            justLayoutStore.activePrevWin()
+          }
+        }
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown);
@@ -97,6 +112,9 @@ const JustLayoutView = observer(({layoutId, getWinInfo, initialValue, closeWin, 
   useEffect(() => {
     console.log('useEffect justLayoutStore.fullScreenLayout', justLayoutStore.fullScreenLayout)
     justLayoutFullScreenStore.setLayout(justLayoutStore.fullScreenLayout)
+    if (justLayoutStore.lastActiveId) {
+      justLayoutFullScreenStore.activeWin({justId: justLayoutStore.lastActiveId})
+    }
   }, [justLayoutStore.fullScreenLayout])
 
   useEffect(() => {
