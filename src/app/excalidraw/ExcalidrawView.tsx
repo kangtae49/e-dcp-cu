@@ -19,7 +19,6 @@ interface Props {
   layoutId: string
 }
 const ExcalidrawView = observer(({justId, layoutId}: Props) => {
-  console.log('file', justId.params?.file)
   const justLayoutStore = useJustLayoutStore(layoutId);
   const excalidrawStore = useExcalidrawStore(JustUtil.toString(justId))
   const [isFullScreen, setIsFullScreen] = useState(false)
