@@ -6,7 +6,7 @@ import WatchListener from "@/app/listeners/WatchListener";
 import React, {useEffect} from "react";
 
 import {WinInfo} from "@/app/components/just-layout";
-import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
+// import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {
   initialLayoutValue,
   LAYOUT_ID,
@@ -15,12 +15,12 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {CONFIG_KEYS, GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
+import {getGridDataKeys, GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
-import {EXCALIDRAW_DATA_ID, EXCALIDRAW_DATA_KEYS} from "@/app/excalidraw-data/excalidrawData.constants.ts";
+import {EXCALIDRAW_DATA_ID, getExcalidrawDataKeys} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
 import KeyDownListener from "@/app/listeners/KeyDownListener.tsx";
 // import DevTools from 'mobx-react-devtools';
@@ -51,31 +51,45 @@ const App = observer(() => {
 
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
 
-  const {updateGridData} = useGridDataStore(GRID_DATA_ID)
-  const {updateExcalidrawData} = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
+  // const {updateGridData} = useGridDataStore(GRID_DATA_ID)
+  // const {updateExcalidrawData} = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
+
+
 
   useEffect(() => {
+    const startWatcher = async () => {
+      await window.api.startWatching()
+      await window.api.addWatchPath((await getGridDataKeys()).map((justId) => JustUtil.getParamString(justId, 'file')))
+      await window.api.addWatchPath((await getExcalidrawDataKeys()).map((justId) => JustUtil.getParamString(justId, 'file')))
+    }
+    startWatcher()
+
     window.api.onSuspend((event) => {
       console.log('onSuspend', event)
     })
-    CONFIG_KEYS.forEach((justId: JustId) => {
-      const file: string = JustUtil.getParamString(justId, 'file');
-      window.api.readDataExcel(file)
-        .then(gridData => {
-          if (gridData) {
-            updateGridData(gridData)
-          }
-        })
-    })
-    EXCALIDRAW_DATA_KEYS.forEach((justId: JustId) => {
-      const file: string = JustUtil.getParamString(justId, 'file');
-      window.api.readDataExcalidraw(file)
-        .then(excalidrawData => {
-          if (excalidrawData) {
-            updateExcalidrawData(excalidrawData)
-          }
-        })
-    })
+
+
+    // CONFIG_KEYS.forEach((justId: JustId) => {
+    //   const file: string = JustUtil.getParamString(justId, 'file');
+    //   window.api.readDataExcel(file)
+    //     .then(gridData => {
+    //       if (gridData) {
+    //         updateGridData(gridData)
+    //       }
+    //     })
+    // })
+    // EXCALIDRAW_DATA_KEYS.forEach((justId: JustId) => {
+    //   const file: string = JustUtil.getParamString(justId, 'file');
+    //   window.api.readDataExcalidraw(file)
+    //     .then(excalidrawData => {
+    //       if (excalidrawData) {
+    //         updateExcalidrawData(excalidrawData)
+    //       }
+    //     })
+    // })
+    return () => {
+      window.api.stopWatching()
+    }
 
   }, [])
 

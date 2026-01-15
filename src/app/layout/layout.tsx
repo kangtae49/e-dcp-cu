@@ -77,7 +77,7 @@ export const toolBarId: JustId = {viewId: 'tool-bar', title: 'Tool Bar'};
 export const utilBarId: JustId = {viewId: 'util-bar', title: 'Util Bar'};
 export const sideMenuId: JustId = {viewId: 'side-menu', title: 'Menu'};
 export const aboutId: JustId = {viewId: 'about', title: 'About'};
-export const helpId: JustId = {viewId: 'help', title: 'Help', params: {file: 'data\\help.excalidraw'}};
+export const getHelpId = async (): Promise<JustId> => ({viewId: 'help', title: 'Help', params: {file: await window.api.getScriptSubPath('data\\help.excalidraw')}});
 
 export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 

@@ -1,7 +1,7 @@
 import {GridDataStore} from "@/app/grid-data/gridData.store.ts";
 
 export interface GridData {
-  key: string,
+  path: string,
   timestamp?: number,
   isLocked?: boolean,
   header: string [],

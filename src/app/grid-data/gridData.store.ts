@@ -33,7 +33,7 @@ export class GridDataStore {
   }
 
   updateGridData = (payload: GridData) =>  {
-    const existing = this.gridDataMap[payload.key] || {};
+    const existing = this.gridDataMap[payload.path] || {};
     const newGridData: GridData = {
       ...existing,
       data: payload.data,
@@ -43,7 +43,7 @@ export class GridDataStore {
 
     this.gridDataMap = {
       ...this.gridDataMap,
-      [payload.key]: newGridData
+      [payload.path]: newGridData
     }
   }
 

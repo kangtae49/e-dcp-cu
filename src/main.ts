@@ -83,23 +83,23 @@ app.on('ready', () => {
   // installExtensions()
   if (process.env.NODE_ENV === 'development') {
     enableLogging({
-      action: true,      // 어떤 액션이 실행되었는지 표시
-      reaction: false,   // 리액션(자동 업데이트) 로그는 너무 많을 수 있으니 일단 false
-      transaction: true, // 트랜잭션 단위 로그 표시
-      compute: true,     // computed 값의 변화 표시
+      action: true,
+      reaction: false,
+      transaction: true,
+      compute: true,
     });
   }
 
 
   const mainWindow = createWindow()
-  registerHandlers(mainWindow);
 
-  const watchPath = getScriptPath();
-  const watcher = new FileWatcher(mainWindow, watchPath);
-  watcher.startWatching();
+  const fileWatcher = new FileWatcher(mainWindow, []);
 
+  registerHandlers(mainWindow, fileWatcher);
+
+  // fileWatcher.startWatching();
   app.on('before-quit', () => {
-    watcher?.stopWatching();
+    // fileWatcher?.stopWatching();
   });
 
 });

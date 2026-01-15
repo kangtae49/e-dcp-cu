@@ -19,7 +19,7 @@ interface Props {
 
 function JustLineChart({dataKey, legend, xAxisCol}: Props) {
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
-  const defaultGridData: GridData = {key: dataKey, header: [], data: []}
+  const defaultGridData: GridData = {path: dataKey, header: [], data: []}
   const gridData = gridDataStore.gridDataMap[dataKey] ?? defaultGridData;
   return (
     <LineChart

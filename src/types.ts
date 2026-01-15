@@ -8,7 +8,7 @@ export type WatchStatus = 'CREATED' | 'MODIFIED' | 'DELETED';
 export interface WatchFileData {
   status: WatchStatus
   path: string
-  key: string
+  // key: string
   mtime: number
 }
 

@@ -10,7 +10,7 @@ export const EXCALIDRAW_DATA_TYPES = {
 };
 
 export interface ExcalidrawData {
-  key: string,
+  path: string,
   timestamp?: number,
   isLocked?: boolean,
   data: ExcalidrawState

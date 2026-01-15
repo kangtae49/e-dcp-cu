@@ -6,15 +6,16 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
-  aboutId, CONTENTS_VIEW, helpId,
+  aboutId, CONTENTS_VIEW, getHelpId,
   INIT_SIDE_MENU_SIZE,
   SIDE_MENU_ID_LIST,
   SIDE_MENU_NODE_NAME, ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
-import {CONFIG_KEYS} from "@/app/grid-data/gridData.constants.ts";
+import {getGridDataKeys} from "@/app/grid-data/gridData.constants.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {useEffect, useState} from "react";
 
 interface Props {
   justId: JustId
@@ -22,6 +23,8 @@ interface Props {
 }
 
 function JustToolBar({justId: _justId, layoutId}: Props) {
+  const [configKeys, setConfigKeys] = useState<JustId[]>([])
+  const [helpId, setHelpId] = useState<JustId | null>(null)
 
   const justLayoutStore = useJustLayoutStore(layoutId)
 
@@ -36,6 +39,13 @@ function JustToolBar({justId: _justId, layoutId}: Props) {
   }
   const size = justLayoutStore.getSizeByNodeName({nodeName: SIDE_MENU_NODE_NAME}) ?? INIT_SIDE_MENU_SIZE;
   const isHide = justLayoutStore.isPrimaryHide({nodeName: SIDE_MENU_NODE_NAME}) ?? false;
+
+  useEffect(() => {
+    getHelpId().then(setHelpId)
+
+    getGridDataKeys().then(setConfigKeys)
+
+  }, [])
   return (
     <div className="just-tool-bar">
       <div
@@ -66,7 +76,7 @@ function JustToolBar({justId: _justId, layoutId}: Props) {
           </div>
         }>
           {
-            CONFIG_KEYS.map((justId) =>
+            configKeys.map((justId) =>
               <MenuItem key={JustUtil.toString(justId)} className="just-menu-item" onClick={() => openWin(justId)}>
                 <div className="just-icon">
                   {viewMap[justId.viewId as ViewId].icon}
@@ -78,15 +88,17 @@ function JustToolBar({justId: _justId, layoutId}: Props) {
               </MenuItem>
             )
           }
-          <MenuItem className="just-menu-item" onClick={() => openWin(helpId)}>
-            <div className="just-icon">
-              {viewMap[helpId.viewId as ViewId].icon}
-            </div>
-            <div className="just-title">
-              {helpId.title}
-            </div>
-            <div className="just-icon" />
-          </MenuItem>
+          {helpId &&
+            <MenuItem className="just-menu-item" onClick={() => openWin(helpId)}>
+              <div className="just-icon">
+                {viewMap[helpId.viewId as ViewId].icon}
+              </div>
+              <div className="just-title">
+                {helpId.title}
+              </div>
+              <div className="just-icon"/>
+            </MenuItem>
+          }
           <MenuItem className="just-menu-item" onClick={() => openWin(aboutId)}>
             <div className="just-icon">
               {viewMap[aboutId.viewId as ViewId].icon}

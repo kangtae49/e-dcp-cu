@@ -16,6 +16,7 @@ import {JobEvent} from "@/app/job/jobMonitor.types.ts";
 import {JobStatus} from "@/app/job/jobMonitor.constants.ts";
 import {ExcalidrawData} from "@/app/excalidraw-data/excalidrawData.types.ts";
 import {ExcalidrawState} from "@/app/excalidraw/excalidraw.types.ts";
+import {FileWatcher} from "@/file_watcher.ts";
 // import nativeImage = Electron.nativeImage;
 
 
@@ -59,13 +60,29 @@ export function handleGetDirname(_event: IpcMainInvokeEvent) {
 export function handleGetAppResourcePath(_event: IpcMainInvokeEvent) {
   return getAppResourcePath();
 }
+export function handleGetScriptPath(_event: IpcMainInvokeEvent) {
+  return getScriptPath();
+}
+
+export function handleGetScriptSubPath(_event: IpcMainInvokeEvent, subpath: string) {
+  return getScriptSubPath(subpath);
+}
+
 
 export function handleReadDataExcel(_event: IpcMainInvokeEvent, subpath: string) {
   return readDataExcel(subpath);
 }
 
+export function handleReadExcel(_event: IpcMainInvokeEvent, filePath: string) {
+  return readExcel(filePath);
+}
+
 export function handleReadDataExcalidraw(_event: IpcMainInvokeEvent, subpath: string) {
   return readDataExcalidraw(subpath);
+}
+
+export function handleReadExcalidraw(_event: IpcMainInvokeEvent, filePath: string) {
+  return readExcalidraw(filePath);
 }
 
 export function handleStartDataFile(_event: IpcMainInvokeEvent, subpath: string) {
@@ -88,15 +105,37 @@ export function handleOpenSaveDialog(_event: IpcMainInvokeEvent, subpath: string
 export function handleUploadFile(_event: IpcMainInvokeEvent, sourcePath: string, subpath: string) {
   return uploadFile(sourcePath, subpath);
 }
+export function handleStartWatching(fileWatcher: FileWatcher) {
+  fileWatcher.startWatching();
+}
+export function handleStopWatching(fileWatcher: FileWatcher) {
+  fileWatcher.stopWatching();
+}
+
+export function handleAddWatchPath(fileWatcher: FileWatcher, watchPath: string[]) {
+  fileWatcher.add(watchPath);
+}
+export function handleUnWatchPath(fileWatcher: FileWatcher, watchPath: string[]) {
+  fileWatcher.unwatch(watchPath);
+}
+export function handleAddWatchSubPath(fileWatcher: FileWatcher, subPath: string[]) {
+  const watchPath = subPath.map(getScriptSubPath)
+  fileWatcher.add(watchPath);
+}
+
+export function handleUnWatchSubPath(fileWatcher: FileWatcher, subPath: string[]) {
+  const watchPath = subPath.map(getScriptSubPath)
+  fileWatcher.unwatch(watchPath);
+}
 
 function readDataExcel(subpath: string): GridData | null {
   const filePath = getScriptSubPath(subpath)
+  return readExcel(filePath)
+}
+
+function readExcel(filePath: string): GridData | null {
 
   if (!fs.existsSync(filePath)) {
-    return null
-  }
-
-  if (isLockScriptSubPath(filePath)) {
     return null
   }
 
@@ -130,24 +169,26 @@ function readDataExcel(subpath: string): GridData | null {
   // }) as Record<string, string | number | boolean | null> [];
 
   return {
-    key: subpath,
+    path: filePath,
     timestamp,
     header,
     data
   }
 }
 
-
 function readDataExcalidraw(subpath: string): ExcalidrawData | null {
   const filePath = getScriptSubPath(subpath)
+  return readExcalidraw(filePath)
+}
 
+function readExcalidraw(filePath: string): ExcalidrawData | null {
   if (!fs.existsSync(filePath)) {
     return null
   }
 
-  if (isLockScriptSubPath(filePath)) {
-    return null
-  }
+  // if (isLockScriptSubPath(filePath)) {
+  //   return null
+  // }
 
   const fileBuffer = fs.readFileSync(filePath);
   const fileStats = fs.statSync(filePath);
@@ -156,7 +197,7 @@ function readDataExcalidraw(subpath: string): ExcalidrawData | null {
   const excalidrawState = JSON.parse(fileBuffer.toString()) as ExcalidrawState;
 
   return {
-    key: subpath,
+    path: filePath,
     timestamp,
     data: excalidrawState
   }
@@ -426,7 +467,7 @@ function uploadFile (sourcePath: string, subpath: string) {
   fs.copyFileSync(sourcePath, targetPath)
 }
 
-export const registerHandlers = (mainWindow: BrowserWindow) => {
+export const registerHandlers = (mainWindow: BrowserWindow, fileWatcher: FileWatcher) => {
   ipcMain.handle('echo', handleEcho);
   ipcMain.handle('set-full-screen', (_event, flag) => handleSetFullScreen(mainWindow, flag))
   ipcMain.handle('is-full-screen', (_event) => handleIsFullScreen(mainWindow))
@@ -434,8 +475,12 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('get-versions', handleGetVersions);
   ipcMain.handle('get-dirname', handleGetDirname);
   ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
+  ipcMain.handle('get-script-path', handleGetScriptPath);
+  ipcMain.handle('get-script-subpath', handleGetScriptSubPath);
   ipcMain.handle('read-data-excel', handleReadDataExcel);
+  ipcMain.handle('read-excel', handleReadExcel);
   ipcMain.handle('read-data-excalidraw', handleReadDataExcalidraw);
+  ipcMain.handle('read-excalidraw', handleReadExcalidraw);
   ipcMain.handle('start-data-file', handleStartDataFile);
   ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
@@ -443,6 +488,12 @@ export const registerHandlers = (mainWindow: BrowserWindow) => {
   ipcMain.handle('get-env', handleGetEnv)
   ipcMain.handle('open-save-dialog', handleOpenSaveDialog)
   ipcMain.handle('upload-file', handleUploadFile)
+  ipcMain.handle('start-watching', (_event) => handleStartWatching(fileWatcher))
+  ipcMain.handle('stop-watching', (_event) => handleStopWatching(fileWatcher))
+  ipcMain.handle('add-watch-path', (_event, watchPath: string[]) => handleAddWatchPath(fileWatcher, watchPath))
+  ipcMain.handle('un-watch-path', (_event, watchPath: string[]) => handleUnWatchPath(fileWatcher, watchPath))
+  ipcMain.handle('add-watch-subpath', (_event, subPath: string[]) => handleAddWatchSubPath(fileWatcher, subPath))
+  ipcMain.handle('un-watch-subpath', (_event, subPath: string[]) => handleUnWatchSubPath(fileWatcher, subPath))
 
   ipcMain.on('ondragstart', onDragStart);
   ipcMain.on('window-minimize', () => onWindowMinimize(mainWindow))

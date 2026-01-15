@@ -20,7 +20,7 @@ function PageLineChart({title, outFile, legend}: Props) {
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
-  const defaultConfigTable: GridData = {key: outFile, header: [], data: []}
+  const defaultConfigTable: GridData = {path: outFile, header: [], data: []}
 
   const configTable = gridDataStore.gridDataMap[outFile] ?? defaultConfigTable;
 

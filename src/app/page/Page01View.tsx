@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
+import React, {Activity, useEffect, useLayoutEffect, useRef, useState} from "react";
 import { format } from "date-fns";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
@@ -34,7 +34,9 @@ interface Props {
 
 
 const Page01View = observer(({justId}: Props)=> {
-  const dataKey = "data\\company.xlsx";
+  const [dataKey, setDataKey] = useState<string>("")
+  const [outPath, setOutPath] = useState<string>("")
+
   const pagesDir = "pages";
   const xAxisCol =  "stdrYm";
   const legend: LegendItem [] = [
@@ -82,18 +84,18 @@ const Page01View = observer(({justId}: Props)=> {
   const condition = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm]
   const filename = condition.join("_")
   const outFile = `${filename}.xlsx`
-  const outPath = `${pagesDir}\\${outFile}`
+  // const outPath = `${pagesDir}\\${outFile}`
 
   const jobStatus = jobMonitorStore.status[pageStore.jobInfo?.jobId ?? '']
 
   useEffect(() => {
-    window.api.readDataExcel(outPath)
-      .then((gridData) => {
-        if (gridData) {
-          gridDataStore.updateGridData(gridData)
-        }
-      })
-  }, [outPath])
+    const subpath = `${pagesDir}\\${outFile}`
+    window.api.getScriptSubPath(subpath).then(async (filePath) => {
+      await window.api.addWatchPath([filePath])
+      setOutPath(filePath)
+    })
+  }, [pagesDir, outFile])
+
 
   useEffect(() => {
     if (companyList.length > 0 && !pageStore.company) {
@@ -299,6 +301,10 @@ const Page01View = observer(({justId}: Props)=> {
     }
   }, [dragJob]);
 
+
+  useEffect(() => {
+    window.api.getScriptSubPath("data\\company.xlsx").then(setDataKey)
+  }, [])
   return (
     <div className="win-page"
          ref={ref}

@@ -72,7 +72,8 @@ function JustGrid({dataKey}: Props) {
 
   const ref = useRef<ReactGrid>(null)
 
-  const defaultConfigTable: GridData = {key: dataKey, header: [], data: []}
+
+  const defaultConfigTable: GridData = {path: dataKey, header: [], data: []}
 
 
 

@@ -3,13 +3,14 @@ import chokidar, { FSWatcher } from 'chokidar';
 import {WatchEvent, WatchFileData, WatchStatus} from "./types.ts";
 import path from "node:path";
 import * as fs from "node:fs";
+import {getScriptPath} from "./api_core.ts";
 
 export class FileWatcher {
   private watcher: FSWatcher | null = null;
   private window: BrowserWindow;
-  private readonly watchPath: string;
+  private readonly watchPath: string[];
 
-  constructor(window: BrowserWindow, watchPath: string) {
+  constructor(window: BrowserWindow, watchPath: string[]) {
     this.window = window;
     this.watchPath = watchPath;
   }
@@ -23,23 +24,27 @@ export class FileWatcher {
     console.log(`Watching directory: ${this.watchPath}`);
 
     this.watcher = chokidar.watch(this.watchPath, {
-      ignored: [
-        (currentPath) => {
-
-          try {
-            if (fs.lstatSync(currentPath).isDirectory()) {
-              return false
-            }
-          } catch (_err) {
-            // nothing : deleted file
-          }
-
-          const fileName = path.basename(currentPath);
-          return !(['.xlsx', '.excalidraw'].includes(path.extname(fileName)));
-        }
-      ],
+      // ignored: [
+      //   (currentPath) => {
+      //
+      //     try {
+      //       if (fs.lstatSync(currentPath).isDirectory()) {
+      //         return false
+      //       }
+      //     } catch (_err) {
+      //       // nothing : deleted file
+      //     }
+      //
+      //     const fileName = path.basename(currentPath);
+      //     return !(['.xlsx', '.excalidraw'].includes(path.extname(fileName)));
+      //   }
+      // ],
+      awaitWriteFinish: {
+        stabilityThreshold: 200,
+        pollInterval: 100
+      },
       persistent: true,
-      ignoreInitial: true,
+      ignoreInitial: false,
       depth: 99
     });
 
@@ -60,14 +65,22 @@ export class FileWatcher {
       console.log('FileWatcher stopped.');
     }
   }
+  public add(watchPath: string []) {
+    this.watcher?.add(watchPath);
+  }
+  public unwatch(watchPath: string []) {
+    this.watcher?.unwatch(watchPath);
+  }
+
 
   private sendWatchEvent(status: WatchStatus, filePath: string, mtime?: number) {
     console.log(`[FileEvent] ${status}: ${filePath}`);
-    const key = path.relative(this.watchPath, filePath);
+    const scriptPath = getScriptPath()
+    const key = path.relative(scriptPath, filePath);
     const eventData: WatchFileData = {
       status,
       path: filePath,
-      key,
+      // key,
       mtime: mtime || Date.now()
     };
 
@@ -78,5 +91,8 @@ export class FileWatcher {
     this.window.webContents.send("on-watch-event", watchEvent);
 
   }
+
+
+
 
 }

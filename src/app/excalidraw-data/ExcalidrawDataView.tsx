@@ -17,7 +17,6 @@ interface Props {
   layoutId: string
 }
 const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
-  console.log('file', justId.params?.file)
   const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null);
 
   const justLayoutStore = useJustLayoutStore(layoutId);
@@ -52,8 +51,9 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
 
   useEffect(() => {
     if (!excalidrawRef.current) return;
+    if (!excalidrawDataStore.excalidrawDataMap[dataKey]) return;
     excalidrawRef.current.updateScene(excalidrawDataStore.excalidrawDataMap[dataKey].data)
-  }, [excalidrawDataStore.excalidrawDataMap[dataKey].data])
+  }, [excalidrawDataStore.excalidrawDataMap[dataKey]?.data])
 
   return (
     <div className="excalidraw-view">
@@ -62,7 +62,7 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
         UIOptions={{
         //   dockedSidebarBreakpoint: 0
         }}
-        initialData={excalidrawDataStore.excalidrawDataMap[dataKey].data}
+        initialData={excalidrawDataStore.excalidrawDataMap[dataKey]?.data}
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>

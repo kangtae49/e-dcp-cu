@@ -20,12 +20,22 @@ export interface Api {
   getEnv: () => Promise<Env>
   openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>
   uploadFile: (sourcePath: string, subpath: string) => Promise<void>
+  startWatching: () => Promise<void>
+  stopWatching: () => Promise<void>
+  addWatchPath: (watchPath: string[]) => Promise<void>
+  unWatchPath: (watchPath: string[]) => Promise<void>
+  addWatchSubPath: (subPath: string[]) => Promise<void>
+  unWatchSubPath: (subPath: string[]) => Promise<void>
 
   getResourcePath(): Promise<string>
+  getScriptPath(): Promise<string>
+  getScriptSubPath(subpath: string): Promise<string>
   // getResourceSubPath(subpath: string): Promise<string>
   getPathForFile(file: File): string
   readDataExcel(subpath: string): Promise<GridData | null>
+  readExcel(filePath: string): Promise<GridData | null>
   readDataExcalidraw(subpath: string): Promise<ExcalidrawData | null>
+  readExcalidraw(filePath: string): Promise<ExcalidrawData | null>
   startDataFile(subpath: string): Promise<void>
   startScript(jobId: string, subpath: string, args: string[]): Promise<void>
   stopScript(jobId: string): Promise<void>
@@ -71,11 +81,41 @@ const api: Api = {
   uploadFile: (sourcePath, subpath): Promise<void> => {
     return ipcRenderer.invoke('upload-file', sourcePath, subpath);
   },
+  startWatching: (): Promise<void> => {
+    return ipcRenderer.invoke('start-watching')
+  },
+  stopWatching: (): Promise<void> => {
+    return ipcRenderer.invoke('stop-watching')
+  },
+  addWatchPath: (watchPath): Promise<void> => {
+    return ipcRenderer.invoke('add-watch-path', watchPath)
+  },
+  unWatchPath: (watchPath): Promise<void> => {
+    return ipcRenderer.invoke('un-watch-path', watchPath)
+  },
+  addWatchSubPath: (subPath): Promise<void> => {
+    return ipcRenderer.invoke('add-watch-subpath', subPath)
+  },
+  unWatchSubPath: (subPath): Promise<void> => {
+    return ipcRenderer.invoke('un-watch-subpath', subPath)
+  },
   getResourcePath: (): Promise<string> => {
     return ipcRenderer.invoke('get-app-resource-path');
   },
+  getScriptPath: (): Promise<string> => {
+    return ipcRenderer.invoke('get-script-path');
+  },
+  getScriptSubPath: (subpath: string): Promise<string> => {
+    return ipcRenderer.invoke('get-script-subpath', subpath);
+  },
+  readExcel(filePath: string): Promise<GridData | null> {
+    return ipcRenderer.invoke('read-excel', filePath);
+  },
   readDataExcel(subpath: string): Promise<GridData | null> {
     return ipcRenderer.invoke('read-data-excel', subpath);
+  },
+  readExcalidraw(filePath: string): Promise<ExcalidrawData | null> {
+    return ipcRenderer.invoke('read-excalidraw', filePath);
   },
   readDataExcalidraw(subpath: string): Promise<ExcalidrawData | null> {
     return ipcRenderer.invoke('read-data-excalidraw', subpath);

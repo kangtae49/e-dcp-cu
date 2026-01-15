@@ -20,7 +20,7 @@ export class ExcalidrawDataStore {
   }
 
   updateExcalidrawData = (payload: ExcalidrawData) => {
-    const existing = this.excalidrawDataMap[payload.key] || {};
+    const existing = this.excalidrawDataMap[payload.path] || {};
     const newExcalidrawData: ExcalidrawData = {
       ...existing,
       data: payload.data,
@@ -29,7 +29,7 @@ export class ExcalidrawDataStore {
 
     this.excalidrawDataMap = {
       ...this.excalidrawDataMap,
-      [payload.key]: newExcalidrawData
+      [payload.path]: newExcalidrawData
     }
   }
 
