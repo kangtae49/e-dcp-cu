@@ -3,10 +3,14 @@ import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import pathUtils from "@/utils/pathUtils.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {observer} from "mobx-react-lite";
+import {EXCALIDRAW_DATA_ID} from "@/app/excalidraw-data/excalidrawData.constants.ts";
+import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
+import {ExcalidrawState} from "@/app/excalidraw/excalidraw.types.ts";
 
 const WatchListener = observer((): null => {
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
+  const excalidrawDataStore = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
 
   useEffect(() => {
 
@@ -25,24 +29,41 @@ const WatchListener = observer((): null => {
         gridDataStore.updateIsLocked({key: dataKey, isLocked})
       } else {
         if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
-          window.api.readDataExcel(watchFile.key)
-            .then((gridData) => {
-              if (gridData) {
-                gridDataStore.updateGridData(gridData)
-              }
-            })
+          if (watchFile.key.toLowerCase().endsWith('.excalidraw')) {
+            window.api.readDataExcalidraw(watchFile.key)
+              .then((data) => {
+                if (data) {
+                  excalidrawDataStore.updateExcalidrawData(data)
+                }
+              })
+
+          } else if (watchFile.key.toLowerCase().endsWith('.xlsx')) {
+            window.api.readDataExcel(watchFile.key)
+              .then((gridData) => {
+                if (gridData) {
+                  gridDataStore.updateGridData(gridData)
+                }
+              })
+          }
         } else if (watchFile.status === 'DELETED') {
-          gridDataStore.updateGridData({
-            key: watchFile.key,
-            header: [],
-            data: []
-          })
+          if (watchFile.key.toLowerCase().endsWith('.excalidraw')) {
+            excalidrawDataStore.updateExcalidrawData({
+              key: watchFile.key,
+              data: {} as ExcalidrawState
+            })
+          } else if (watchFile.key.toLowerCase().endsWith('.xlsx')) {
+            gridDataStore.updateGridData({
+              key: watchFile.key,
+              header: [],
+              data: []
+            })
+          }
         }
       }
 
 
     })
-  }, [gridDataStore])
+  }, [gridDataStore, excalidrawDataStore])
   return null
 })
 
