@@ -15,13 +15,12 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {getGridDataKeys, GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
+import {getGridDataKeys} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
-import {EXCALIDRAW_DATA_ID, getExcalidrawDataKeys} from "@/app/excalidraw-data/excalidrawData.constants.ts";
-import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
+import {getExcalidrawDataKeys} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import KeyDownListener from "@/app/listeners/KeyDownListener.tsx";
 // import DevTools from 'mobx-react-devtools';
 
@@ -50,11 +49,6 @@ const App = observer(() => {
 
 
   const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
-
-  // const {updateGridData} = useGridDataStore(GRID_DATA_ID)
-  // const {updateExcalidrawData} = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
-
-
 
   useEffect(() => {
     const startWatcher = async () => {

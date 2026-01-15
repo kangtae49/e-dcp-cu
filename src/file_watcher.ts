@@ -1,9 +1,6 @@
 import { BrowserWindow } from 'electron';
 import chokidar, { FSWatcher } from 'chokidar';
 import {WatchEvent, WatchFileData, WatchStatus} from "./types.ts";
-import path from "node:path";
-import * as fs from "node:fs";
-import {getScriptPath} from "./api_core.ts";
 
 export class FileWatcher {
   private watcher: FSWatcher | null = null;
@@ -75,12 +72,9 @@ export class FileWatcher {
 
   private sendWatchEvent(status: WatchStatus, filePath: string, mtime?: number) {
     console.log(`[FileEvent] ${status}: ${filePath}`);
-    const scriptPath = getScriptPath()
-    const key = path.relative(scriptPath, filePath);
     const eventData: WatchFileData = {
       status,
       path: filePath,
-      // key,
       mtime: mtime || Date.now()
     };
 

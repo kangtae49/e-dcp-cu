@@ -4,7 +4,6 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import {
   getIconSubPath,
-  getScriptPath,
   registerHandlers,
 } from "./api_core";
 import {FileWatcher} from "./file_watcher.ts";
