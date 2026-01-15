@@ -6,6 +6,8 @@ import {observer} from "mobx-react-lite";
 import {EXCALIDRAW_DATA_ID} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
 import {ExcalidrawState} from "@/app/excalidraw/excalidraw.types.ts";
+import {retryWithBackoff} from "@/utils/asyncUtils.ts";
+import {ExcalidrawData} from "@/app/excalidraw-data/excalidrawData.types.ts";
 
 const WatchListener = observer((): null => {
 
@@ -30,12 +32,19 @@ const WatchListener = observer((): null => {
       } else {
         if (watchFile.status === 'CREATED' || watchFile.status === 'MODIFIED') {
           if (watchFile.key.toLowerCase().endsWith('.excalidraw')) {
-            window.api.readDataExcalidraw(watchFile.key)
-              .then((data) => {
-                if (data) {
-                  excalidrawDataStore.updateExcalidrawData(data)
-                }
-              })
+            retryWithBackoff<ExcalidrawData | null>(async () => {
+              return await window.api.readDataExcalidraw(watchFile.key)
+            }, { retries: 2, timeout: 500}).then((data) => {
+              if(data) {
+                excalidrawDataStore.updateExcalidrawData(data)
+              }
+            })
+            // window.api.readDataExcalidraw(watchFile.key)
+            //   .then((data) => {
+            //     if (data) {
+            //       excalidrawDataStore.updateExcalidrawData(data)
+            //     }
+            //   })
 
           } else if (watchFile.key.toLowerCase().endsWith('.xlsx')) {
             window.api.readDataExcel(watchFile.key)
