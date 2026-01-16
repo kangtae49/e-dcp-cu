@@ -14,7 +14,6 @@ import {
 } from "@/app/layout/layout.tsx";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
-import {useEffect, useState} from "react";
 import {GRID_DATA_KEYS} from "@/app/grid-data/gridData.constants.ts";
 
 interface Props {
