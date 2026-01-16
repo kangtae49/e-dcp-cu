@@ -16,6 +16,15 @@ const pathUtils = {
       })
       .filter(x => x.length > 0)
       .join(SEP);
+  },
+  getScriptSubPath(subpath: string): string {
+    return this.join(window.api.appInfo.scriptPath, subpath)
+  },
+  getLockFile(filePath: string): string {
+    const fileName = this.basename(filePath)
+    const dirName = this.dirname(filePath)
+    console.log(this.join(dirName, SEP, `~$${fileName}`))
+    return this.join(dirName, SEP, `~$${fileName}`)
   }
 };
 

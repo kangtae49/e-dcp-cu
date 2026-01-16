@@ -16,9 +16,11 @@ export default function AboutView({justId: _justId, layoutId: _layoutId}: Props)
 
   onLoad(() => {
     console.log("onLoad")
-    window.api.getVersions().then(res => {
-      setVersions(res)
-    })
+    setVersions(window.api.appInfo.versions)
+
+    // window.api.getVersions().then(res => {
+    //   setVersions(res)
+    // })
   })
 
   return (

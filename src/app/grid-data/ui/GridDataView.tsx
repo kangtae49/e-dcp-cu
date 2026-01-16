@@ -10,13 +10,14 @@ import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 
-function GridDataView({justId}: Props) {
+const GridDataView = observer(({justId}: Props) => {
   const ref = useRef<HTMLDivElement>(null)
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
@@ -26,7 +27,7 @@ function GridDataView({justId}: Props) {
 
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()
-    window.api.startDataFile(dataKey).then()
+    window.api.startFile(dataKey).then()
   }
 
   const dragDownload = (e: React.DragEvent) => {
@@ -46,7 +47,7 @@ function GridDataView({justId}: Props) {
     drop(_item: FileItem, monitor) {
       if (gridDataStore.gridDataMap?.[dataKey]?.isLocked) {
         alert(`Close Excel: ${dataKey}`)
-        window.api.startDataFile(dataKey).then()
+        window.api.startFile(dataKey).then()
         return
       }
 
@@ -63,8 +64,6 @@ function GridDataView({justId}: Props) {
       drop(ref);
     }
   }, [drop]);
-
-
 
   return (
     <div ref={ref} className="grid-data-view">
@@ -85,12 +84,13 @@ function GridDataView({justId}: Props) {
       </div>
       <div className="grid-container">
         <JustGrid
+          key={dataKey}
           dataKey={dataKey}
         />
       </div>
     </div>
   )
-}
+})
 
 export default GridDataView;
 

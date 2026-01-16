@@ -15,13 +15,14 @@ import {
   viewMap
 } from "@/app/layout/layout.tsx";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {getGridDataKeys} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
-import {getExcalidrawDataKeys} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import KeyDownListener from "@/app/listeners/KeyDownListener.tsx";
+import pathUtils from "@/utils/pathUtils.ts";
+import {GRID_DATA_KEYS} from "@/app/grid-data/gridData.constants.ts";
+import {EXCALIDRAW_DATA_KEYS} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 // import DevTools from 'mobx-react-devtools';
 
 // import remotedev from 'mobx-remotedev';
@@ -53,8 +54,11 @@ const App = observer(() => {
   useEffect(() => {
     const startWatcher = async () => {
       await window.api.startWatching()
-      await window.api.addWatchPath((await getGridDataKeys()).map((justId) => JustUtil.getParamString(justId, 'file')))
-      await window.api.addWatchPath((await getExcalidrawDataKeys()).map((justId) => JustUtil.getParamString(justId, 'file')))
+
+      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')))
+      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => pathUtils.getLockFile(JustUtil.getParamString(justId, 'file'))))
+
+      await window.api.addWatchPath(EXCALIDRAW_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')))
     }
     startWatcher()
 

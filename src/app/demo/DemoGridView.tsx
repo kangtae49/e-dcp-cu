@@ -8,7 +8,7 @@ function DemoGridView() {
 
 
   const clickEdit = () => {
-    window.api.startDataFile(dataKey)
+    window.api.startFile(dataKey)
   }
 
   return (

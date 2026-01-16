@@ -8,7 +8,7 @@ import * as XLSX from 'xlsx';
 import {SCRIPT_DIR} from "./constants.ts";
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
-import {Env, DragStartItem, DialogResult, Versions} from "./types.ts";
+import {Env, DragStartItem, DialogResult, Versions, AppInfo} from "./types.ts";
 import iconv from 'iconv-lite';
 import * as os from "node:os";
 import {GridData} from "@/app/grid-data/gridData.types.ts";
@@ -41,7 +41,11 @@ export function handleIsMaximized(window: BrowserWindow) {
   return window.isMaximized()
 }
 
-export function handleGetVersions(_event: IpcMainInvokeEvent): Versions {
+export function handleExistsFile(_event: IpcMainInvokeEvent, filePath: string) {
+  return fs.existsSync(filePath)
+}
+
+export function getVersions(): Versions {
   return {
     app: app.getVersion(),
     electron: process.versions.electron,
@@ -53,40 +57,19 @@ export function handleGetVersions(_event: IpcMainInvokeEvent): Versions {
     osRelease: os.release(),
   };
 }
-export function handleGetDirname(_event: IpcMainInvokeEvent) {
-  return __dirname;
-}
 
-export function handleGetAppResourcePath(_event: IpcMainInvokeEvent) {
-  return getAppResourcePath();
-}
-export function handleGetScriptPath(_event: IpcMainInvokeEvent) {
-  return getScriptPath();
-}
-
-export function handleGetScriptSubPath(_event: IpcMainInvokeEvent, subpath: string) {
-  return getScriptSubPath(subpath);
-}
-
-
-export function handleReadDataExcel(_event: IpcMainInvokeEvent, subpath: string) {
-  return readDataExcel(subpath);
-}
 
 export function handleReadExcel(_event: IpcMainInvokeEvent, filePath: string) {
   return readExcel(filePath);
 }
 
-export function handleReadDataExcalidraw(_event: IpcMainInvokeEvent, subpath: string) {
-  return readDataExcalidraw(subpath);
-}
 
 export function handleReadExcalidraw(_event: IpcMainInvokeEvent, filePath: string) {
   return readExcalidraw(filePath);
 }
 
-export function handleStartDataFile(_event: IpcMainInvokeEvent, subpath: string) {
-  startDataFile(subpath);
+export function handleStartFile(_event: IpcMainInvokeEvent, filePath: string) {
+  startFile(filePath);
 }
 
 export function handleIsLockScriptPath(_event: IpcMainInvokeEvent, subpath: string) {
@@ -123,15 +106,6 @@ export function handleAddWatchSubPath(fileWatcher: FileWatcher, subPath: string[
   fileWatcher.add(watchPath);
 }
 
-export function handleUnWatchSubPath(fileWatcher: FileWatcher, subPath: string[]) {
-  const watchPath = subPath.map(getScriptSubPath)
-  fileWatcher.unwatch(watchPath);
-}
-
-function readDataExcel(subpath: string): GridData | null {
-  const filePath = getScriptSubPath(subpath)
-  return readExcel(filePath)
-}
 
 function readExcel(filePath: string): GridData | null {
 
@@ -176,10 +150,6 @@ function readExcel(filePath: string): GridData | null {
   }
 }
 
-function readDataExcalidraw(subpath: string): ExcalidrawData | null {
-  const filePath = getScriptSubPath(subpath)
-  return readExcalidraw(filePath)
-}
 
 function readExcalidraw(filePath: string): ExcalidrawData | null {
   if (!fs.existsSync(filePath)) {
@@ -246,21 +216,21 @@ function isLockScriptSubPath(subpath: string) {
 
 
 
-function startDataFile(subpath: string) {
-  shell.openPath(getScriptSubPath(subpath))
+function startFile(filePath: string) {
+  shell.openPath(filePath)
 }
 
 function dispatchJobEvent(window: BrowserWindow, jobEvent: JobEvent) {
   window.webContents.send('on-job-event', jobEvent);
 }
 
-export function startScript(window: BrowserWindow, jobId: string, subpath: string, args: string[] = []) {
+export function startScript(window: BrowserWindow, jobId: string, filePath: string, args: string[] = []) {
   const scriptsRoot = getScriptPath();
 
   const pythonExecutable = path.resolve(path.join(scriptsRoot, '.venv', 'Scripts', 'python.exe'));
 
-  const scriptPathAbs = path.resolve(getScriptSubPath(subpath));
-  console.log('startScript', jobId, subpath, args)
+  const scriptPathAbs = path.resolve(filePath);
+  console.log('startScript', jobId, filePath, args)
   console.log(scriptsRoot, pythonExecutable, scriptPathAbs)
 
   try{
@@ -400,7 +370,7 @@ export function stopScript(window: BrowserWindow, jobId: string) {
 export function onDragStart(event: IpcMainEvent, item: DragStartItem) {
   try {
     const icon = START_DRAG_IMG
-    const file = getScriptSubPath(item.file)
+    const file = item.file
     console.log(file, icon)
     if (!fs.existsSync(file)) {
       console.error('Not Exists file: ', file);
@@ -467,22 +437,25 @@ function uploadFile (sourcePath: string, subpath: string) {
   fs.copyFileSync(sourcePath, targetPath)
 }
 
-export const registerHandlers = (mainWindow: BrowserWindow, fileWatcher: FileWatcher) => {
+export const getAppInfo = async (): Promise<AppInfo> => {
+  return {
+    versions: getVersions(),
+    resourcePath: getAppResourcePath(),
+    scriptPath: getScriptPath(),
+  }
+}
+
+export const registerHandlers = async (mainWindow: BrowserWindow, fileWatcher: FileWatcher) => {
+  ipcMain.handle('get-app-info', async (_event) => await getAppInfo())
   ipcMain.handle('echo', handleEcho);
   ipcMain.handle('set-full-screen', (_event, flag) => handleSetFullScreen(mainWindow, flag))
   ipcMain.handle('is-full-screen', (_event) => handleIsFullScreen(mainWindow))
   ipcMain.handle('is-maximized', (_event) => handleIsMaximized(mainWindow))
-  ipcMain.handle('get-versions', handleGetVersions);
-  ipcMain.handle('get-dirname', handleGetDirname);
-  ipcMain.handle('get-app-resource-path', handleGetAppResourcePath);
-  ipcMain.handle('get-script-path', handleGetScriptPath);
-  ipcMain.handle('get-script-subpath', handleGetScriptSubPath);
-  ipcMain.handle('read-data-excel', handleReadDataExcel);
   ipcMain.handle('read-excel', handleReadExcel);
-  ipcMain.handle('read-data-excalidraw', handleReadDataExcalidraw);
   ipcMain.handle('read-excalidraw', handleReadExcalidraw);
-  ipcMain.handle('start-data-file', handleStartDataFile);
-  ipcMain.handle('start-script', async (_event, jobId: string, subpath: string, args: string []) => startScript(mainWindow, jobId, subpath, args))
+  ipcMain.handle('start-file', handleStartFile);
+  ipcMain.handle('exists-file', handleExistsFile);
+  ipcMain.handle('start-script', async (_event, jobId: string, filePath: string, args: string []) => startScript(mainWindow, jobId, filePath, args))
   ipcMain.handle('stop-script', async (_event, jobId: string) => stopScript(mainWindow, jobId))
   ipcMain.handle('is-lock-script-path', handleIsLockScriptPath)
   ipcMain.handle('get-env', handleGetEnv)
@@ -492,8 +465,6 @@ export const registerHandlers = (mainWindow: BrowserWindow, fileWatcher: FileWat
   ipcMain.handle('stop-watching', (_event) => handleStopWatching(fileWatcher))
   ipcMain.handle('add-watch-path', (_event, watchPath: string[]) => handleAddWatchPath(fileWatcher, watchPath))
   ipcMain.handle('un-watch-path', (_event, watchPath: string[]) => handleUnWatchPath(fileWatcher, watchPath))
-  ipcMain.handle('add-watch-subpath', (_event, subPath: string[]) => handleAddWatchSubPath(fileWatcher, subPath))
-  ipcMain.handle('un-watch-subpath', (_event, subPath: string[]) => handleUnWatchSubPath(fileWatcher, subPath))
 
   ipcMain.on('ondragstart', onDragStart);
   ipcMain.on('window-minimize', () => onWindowMinimize(mainWindow))

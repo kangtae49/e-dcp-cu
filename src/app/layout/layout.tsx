@@ -20,6 +20,7 @@ import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/ju
 import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
 import ExcalidrawDataView from "@/app/excalidraw-data/ExcalidrawDataView.tsx";
+import pathUtils from "@/utils/pathUtils.ts";
 
 
 export const LAYOUT_ID = "LAYOUT_ID"
@@ -77,7 +78,7 @@ export const toolBarId: JustId = {viewId: 'tool-bar', title: 'Tool Bar'};
 export const utilBarId: JustId = {viewId: 'util-bar', title: 'Util Bar'};
 export const sideMenuId: JustId = {viewId: 'side-menu', title: 'Menu'};
 export const aboutId: JustId = {viewId: 'about', title: 'About'};
-export const getHelpId = async (): Promise<JustId> => ({viewId: 'help', title: 'Help', params: {file: await window.api.getScriptSubPath('data\\help.excalidraw')}});
+export const helpId: JustId = {viewId: 'help', title: 'Help', params: {file: pathUtils.getScriptSubPath('data\\help.excalidraw')}};
 
 export const page01Id: JustId = {viewId: 'page01', title: '자산통계정보'};
 

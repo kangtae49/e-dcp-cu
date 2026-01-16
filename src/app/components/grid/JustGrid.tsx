@@ -81,7 +81,7 @@ function JustGrid({dataKey}: Props) {
 
   useEffect(() => {
     ref?.current?.forceUpdate();
-  }, [gridDataStore.gridDataMap[dataKey]]);
+  }, [gridDataStore.gridDataMap[dataKey], gridDataStore.gridDataMap[dataKey]?.isLocked]);
 
   const handleColumnResize = (ci: Id, width: number) => {
     setColumnsSize((prev) => {
@@ -109,7 +109,7 @@ function JustGrid({dataKey}: Props) {
   return (
     <div className="just-grid" onScroll={handleScroll}>
       <ReactGrid
-        key={dataKey}
+        // key={dataKey}
         ref={ref}
         rows={rows}
         columns={columns}

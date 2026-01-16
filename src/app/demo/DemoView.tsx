@@ -1,3 +1,4 @@
+import pathUtils from "@/utils/pathUtils.ts";
 
 function DemoView() {
   const startScript = () => {
@@ -14,11 +15,11 @@ function DemoView() {
   }
 
   const openSetting = () => {
-    window.api.startDataFile('data\\설정1.xlsx')
+    window.api.startFile('data\\설정1.xlsx')
   }
 
   const readConfig = () => {
-    window.api.readDataExcel('data\\설정1.xlsx')
+    window.api.readExcel(pathUtils.getScriptSubPath('data\\설정1.xlsx'))
     .then(res => {
       console.log(res)
     })

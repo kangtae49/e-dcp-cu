@@ -10,7 +10,7 @@ interface Props {
 
 function OutputGrid({outFile, title}: Props) {
   const openGrid = (filePath: string) => {
-    window.api.startDataFile(filePath)
+    window.api.startFile(filePath)
   }
 
   return (

@@ -21,7 +21,7 @@ const ChartView = observer(({ justId }: Props)=> {
   }
 
   const openSetting = (key: string) => {
-    window.api.startDataFile(key).then()
+    window.api.startFile(key).then()
   }
 
   return (

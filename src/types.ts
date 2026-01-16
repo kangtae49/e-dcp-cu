@@ -48,3 +48,9 @@ export interface Versions {
   osArch: string,
   osRelease: string,
 }
+
+export interface AppInfo {
+  versions: Versions
+  resourcePath: string
+  scriptPath: string
+}

@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import SelectBox, {type Option} from "@/app/components/select/SelectBox.tsx";
 import MonthPicker from "@/app/components/date/MonthPicker.tsx";
-import React, {Activity, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import classNames from "classnames";
 import Terminal from "@/app/components/terminal/Terminal.tsx";
@@ -25,6 +25,7 @@ import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
 import {JSONValue, JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import pathUtils from "@/utils/pathUtils.ts";
 
 interface Props {
   justId: JustId
@@ -34,9 +35,7 @@ interface Props {
 
 
 const Page01View = observer(({justId}: Props)=> {
-  const [dataKey, setDataKey] = useState<string>("")
-  const [outPath, setOutPath] = useState<string>("")
-
+  const dataKey = pathUtils.getScriptSubPath("data\\company.xlsx")
   const pagesDir = "pages";
   const xAxisCol =  "stdrYm";
   const legend: LegendItem [] = [
@@ -56,10 +55,6 @@ const Page01View = observer(({justId}: Props)=> {
   const refChart = useRef<HTMLDivElement>(null)
   const refJob = useRef<HTMLDivElement>(null)
 
-  // const {
-  //   showWin,
-  //   addTabWinByNodeName
-  // } = useJustLayout(LAYOUT_ID)
   const pageStore = usePageStore(JustUtil.toString(justId));
 
   const jobMonitorStore = useJobMonitor(JOB_MONITOR_ID);
@@ -84,28 +79,15 @@ const Page01View = observer(({justId}: Props)=> {
   const condition = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm]
   const filename = condition.join("_")
   const outFile = `${filename}.xlsx`
-  // const outPath = `${pagesDir}\\${outFile}`
-
+  const outPath = pathUtils.getScriptSubPath(`${pagesDir}\\${outFile}`)
+  window.api.addWatchPath([outPath, pathUtils.getLockFile(outPath)]).then()
   const jobStatus = jobMonitorStore.status[pageStore.jobInfo?.jobId ?? '']
-
-  useEffect(() => {
-    const subpath = `${pagesDir}\\${outFile}`
-    window.api.getScriptSubPath(subpath).then(async (filePath) => {
-      await window.api.addWatchPath([filePath])
-      setOutPath(filePath)
-    })
-  }, [pagesDir, outFile])
-
 
   useEffect(() => {
     if (companyList.length > 0 && !pageStore.company) {
       pageStore.setCompany(companyList[0]);
     }
   }, [companyList, pageStore.company]);
-
-  // const getCompanyName = (cdVlId: string) => {
-  //   return companyList.find((opt) => opt.value === cdVlId)?.label || ''
-  // }
 
   const formatYYMM = (strDt: string) => {
     return format(strDt, 'yy-MM')
@@ -140,14 +122,14 @@ const Page01View = observer(({justId}: Props)=> {
     // const isLock = await window.api.isLockScriptSubPath(outPath);
     if (gridDataStore.gridDataMap?.[outPath]?.isLocked) {
       alert(`Close Excel: ${outPath}`)
-      window.api.startDataFile(outPath).then()
+      window.api.startFile(outPath).then()
       return
     }
 
     if (jobStatus === 'RUNNING') return;
 
     const jobId = `job-${new Date().getTime()}`
-    const scriptPath = "page01.py"
+    const scriptPath = pathUtils.getScriptSubPath("page01.py")
     const args = [jobId, ...condition];
     pageStore.setJobInfo({jobId, path: scriptPath, args})
     window.api.startScript(jobId, scriptPath, args).then()
@@ -165,19 +147,9 @@ const Page01View = observer(({justId}: Props)=> {
     window.api.openSaveDialog(outPath, outPath).then()
   }
 
-  // const clickJobMonitor = (e: React.MouseEvent) => {
-  //   e.preventDefault()
-  //   const jobId = pageState?.jobInfo?.jobId;
-  //   console.log('clickJobMonitor', jobId)
-  //   if (jobId) {
-  //     addTabWinByNodeName({viewId: "job-monitor-view", title: jobId, params: {jobId}}, JOB_MONITOR_VIEW_NODE_NAME)
-  //     showWin(BOTTOM_PANEL_NODE_NAME, true)
-  //   }
-  // }
-
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()
-    window.api.startDataFile(outPath).then()
+    window.api.startFile(outPath).then()
   }
 
   const clickStropScript = (e: React.MouseEvent) => {
@@ -189,10 +161,10 @@ const Page01View = observer(({justId}: Props)=> {
 
   const [, drop] = useDrop(() => ({
     accept: [NativeTypes.FILE],
-    drop(item: FileItem, monitor) {
+    drop(_item: FileItem, monitor) {
       if (gridDataStore.gridDataMap?.[outPath]?.isLocked) {
         alert(`Close Excel: ${outPath}`)
-        window.api.startDataFile(outPath).then()
+        window.api.startFile(outPath).then()
         return
       }
 
@@ -302,9 +274,9 @@ const Page01View = observer(({justId}: Props)=> {
   }, [dragJob]);
 
 
-  useEffect(() => {
-    window.api.getScriptSubPath("data\\company.xlsx").then(setDataKey)
-  }, [])
+  // useEffect(() => {
+  //   pathUtils.getScriptSubPath("data\\company.xlsx").then(setDataKey)
+  // }, [])
   return (
     <div className="win-page"
          ref={ref}

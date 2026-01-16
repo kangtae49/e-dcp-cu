@@ -74,7 +74,7 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.on('ready', async () => {
   // console.log(app.isPackaged)
   // path.dirname()
   // const cur_path = await getCurPath(process.argv, app.isPackaged);
@@ -90,11 +90,12 @@ app.on('ready', () => {
   }
 
 
+
   const mainWindow = createWindow()
 
   const fileWatcher = new FileWatcher(mainWindow, []);
 
-  registerHandlers(mainWindow, fileWatcher);
+  await registerHandlers(mainWindow, fileWatcher);
 
   // fileWatcher.startWatching();
   app.on('before-quit', () => {

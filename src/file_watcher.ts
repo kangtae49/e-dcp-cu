@@ -36,13 +36,13 @@ export class FileWatcher {
       //     return !(['.xlsx', '.excalidraw'].includes(path.extname(fileName)));
       //   }
       // ],
-      awaitWriteFinish: {
-        stabilityThreshold: 200,
-        pollInterval: 100
-      },
+      // awaitWriteFinish: {
+      //   stabilityThreshold: 200,
+      //   pollInterval: 50
+      // },
       persistent: true,
       ignoreInitial: false,
-      depth: 99
+      depth: 99,
     });
 
     this.watcher
@@ -71,18 +71,20 @@ export class FileWatcher {
 
 
   private sendWatchEvent(status: WatchStatus, filePath: string, mtime?: number) {
-    console.log(`[FileEvent] ${status}: ${filePath}`);
-    const eventData: WatchFileData = {
-      status,
-      path: filePath,
-      mtime: mtime || Date.now()
-    };
+    setTimeout(() => {
+      console.log(`[FileEvent] ${status}: ${filePath}`);
+      const eventData: WatchFileData = {
+        status,
+        path: filePath,
+        mtime: mtime || Date.now()
+      };
 
-    const watchEvent: WatchEvent = {
-      action: "WATCH_FILE",
-      data: eventData
-    }
-    this.window.webContents.send("on-watch-event", watchEvent);
+      const watchEvent: WatchEvent = {
+        action: "WATCH_FILE",
+        data: eventData
+      }
+      this.window.webContents.send("on-watch-event", watchEvent);
+    }, 200)
 
   }
 
