@@ -11,6 +11,7 @@ import {FileItem} from "@/types.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {observer} from "mobx-react-lite";
+import pathUtils from "@/utils/pathUtils.ts";
 
 interface Props {
   justId: JustId
@@ -24,6 +25,7 @@ const GridDataView = observer(({justId}: Props) => {
 
   const dataKey = JustUtil.getParamString(justId, 'file');
   const title = justId.title;
+  window.api.addWatchPath([dataKey, pathUtils.getLockFile(dataKey)])
 
   const clickOpenFile = (e: React.MouseEvent) => {
     e.preventDefault()

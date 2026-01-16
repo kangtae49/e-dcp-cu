@@ -113,6 +113,7 @@ const Page01View = observer(({justId}: Props)=> {
   }
 
   const handleCompany = (option: Option) => {
+    console.log(option)
     pageStore.setCompany(option)
   }
   const searchPage01 = async () => {
@@ -422,11 +423,6 @@ const Page01View = observer(({justId}: Props)=> {
                 dataKey={outPath}
               />
             </div>
-            {/*<OutputGrid*/}
-            {/*    key={outPath}*/}
-            {/*    title={outFile ?? ''}*/}
-            {/*    outFile={outPath}*/}
-            {/*/>*/}
           </Activity>
           <Activity mode={pageStore.tab === "GRAPH" ? "visible" : "hidden"}>
             <div className="content">
