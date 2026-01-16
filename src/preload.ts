@@ -19,8 +19,8 @@ export interface Api {
   isMaximized(): Promise<boolean>
   // getVersions: () => Promise<Versions>
   getEnv: () => Promise<Env>
-  openSaveDialog: (subpath: string, defaultName: string) => Promise<DialogResult>
-  uploadFile: (sourcePath: string, subpath: string) => Promise<void>
+  openSaveDialog: (filePath: string, defaultName: string) => Promise<DialogResult>
+  uploadFile: (sourcePath: string, targetPath: string) => Promise<void>
   existsFile: (filePath: string) => Promise<boolean>
   startWatching: () => Promise<void>
   stopWatching: () => Promise<void>
@@ -70,11 +70,11 @@ const getApi = async (): Promise<Api> => {
     getEnv: () => {
       return ipcRenderer.invoke('get-env');
     },
-    openSaveDialog: (subpath: string, defaultName: string): Promise<DialogResult> => {
-      return ipcRenderer.invoke('open-save-dialog', subpath, defaultName);
+    openSaveDialog: (filePath: string, defaultName: string): Promise<DialogResult> => {
+      return ipcRenderer.invoke('open-save-dialog', filePath, defaultName);
     },
-    uploadFile: (sourcePath, subpath): Promise<void> => {
-      return ipcRenderer.invoke('upload-file', sourcePath, subpath);
+    uploadFile: (sourcePath, targetPath): Promise<void> => {
+      return ipcRenderer.invoke('upload-file', sourcePath, targetPath);
     },
     existsFile: (filePath): Promise<boolean> => {
       return ipcRenderer.invoke('exists-file', filePath)

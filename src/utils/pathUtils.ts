@@ -7,7 +7,10 @@ const pathUtils = {
     parts.pop();
     return parts.join(SEP) || (path.startsWith(SEP) ? SEP : '.');
   },
-
+  extname: (path: string) => {
+    const ext = path.split('.').pop()
+    return ext ? `.${ext}` : ''
+  },
   join: (...args: string[]) => {
     return args
       .map((part, i) => {

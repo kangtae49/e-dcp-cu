@@ -72,8 +72,8 @@ export function handleStartFile(_event: IpcMainInvokeEvent, filePath: string) {
   startFile(filePath);
 }
 
-export function handleIsLockScriptPath(_event: IpcMainInvokeEvent, subpath: string) {
-  return isLockScriptSubPath(subpath);
+export function handleIsLockScriptPath(_event: IpcMainInvokeEvent, filePath: string) {
+  return isLockScriptPath(filePath);
 }
 
 export function handleGetEnv() {
@@ -81,12 +81,12 @@ export function handleGetEnv() {
   return myEnv;
 }
 
-export function handleOpenSaveDialog(_event: IpcMainInvokeEvent, subpath: string, defaultName: string) {
-  return openSaveDialog(subpath, defaultName);
+export function handleOpenSaveDialog(_event: IpcMainInvokeEvent, filePath: string, defaultName: string) {
+  return openSaveDialog(filePath, defaultName);
 }
 
-export function handleUploadFile(_event: IpcMainInvokeEvent, sourcePath: string, subpath: string) {
-  return uploadFile(sourcePath, subpath);
+export function handleUploadFile(_event: IpcMainInvokeEvent, sourcePath: string, targetPath: string) {
+  return uploadFile(sourcePath, targetPath);
 }
 export function handleStartWatching(fileWatcher: FileWatcher) {
   fileWatcher.startWatching();
@@ -101,10 +101,7 @@ export function handleAddWatchPath(fileWatcher: FileWatcher, watchPath: string[]
 export function handleUnWatchPath(fileWatcher: FileWatcher, watchPath: string[]) {
   fileWatcher.unwatch(watchPath);
 }
-export function handleAddWatchSubPath(fileWatcher: FileWatcher, subPath: string[]) {
-  const watchPath = subPath.map(getScriptSubPath)
-  fileWatcher.add(watchPath);
-}
+
 
 
 function readExcel(filePath: string): GridData | null {
@@ -156,7 +153,7 @@ function readExcalidraw(filePath: string): ExcalidrawData | null {
     return null
   }
 
-  // if (isLockScriptSubPath(filePath)) {
+  // if (isLockScriptPath(filePath)) {
   //   return null
   // }
 
@@ -204,8 +201,7 @@ export function getScriptSubPath(subpath: string) {
   return path.join(getScriptPath(), subpath)
 }
 
-function isLockScriptSubPath(subpath: string) {
-  const filePath = path.join(getScriptPath(), subpath);
+function isLockScriptPath(filePath: string) {
   const fileDir = path.dirname(filePath);
   const fileName = path.basename(filePath);
   const lockFileName = `~$${fileName}`;
@@ -403,8 +399,8 @@ const onWindowClose = (window: BrowserWindow) => {
 }
 
 
-const openSaveDialog = async (subpath: string, defaultName: string): Promise<DialogResult> => {
-  const { filePath, canceled } = await dialog.showSaveDialog({
+const openSaveDialog = async (filePath: string, defaultName: string): Promise<DialogResult> => {
+  const { filePath: savePath, canceled } = await dialog.showSaveDialog({
     title: 'Save',
     defaultPath: defaultName,
     buttonLabel: 'Save',
@@ -414,23 +410,22 @@ const openSaveDialog = async (subpath: string, defaultName: string): Promise<Dia
     ]
   });
 
-  if (canceled || !filePath) {
+  if (canceled || !savePath) {
     return { success: false, message: 'Cancel' };
   }
 
   try {
-    fs.copyFileSync(getScriptSubPath(subpath), filePath)
-    return { success: true, file: filePath, message: 'Success' };
+    fs.copyFileSync(filePath, savePath)
+    return { success: true, file: savePath, message: 'Success' };
   } catch (err) {
     return { success: false, message: err.message };
   }
 }
 
-function uploadFile (sourcePath: string, subpath: string) {
+function uploadFile (sourcePath: string, targetPath: string) {
   if (!fs.existsSync(sourcePath)) {
     return
   }
-  const targetPath = getScriptSubPath(subpath);
   if (fs.existsSync(targetPath)) {
     fs.unlinkSync(targetPath)
   }
