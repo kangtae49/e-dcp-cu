@@ -76,15 +76,10 @@ const Page01View = observer(({justId}: Props)=> {
   const startYm = pageStore.startDate ? format(pageStore.startDate, "yyyyMM") : format(new Date(), "yyyyMM");
   const endYm = pageStore.endDate ? format(pageStore.endDate, "yyyyMM") : format(new Date(), "yyyyMM");
   const companyVal = pageStore.company ? pageStore.company.value : companyList[0]?.value;
-  console.log(companyVal)
   const condition = [justId.viewId, companyVal?.toString() ?? '', startYm, endYm]
-  console.log(condition)
   const filename = condition.join("_")
-  console.log(filename)
   const outFile = `${filename}.xlsx`
-  console.log(outFile)
   const outPath = pathUtils.getScriptSubPath(`${pagesDir}\\${outFile}`)
-  console.log('outPath:', outPath)
   window.api.addWatchPath([outPath, pathUtils.getLockFile(outPath)]).then()
   const jobStatus = jobMonitorStore.status[pageStore.jobInfo?.jobId ?? '']
 
