@@ -5,13 +5,14 @@ import "./MonthPicker.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faCalendar} from "@fortawesome/free-solid-svg-icons"
 import {format, parse} from "date-fns";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   value?: string | null
   onChange?: (date: string | null) => void
 }
 
-function MonthPicker ({value, onChange}: Props) {
+const MonthPicker = observer(({value, onChange}: Props) => {
 
   const handleChange = (date: string | null) => {
     if (onChange) {
@@ -39,6 +40,6 @@ function MonthPicker ({value, onChange}: Props) {
       />
     </div>
   );
-}
+})
 
 export default MonthPicker;

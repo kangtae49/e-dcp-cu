@@ -1,6 +1,7 @@
 import pathUtils from "@/utils/pathUtils.ts";
+import {observer} from "mobx-react-lite";
 
-function DemoView() {
+const DemoView = observer(() => {
   const startScript = () => {
     window.api.startScript("job_id_01", "hello_world.py", ["한글 스페이스", "두번째 음냐"])
       .then(() => {
@@ -45,6 +46,6 @@ function DemoView() {
 
     </div>
   )
-}
+})
 
 export default DemoView

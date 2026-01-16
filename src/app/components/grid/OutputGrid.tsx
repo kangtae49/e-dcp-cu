@@ -2,13 +2,14 @@ import "./OutputGrid.css"
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   outFile: string
   title: string
 }
 
-function OutputGrid({outFile, title}: Props) {
+const OutputGrid = observer(({outFile, title}: Props) => {
   const openGrid = (filePath: string) => {
     window.api.startFile(filePath)
   }
@@ -25,7 +26,7 @@ function OutputGrid({outFile, title}: Props) {
       </div>
     </div>
   )
-}
+})
 
 export default OutputGrid
 

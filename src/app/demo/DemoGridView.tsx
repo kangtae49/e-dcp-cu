@@ -2,8 +2,9 @@ import "@silevis/reactgrid/styles.css";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare} from "@fortawesome/free-solid-svg-icons"
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
+import {observer} from "mobx-react-lite";
 
-function DemoGridView() {
+const DemoGridView = observer(() => {
   const dataKey = "data\\company.xlsx";
 
 
@@ -21,6 +22,6 @@ function DemoGridView() {
       </div>
     </div>
   )
-}
+})
 
 export default DemoGridView

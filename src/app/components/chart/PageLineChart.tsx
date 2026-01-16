@@ -3,6 +3,7 @@ import {Legend, Line, LineChart, Tooltip, XAxis, YAxis} from "recharts";
 import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {GridData} from "@/app/grid-data/gridData.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface DataKey {
   id: string
@@ -16,7 +17,7 @@ interface Props {
   legend: DataKey[]
 }
 
-function PageLineChart({title, outFile, legend}: Props) {
+const PageLineChart = observer(({title, outFile, legend}: Props) => {
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
@@ -83,6 +84,6 @@ function PageLineChart({title, outFile, legend}: Props) {
       </div>
     </div>
   )
-}
+})
 
 export default PageLineChart

@@ -15,13 +15,14 @@ import {
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {GRID_DATA_KEYS} from "@/app/grid-data/gridData.constants.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 
-function JustToolBar({justId: _justId, layoutId}: Props) {
+const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
 
   const justLayoutStore = useJustLayoutStore(layoutId)
 
@@ -102,6 +103,6 @@ function JustToolBar({justId: _justId, layoutId}: Props) {
 
     </div>
   )
-}
+})
 
 export default JustToolBar

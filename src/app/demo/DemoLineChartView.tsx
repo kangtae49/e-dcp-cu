@@ -1,6 +1,8 @@
 import {Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis} from 'recharts';
 import "@/app/components/chart/chart.css"
-function DemoLineChartView() {
+import {observer} from "mobx-react-lite";
+
+const DemoLineChartView = observer(() => {
   const data = [
     {
       name: 'Page A',
@@ -58,7 +60,7 @@ function DemoLineChartView() {
       </div>
     </div>
   )
-}
+})
 
 export default DemoLineChartView;
 

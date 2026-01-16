@@ -6,6 +6,7 @@ import throttle from "lodash/throttle";
 import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {GridData} from "@/app/grid-data/gridData.types.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   dataKey: string
@@ -65,7 +66,7 @@ const getTableRows = (table: GridData): Row[] => {
 }
 
 
-function JustGrid({dataKey}: Props) {
+const JustGrid = observer(({dataKey}: Props) => {
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
   const [columnsSize, setColumnsSize] = useState({});
@@ -121,7 +122,7 @@ function JustGrid({dataKey}: Props) {
       />
     </div>
   )
-}
+})
 
 export default JustGrid;
 

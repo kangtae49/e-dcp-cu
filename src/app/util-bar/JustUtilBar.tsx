@@ -1,14 +1,15 @@
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 
-function JustUtilBar({justId: _justId, layoutId: _layoutId}: Props) {
+const JustUtilBar = observer(({justId: _justId, layoutId: _layoutId}: Props) => {
   return (
     <div></div>
   )
-}
+})
 
 export default JustUtilBar

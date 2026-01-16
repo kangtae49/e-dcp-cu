@@ -5,12 +5,13 @@ import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CONTENTS_VIEW, SIDE_MENU_ID_LIST, SIDE_MENU_NODE_NAME} from "@/app/layout/layout";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
-function SideMenu({justId: _justId, layoutId}: Props) {
+const SideMenu = observer(({justId: _justId, layoutId}: Props) => {
 
   const justLayoutStore = useJustLayoutStore(layoutId)
 
@@ -42,6 +43,6 @@ function SideMenu({justId: _justId, layoutId}: Props) {
       </div>
     </div>
   )
-}
+})
 
 export default SideMenu

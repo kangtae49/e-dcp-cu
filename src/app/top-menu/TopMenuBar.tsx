@@ -4,13 +4,14 @@ import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import IconClose from "../../assets/close.svg?react"
 import IconMinimize from "../../assets/minimize.svg?react"
 import IconMaximize from "../../assets/maximize.svg?react"
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 
-function TopMenuBar({justId: _justId, layoutId: _layoutId}: Props) {
+const TopMenuBar = observer(({justId: _justId, layoutId: _layoutId}: Props) => {
   const minimize = () => {
     window.api.minimize()
   }
@@ -47,6 +48,6 @@ function TopMenuBar({justId: _justId, layoutId: _layoutId}: Props) {
       </div>
     </div>
   )
-}
+})
 
 export default TopMenuBar

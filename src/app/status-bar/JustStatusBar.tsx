@@ -7,12 +7,13 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faTerminal} from "@fortawesome/free-solid-svg-icons";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
-function JustStatusBar({justId: _justId, layoutId}: Props) {
+const JustStatusBar = observer(({justId: _justId, layoutId}: Props) => {
   const justLayoutStore = useJustLayoutStore(layoutId)
 
 
@@ -36,6 +37,6 @@ function JustStatusBar({justId: _justId, layoutId}: Props) {
 
     </div>
   )
-}
+})
 
 export default JustStatusBar

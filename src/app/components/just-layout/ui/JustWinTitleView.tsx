@@ -189,22 +189,26 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
             <Icon icon={faEllipsisVertical} />
           </div>
         }>
-          <MenuItem className="just-menu-item" onClick={() => closeAllTabs(justBranch)}>
-            <div className="just-icon" />
-            <div className="just-title">
-              Close All
-            </div>
-            <div className="just-icon" />
-          </MenuItem>
-          <MenuItem className="just-menu-item" onClick={() => fullScreenWin(true)}>
-            <div className="just-icon">
-              <Icon icon={faExpand} />
-            </div>
-            <div className="just-title">
-              {isFullScreenView ? 'F11' : 'Full'}
-            </div>
-            <div className="just-icon" />
-          </MenuItem>
+          {justStack.tabs.length > 0 &&
+            <>
+              <MenuItem className="just-menu-item" onClick={() => closeAllTabs(justBranch)}>
+                  <div className="just-icon" />
+                  <div className="just-title">
+                      Close All
+                  </div>
+                  <div className="just-icon" />
+              </MenuItem>
+              <MenuItem className="just-menu-item" onClick={() => fullScreenWin(true)}>
+                  <div className="just-icon">
+                      <Icon icon={faExpand} />
+                  </div>
+                  <div className="just-title">
+                    {isFullScreenView ? 'F11' : 'Full'}
+                  </div>
+                  <div className="just-icon" />
+              </MenuItem>
+            </>
+          }
           {/*{ !justLayoutStore.fullScreenLayout &&*/}
           {/*  <MenuItem className="just-menu-item" onClick={() => fullScreenWin(false)}>*/}
           {/*    <div className="just-icon">*/}

@@ -4,13 +4,14 @@ import IconLogo from "../../assets/icon.svg?react"
 import {useState} from "react";
 import {Versions} from "@/types.ts";
 import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {observer} from "mobx-react-lite";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 
-export default function AboutView({justId: _justId, layoutId: _layoutId}: Props) {
+const AboutView = observer(({justId: _justId, layoutId: _layoutId}: Props) => {
   const {onLoad} = useOnload();
   const [versions, setVersions] = useState<Versions | null>(null)
 
@@ -43,4 +44,7 @@ export default function AboutView({justId: _justId, layoutId: _layoutId}: Props)
       </div>
     </div>
   )
-}
+})
+
+export default AboutView
+

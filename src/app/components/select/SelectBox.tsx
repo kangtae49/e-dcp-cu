@@ -3,6 +3,7 @@ import {Menu, MenuItem} from "@szhsin/react-menu";
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faAngleDown} from "@fortawesome/free-solid-svg-icons"
+import {observer} from "mobx-react-lite";
 
 export interface Option {
   value: string | number | boolean | null,
@@ -15,7 +16,7 @@ interface Props {
   onChange?: (option: Option) => void
 }
 
-function SelectBox({options, value, onChange}: Props) {
+const SelectBox = observer(({options, value, onChange}: Props) => {
   // const [selectedOption, setSelectedOption] = useState<Option | null>(null);
   const clickOption = (option: Option) => {
     // setSelectedOption(option);
@@ -58,6 +59,6 @@ function SelectBox({options, value, onChange}: Props) {
       </Menu>
     </div>
   )
-}
+})
 
 export default SelectBox;
