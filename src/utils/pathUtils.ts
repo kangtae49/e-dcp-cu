@@ -26,7 +26,6 @@ const pathUtils = {
   getLockFile(filePath: string): string {
     const fileName = this.basename(filePath)
     const dirName = this.dirname(filePath)
-    console.log(this.join(dirName, SEP, `~$${fileName}`))
     return this.join(dirName, SEP, `~$${fileName}`)
   }
 };

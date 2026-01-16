@@ -306,22 +306,29 @@ export const layoutSideMenu: JustNode = {
     hideTitle: true,
   },
   second: {
-    type: 'split-percentage',
+    type: 'stack',
     name: CONTENTS_VIEW,
-    direction: 'column',
-    size: 50,
     dndAccept: DND_ACCEPT_CONTENT,
-    first: {
-      type: 'stack',
-      tabs: [page01Id],
-      active: page01Id
-    },
-    second: {
-      type: 'stack',
-      tabs: [aboutId, excalidrawViewId],
-      active: excalidrawViewId
-    }
+    tabs: [aboutId],
+    active: aboutId,
   },
+  // second: {
+  //   type: 'split-percentage',
+  //   name: CONTENTS_VIEW,
+  //   direction: 'column',
+  //   size: 50,
+  //   dndAccept: DND_ACCEPT_CONTENT,
+  //   first: {
+  //     type: 'stack',
+  //     tabs: [page01Id],
+  //     active: page01Id
+  //   },
+  //   second: {
+  //     type: 'stack',
+  //     tabs: [aboutId, excalidrawViewId],
+  //     active: excalidrawViewId
+  //   }
+  // },
 }
 
 

@@ -1,12 +1,12 @@
 import './JustToolBar.css'
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
-import {faBars, faGear} from "@fortawesome/free-solid-svg-icons"
+import {faBars, faGear, faPen} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
 import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
-  aboutId, CONTENTS_VIEW, helpId,
+  aboutId, CONTENTS_VIEW, excalidrawViewId, helpId,
   INIT_SIDE_MENU_SIZE,
   SIDE_MENU_ID_LIST,
   SIDE_MENU_NODE_NAME, ViewId,
@@ -58,6 +58,9 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
             </div>
           )
         }
+      </div>
+      <div className="just-app-icon" onClick={() => openWin(excalidrawViewId)}>
+        <Icon icon={faPen} />
       </div>
 
       <div className="just-tool-menus">
