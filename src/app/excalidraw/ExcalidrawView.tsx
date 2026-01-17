@@ -18,6 +18,7 @@ import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
 import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
 import {EXCALIDRAW_DATA_ID} from "@/app/excalidraw-data/excalidrawData.constants.ts";
+import pathUtils from "@/utils/pathUtils.ts";
 
 interface Props {
   justId: JustId
@@ -97,6 +98,8 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
       console.log(filePath)
       window.api.addWatchPath([filePath])
       setDataKey(filePath)
+      justLayoutStore.setTabTitle(justId, pathUtils.basename(filePath))
+      justLayoutStore.setTabTitleTooltip(justId, filePath)
     }
   }), [])
 

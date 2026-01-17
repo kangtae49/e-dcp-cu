@@ -35,6 +35,7 @@ interface Prop {
 const JustDraggableTitle = observer((props: Prop) => {
   const {
     layoutId,
+
     isFullScreenView,
     dndAccept,
     winInfo, justBranch, justId, justStack,
@@ -167,6 +168,9 @@ const JustDraggableTitle = observer((props: Prop) => {
     toggleMenu(true);
   }, [toggleMenu]);
 
+  const tabTitle = justLayoutStore.getTabTitle(justId) ?? (typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId))
+  const tabTitleTooltip = justLayoutStore.getTabTitleTooltip(justId) ?? (typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId))
+
   return (
     <div
       className={classNames(
@@ -184,14 +188,16 @@ const JustDraggableTitle = observer((props: Prop) => {
       <div className="just-icon"
            onClick={(e) => clickTitle(e, justId)}
            onDoubleClick={(e) => dblClickTitle(e, justId)}
+           title={tabTitleTooltip}
       >
         {winInfo.icon}
       </div>
       <div className="just-title"
            onClick={(e) => clickTitle(e, justId)}
            onDoubleClick={(e) => dblClickTitle(e, justId)}
+           title={tabTitleTooltip}
       >
-        {typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId)}
+        {tabTitle}
       </div>
 
       {(winInfo.showClose ?? true) &&

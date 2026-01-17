@@ -122,6 +122,8 @@ export class JustLayoutStore {
   lastActiveTm: number = new Date().getTime()
   fullScreenLayout: JustNode | null = null
   fullScreenHideTitle: boolean = false
+  tabTitleMap: Map<string, string> = new Map()
+  tabTitleTooltipMap: Map<string, string> = new Map()
 
   // isFullScreen: boolean = false
   // isMaximize: boolean = false
@@ -139,6 +141,19 @@ export class JustLayoutStore {
 
   setLayout = (payload: JustNode | null) => {
     this.layout = payload
+  }
+
+  setTabTitle = (justId: JustId, title: string) => {
+    this.tabTitleMap.set(JustUtil.toString(justId), title)
+  }
+  getTabTitle = (justId: JustId) => {
+    return this.tabTitleMap.get(JustUtil.toString(justId))
+  }
+  setTabTitleTooltip = (justId: JustId, tooltip: string) => {
+    this.tabTitleTooltipMap.set(JustUtil.toString(justId), tooltip)
+  }
+  getTabTitleTooltip = (justId: JustId) => {
+    return this.tabTitleTooltipMap.get(JustUtil.toString(justId))
   }
 
   // setFullScreenLayout = (payload: JustNode | null) => {
