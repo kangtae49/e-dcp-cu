@@ -22,7 +22,7 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
   const justLayoutStore = useJustLayoutStore(layoutId);
   const excalidrawDataStore = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
 
-  const dataKey = JustUtil.getParamString(justId, 'file');
+  const dataKey = JustUtil.getParamString(justId, 'file') ?? '';
 
 
   const [isFullScreen, setIsFullScreen] = useState(false)

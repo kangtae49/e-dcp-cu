@@ -211,7 +211,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
 
   },
   "job-monitor-view": {
-    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
+    title: (justId) => JustUtil.getParamString(justId, 'jobId')!,
     icon: <Icon icon={faTerminal} />,
     getView: (justId, layoutId) => {
       return (
@@ -241,7 +241,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "counter-view": {
-    title: (justId) => JustUtil.getParamString(justId, 'jobId'),
+    title: (justId) => JustUtil.getParamString(justId, 'jobId')!,
     icon: <Jdenticon size="30" value="counter-view" />,
     canDup: true,
     getView: (justId, layoutId) => {

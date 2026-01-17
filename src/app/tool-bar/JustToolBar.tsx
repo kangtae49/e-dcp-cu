@@ -59,7 +59,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
           )
         }
       </div>
-      <div className="just-app-icon" onClick={() => openWin(excalidrawViewId)}>
+      <div className="just-app-icon" onClick={() => openWin(JustUtil.replaceDup(excalidrawViewId))}>
         <Icon icon={faPen} />
       </div>
 

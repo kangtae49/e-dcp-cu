@@ -23,7 +23,7 @@ const GridDataView = observer(({justId}: Props) => {
 
   const gridDataStore = useGridDataStore(GRID_DATA_ID)
 
-  const dataKey = JustUtil.getParamString(justId, 'file');
+  const dataKey = JustUtil.getParamString(justId, 'file')!;
   const title = justId.title;
   window.api.addWatchPath([dataKey, pathUtils.getLockFile(dataKey)])
 

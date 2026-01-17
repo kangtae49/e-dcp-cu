@@ -11,9 +11,9 @@ interface Props {
   layoutId: string
 }
 const ChartView = observer(({ justId }: Props)=> {
-  const dataKey = JustUtil.getParamString(justId, 'file');
+  const dataKey = JustUtil.getParamString(justId, 'file')!;
   const title = justId.title;
-  const xAxisCol = JustUtil.getParamString(justId, 'xAxisCol');
+  const xAxisCol = JustUtil.getParamString(justId, 'xAxisCol')!;
   const legend= JustUtil.getParam<LegendItem []>(justId, 'legend') ?? [];
 
   const clickTitle = () => {

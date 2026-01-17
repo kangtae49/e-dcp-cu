@@ -14,8 +14,8 @@ export class JustUtil {
     return winId
   }
 
-  static getParamString(justId: JustId, key: string): string {
-    return justId.params?.[key]?.toString() ?? ""
+  static getParamString(justId: JustId, key: string) {
+    return justId.params?.[key]?.toString()
   }
   static getParam<T>(justId: JustId, key: string): T | undefined {
     return justId.params?.[key] as T | undefined

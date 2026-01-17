@@ -32,7 +32,8 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
   const excalidrawStore = useExcalidrawStore(JustUtil.toString(justId))
   const [isFullScreen, setIsFullScreen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const [dataKey, setDataKey] = useState<string | null>(null)
+  const [dataKey, setDataKey] = useState<string | null>(JustUtil.getParamString(justId, 'file') ?? null)
+
   const changeFullScreen = async () => {
     setIsFullScreen(await window.api.isFullScreen())
   }
@@ -96,10 +97,8 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
       const filePath = window.api.getPathForFile(fileItem.files[0])
       if (!filePath.endsWith('.excalidraw')) return;
       console.log(filePath)
-      window.api.addWatchPath([filePath])
+
       setDataKey(filePath)
-      justLayoutStore.setTabTitle(justId, pathUtils.basename(filePath))
-      justLayoutStore.setTabTitleTooltip(justId, filePath)
     }
   }), [])
 
@@ -110,11 +109,21 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
   }, [drop]);
 
   useEffect(() => {
+    if (dataKey === null) return;
+    window.api.addWatchPath([dataKey])
+    justLayoutStore.setTabTitle(justId, pathUtils.basename(dataKey))
+    justLayoutStore.setTabTitleTooltip(justId, dataKey)
+
+  }, [dataKey]);
+
+  useEffect(() => {
+    console.log('excalidrawView useEffect', dataKey, excalidrawDataStore.excalidrawDataMap?.[dataKey!])
     if (!excalidrawRef.current) return;
     if (dataKey === null) return;
     if (!excalidrawDataStore.excalidrawDataMap[dataKey]) return;
     excalidrawRef.current.updateScene(excalidrawDataStore.excalidrawDataMap[dataKey].data)
-  }, [excalidrawDataStore.excalidrawDataMap?.[dataKey ?? '']])
+  }, [dataKey, excalidrawDataStore.excalidrawDataMap[dataKey!], excalidrawRef.current])
+
 
   return (
     <div className="excalidraw-view" ref={ref}>

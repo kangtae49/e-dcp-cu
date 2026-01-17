@@ -55,10 +55,10 @@ const App = observer(() => {
     const startWatcher = async () => {
       await window.api.startWatching()
 
-      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')))
-      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => pathUtils.getLockFile(JustUtil.getParamString(justId, 'file'))))
+      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')!))
+      await window.api.addWatchPath(GRID_DATA_KEYS.map((justId) => pathUtils.getLockFile(JustUtil.getParamString(justId, 'file')!)))
 
-      await window.api.addWatchPath(EXCALIDRAW_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')))
+      await window.api.addWatchPath(EXCALIDRAW_DATA_KEYS.map((justId) => JustUtil.getParamString(justId, 'file')!))
     }
     startWatcher()
 

@@ -11,7 +11,7 @@ function JobMonitorView({justId}: Props) {
 
   return (
     <div className="job-monitor-view">
-      <Terminal jobId={JustUtil.getParamString(justId, "jobId")} />
+      <Terminal jobId={JustUtil.getParamString(justId, "jobId")!} />
     </div>
   )
 }
