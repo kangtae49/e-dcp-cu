@@ -11,6 +11,8 @@ import {justLayoutModule} from "@/app/components/just-layout/justLayout.module.t
 import {appModule} from "@/app/listeners/app.module.ts";
 import {excalidrawModule} from "@/app/excalidraw/excalidraw.module.ts";
 import {excalidrawDataModule} from "@/app/excalidraw-data/excalidrawData.module.ts";
+import {toJS} from "mobx";
+import {AppStore} from "@/app/listeners/app.store.ts";
 
 const container = new Container();
 
@@ -29,6 +31,7 @@ container.load(
   ...appModules
 );
 
+const storeCache = new Map<string, any>();
 
 
 // if (process.env.NODE_ENV === 'development') {
@@ -37,4 +40,13 @@ container.load(
 // }
 
 
-export { container };
+// const getF = (facId: string, storeId: string) => {
+//   return container.get(Symbol.for(facId))(storeId)
+// }
+
+(window as any).storeCache = storeCache;
+(window as any).toJS = toJS;
+// toJS(storeCache.get('LAYOUT_ID').layout)
+
+
+export { container, storeCache};

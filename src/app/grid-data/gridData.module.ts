@@ -1,10 +1,10 @@
 import { ContainerModule, Factory  } from "inversify";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 import {GRID_DATA_TYPES} from "@/app/grid-data/gridData.types.ts";
 import {GridDataStore} from "@/app/grid-data/gridData.store.ts";
 import {GridDataService} from "@/app/grid-data/gridData.service.ts";
 
-const storeCache = new Map<string, GridDataStore>();
+// const storeCache = new Map<string, GridDataStore>();
 
 
 export const gridDataModule = new ContainerModule(({bind}) => {

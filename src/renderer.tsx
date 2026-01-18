@@ -39,7 +39,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css';
 import App from './App'
 import { toJS } from 'mobx';
-(window as any).toJS = toJS;
+// (window as any).toJS = toJS;
 
 // import {container} from "@/inversify.config.ts";
 // if (process.env.NODE_ENV === 'development') {

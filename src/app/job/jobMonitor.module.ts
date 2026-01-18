@@ -1,10 +1,10 @@
 import { ContainerModule, Factory  } from "inversify";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 import {JOB_MONITOR_TYPES} from "@/app/job/jobMonitor.types.ts";
 import {JobMonitorStore} from "@/app/job/jobMonitor.store.ts";
 import {JobMonitorService} from "@/app/job/jobMonitor.service.ts";
 
-const storeCache = new Map<string, JobMonitorStore>();
+// const storeCache = new Map<string, JobMonitorStore>();
 
 
 export const jobMonitorModule = new ContainerModule(({bind}) => {

@@ -2,10 +2,9 @@ import { ContainerModule, Factory  } from "inversify";
 import { EXCALIDRAW_DATA_TYPES } from "./excalidrawData.types";
 import { ExcalidrawDataService } from "./excalidrawData.service.ts";
 import { ExcalidrawDataStore } from "./excalidrawData.store.ts";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 
-const storeCache = new Map<string, ExcalidrawDataStore>();
-(window as any).storeExcalidrawData = storeCache;
+// const storeCache = new Map<string, ExcalidrawDataStore>();
 
 
 export const excalidrawDataModule = new ContainerModule(({bind}) => {

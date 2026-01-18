@@ -2,9 +2,9 @@ import { ContainerModule, Factory  } from "inversify";
 import { COUNTER_TYPES } from "./counter.types";
 import { CounterService } from "./counter.service";
 import { CounterStore } from "./counter.store";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 
-const storeCache = new Map<string, CounterStore>();
+// const storeCache = new Map<string, CounterStore>();
 
 
 export const counterModule = new ContainerModule(({bind}) => {

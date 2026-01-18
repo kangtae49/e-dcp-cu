@@ -2,9 +2,9 @@ import { ContainerModule, Factory  } from "inversify";
 import { PAGE_TYPES } from "./page.types";
 import { PageService } from "./page.service.ts";
 import { PageStore } from "./page.store";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 
-const storeCache = new Map<string, PageStore>();
+// const storeCache = new Map<string, PageStore>();
 
 
 export const pageModule = new ContainerModule(({bind}) => {

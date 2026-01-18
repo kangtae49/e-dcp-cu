@@ -2,10 +2,9 @@ import { ContainerModule, Factory  } from "inversify";
 import { JUST_LAYOUT_TYPES } from "./justLayout.types";
 import { JustLayoutService } from "./justLayout.service";
 import { JustLayoutStore } from "./justLayout.store";
-import {container} from "@/inversify.config.ts";
+import {container, storeCache} from "@/inversify.config.ts";
 
-const storeCache = new Map<string, JustLayoutStore>();
-(window as any).storeJustLayout = storeCache;
+// const storeCache = new Map<string, JustLayoutStore>();
 
 
 export const justLayoutModule = new ContainerModule(({bind}) => {
