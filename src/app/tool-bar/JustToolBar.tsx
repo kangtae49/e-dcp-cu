@@ -74,7 +74,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
             GRID_DATA_KEYS.map((justId) =>
               <MenuItem key={JustUtil.toString(justId)} className="just-menu-item" onClick={() => openWin(justId)}>
                 <div className="just-icon">
-                  {viewMap[justId.viewId as ViewId].icon}
+                  {viewMap[justId.viewId as ViewId].getIcon(justId, layoutId)}
                 </div>
                 <div className="just-title">
                   {justId.title}
@@ -85,7 +85,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
           }
           <MenuItem className="just-menu-item" onClick={() => openWin(helpId)}>
             <div className="just-icon">
-              {viewMap[helpId.viewId as ViewId].icon}
+              {viewMap[helpId.viewId as ViewId].getIcon(helpId, layoutId)}
             </div>
             <div className="just-title">
               {helpId.title}
@@ -94,7 +94,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
           </MenuItem>
           <MenuItem className="just-menu-item" onClick={() => openWin(aboutId)}>
             <div className="just-icon">
-              {viewMap[aboutId.viewId as ViewId].icon}
+              {viewMap[aboutId.viewId as ViewId].getIcon(aboutId, layoutId)}
             </div>
             <div className="just-title">
               {aboutId.title}

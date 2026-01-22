@@ -55,7 +55,7 @@ const JustDraggableTitle = observer((props: Prop) => {
       justId
     })
     if (closeWin) {
-      closeWin(justId);
+      closeWin(justId, layoutId);
     }
   }
 
@@ -168,8 +168,7 @@ const JustDraggableTitle = observer((props: Prop) => {
     toggleMenu(true);
   }, [toggleMenu]);
 
-  const tabTitle = justLayoutStore.getTabTitle(justId) ?? (typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId))
-  const tabTitleTooltip = justLayoutStore.getTabTitleTooltip(justId) ?? (typeof winInfo.title === 'string' ? winInfo.title : winInfo.title(justId))
+  const tabTitleTooltip = justLayoutStore.getTabTitleTooltip(justId)
 
   return (
     <div
@@ -190,14 +189,14 @@ const JustDraggableTitle = observer((props: Prop) => {
            onDoubleClick={(e) => dblClickTitle(e, justId)}
            title={tabTitleTooltip}
       >
-        {winInfo.icon}
+        {winInfo.getIcon(justId, layoutId)}
       </div>
       <div className="just-title"
            onClick={(e) => clickTitle(e, justId)}
            onDoubleClick={(e) => dblClickTitle(e, justId)}
            title={tabTitleTooltip}
       >
-        {tabTitle}
+        {justLayoutStore.getTabTitle(justId) ?? winInfo.getTabTitle(justId, layoutId)}
       </div>
 
       {(winInfo.showClose ?? true) &&

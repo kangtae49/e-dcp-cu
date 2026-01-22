@@ -37,7 +37,7 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
       justId
     })
     if (closeWin) {
-      closeWin(justId)
+      closeWin(justId, layoutId);
     }
   }
 
@@ -50,7 +50,7 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
 
     if (closeWin) {
       winIds.forEach((justId: JustId) => {
-        closeWin(justId)
+        closeWin(justId, layoutId)
       });
     }
   }
@@ -63,7 +63,7 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
 
 
 
-  const onDrop = (itemType: any, item: JustDragItem) => {
+  const onDrop = (_itemType: any, item: JustDragItem) => {
     justLayoutStore.moveWin({
       pos: 'stack',
       justId: item.justId,
@@ -120,14 +120,14 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
     };
   }, []);
 
-  const getTitle = (justId: JustId) => {
-    const title = getWinInfo(justId).title
-    if (typeof title === 'string') {
-      return title
-    } else {
-      return title(justId)
-    }
-  }
+  // const getTitle = (justId: JustId) => {
+  //   const title = getWinInfo(justId).title
+  //   if (typeof title === 'string') {
+  //     return title
+  //   } else {
+  //     return title(justId)
+  //   }
+  // }
   const fullScreenWin = async (hideTitle: boolean = false) => {
     if (isFullScreenView) {
       justLayoutStore.setLayout(null)
@@ -170,9 +170,9 @@ const JustWinTitleView = observer(({layoutId, isFullScreenView, dndAccept, justB
           {justStack.tabs.map(justId =>
             <MenuItem key={JustUtil.toString(justId)}
                       className={classNames("just-menu-item", {"active": JustUtil.isEquals(justStack.active, justId)})}>
-              <div className="just-icon" onClick={() => activeWin(justId)}>{getWinInfo(justId).icon}</div>
+              <div className="just-icon" onClick={() => activeWin(justId)}>{getWinInfo(justId).getIcon(justId, layoutId)}</div>
               <div className="just-title" onClick={() => activeWin(justId)}>
-                {getTitle(justId)}
+                {justLayoutStore.getTabTitle(justId) ?? getWinInfo(justId).getTabTitle(justId, layoutId)}
               </div>
 
               {(getWinInfo(justId).showClose ?? true) && <div className="just-icon just-close" onClick={(e) => {

@@ -87,6 +87,11 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
     //   console.log(filePath)
     // }
     // console.log("handleChange", elements, appState, files)
+    if (appState.fileHandle) {
+      const file = await appState.fileHandle.getFile() as File;
+      const filePath = window.api.getPathForFile(file)
+      console.log('filePath:', filePath)
+    }
     excalidrawStore.setState({elements, appState: filterAppState(appState), files})
   }
 
