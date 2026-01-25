@@ -208,6 +208,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "excalidraw-view": {
+    getTabTitle: getTabTitle,
     getTabIcon: () => <Icon icon={faPen} />,
     getView: (justId, layoutId) => {
       return (
