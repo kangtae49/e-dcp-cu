@@ -6,7 +6,6 @@ import WatchListener from "@/app/listeners/WatchListener";
 import {
   initialLayoutValue,
   LAYOUT_ID,
-  SIDE_MENU_NODE_NAME,
   ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
@@ -29,7 +28,6 @@ const App = observer(() => {
   const layoutId = LAYOUT_ID;
   const layoutFullScreenId = `${layoutId}_FULLSCREEN`
 
-  const justLayoutStore = useJustLayoutStore(layoutId);
   const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId)
 
   useEffect(() => {
@@ -105,7 +103,7 @@ const App = observer(() => {
         <div className="just-con">
           <DndProvider backend={ HTML5Backend }>
           <JustLayoutView
-            layoutId={LAYOUT_ID}
+            layoutId={layoutId}
             getWinInfo={getWinInfo}
             initialValue={initialLayoutValue}
           />

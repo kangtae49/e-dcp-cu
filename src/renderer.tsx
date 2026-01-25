@@ -38,7 +38,6 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css';
 import App from './App'
-import { toJS } from 'mobx';
 import {container} from "@/inversify.config.ts";
 import {Provider} from "inversify-react";
 // import {DndProvider} from "react-dnd";

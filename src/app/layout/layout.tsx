@@ -18,7 +18,7 @@ import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
 import ExcalidrawDataView from "@/app/excalidraw-data/ExcalidrawDataView.tsx";
 import pathUtils from "@/utils/pathUtils.ts";
-import {JustId, JustNode, JustSplitPixels, JustUtil, TabTitleProps, WinInfo} from "@kangtae49/just-layout";
+import {JustId, JustNode, JustSplitPixels, TabTitleProps, WinInfo} from "@kangtae49/just-layout";
 import TabTitle from "@/app/layout/TabTitle.tsx";
 
 
