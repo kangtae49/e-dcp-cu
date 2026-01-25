@@ -2,16 +2,15 @@ import "./GridDataView.css"
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faPenToSquare, faDownload} from "@fortawesome/free-solid-svg-icons";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import React, {useLayoutEffect, useRef} from "react";
 import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {observer} from "mobx-react-lite";
 import pathUtils from "@/utils/pathUtils.ts";
+import {JustId, JustUtil} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

@@ -1,12 +1,8 @@
 import './App.css'
-
-import JustLayoutView from "@/app/components/just-layout/ui/JustLayoutView.tsx";
+import "@kangtae49/just-layout/style.css"
+import React, {useEffect} from "react";
 import JobListener from "@/app/listeners/JobListener";
 import WatchListener from "@/app/listeners/WatchListener";
-import React, {useEffect} from "react";
-
-import {WinInfo} from "@/app/components/just-layout";
-// import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {
   initialLayoutValue,
   LAYOUT_ID,
@@ -14,32 +10,15 @@ import {
   ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import AppListener from "@/app/listeners/AppListener.tsx";
 import {observer} from "mobx-react-lite";
 import KeyDownListener from "@/app/listeners/KeyDownListener.tsx";
 import pathUtils from "@/utils/pathUtils.ts";
 import {GRID_DATA_KEYS} from "@/app/grid-data/gridData.constants.ts";
 import {EXCALIDRAW_DATA_KEYS} from "@/app/excalidraw-data/excalidrawData.constants.ts";
-// import DevTools from 'mobx-react-devtools';
-
-// import remotedev from 'mobx-remotedev';
-// import {container} from "@/inversify.config.ts";
-// import {JustLayoutStore} from "@/app/components/just-layout/justLayout.store.ts";
-// if (process.env.NODE_ENV === 'development') {
-//   const hub = {
-//     'layout': container.get<JustLayoutStore>(JUST_LAYOUT_TYPES.JustLayoutStore),
-//
-//   };
-//   remotedev(hub, {
-//     name: 'Electron_App_All_Stores',
-//     remote: true,
-//     hostname: 'localhost',
-//     port: 8000
-//   });
-// }
+import {JustId, JustLayoutView, JustUtil, useJustLayoutStore, WinInfo} from "@kangtae49/just-layout";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {DndProvider} from "react-dnd";
 
 function getWinInfo(justId: JustId): WinInfo {
   const viewId = justId.viewId as ViewId;
@@ -102,21 +81,19 @@ const App = observer(() => {
 
   return (
     <>
-      {/*<DevTools />*/}
       <AppListener />
       <KeyDownListener />
       <JobListener />
       <WatchListener />
       <div className="just-app">
         <div className="just-con">
+          <DndProvider backend={ HTML5Backend }>
           <JustLayoutView
             layoutId={LAYOUT_ID}
             getWinInfo={getWinInfo}
             initialValue={initialLayoutValue}
-            closeWin={closeWin}
-            onClickTitle={onClickTitle}
-            onDoubleClickTitle={onDoubleClickTitle}
           />
+          </DndProvider>
         </div>
       </div>
     </>

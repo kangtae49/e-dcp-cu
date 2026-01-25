@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { container } from "@/inversify.config";
-import { PAGE_TYPES, PageFactory } from "./page.types";
+import { PageFactory } from "./page.types";
+import { PAGE_TYPES } from "./page.constants.ts";
+import {useInjection} from "inversify-react";
 
 export const usePageStore = (id: string) => {
+  const factory = useInjection<PageFactory>(PAGE_TYPES.PageFactory);
   const [store] = useState(() => {
-    const factory = container.get<PageFactory>(PAGE_TYPES.PageFactory);
     return factory(id);
   });
 

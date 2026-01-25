@@ -1,24 +1,22 @@
 import "./ExcalidrawView.css"
 import "@excalidraw/excalidraw/index.css";
 import {observer} from "mobx-react-lite";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {Excalidraw, MainMenu} from "@excalidraw/excalidraw";
 import {AppState, BinaryFiles, ExcalidrawImperativeAPI} from "@excalidraw/excalidraw/types";
 import {OrderedExcalidrawElement} from "@excalidraw/excalidraw/element/types";
 import {useExcalidrawStore} from "@/app/excalidraw/useExcalidrawStore.ts";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {toJS} from "mobx";
 import {restoreAppState} from "@excalidraw/excalidraw";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faExpand} from "@fortawesome/free-solid-svg-icons";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
 import {FileItem} from "@/types.ts";
 import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataStore.ts";
 import {EXCALIDRAW_DATA_ID} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import pathUtils from "@/utils/pathUtils.ts";
+import {JustId, JustUtil, useJustLayoutStore} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

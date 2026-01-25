@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { container } from "@/inversify.config";
-import { COUNTER_TYPES, CounterFactory } from "./counter.types";
-// import { CounterStore } from "./counter.store";
+import { CounterFactory } from "./counter.types";
+import { COUNTER_TYPES } from "./counter.constants.ts";
+import {useInjection} from "inversify-react";
 
 export const useCounterStore = (id: string) => {
+  const factory = useInjection<CounterFactory>(COUNTER_TYPES.CounterFactory);
   const [store] = useState(() => {
-    const factory = container.get<CounterFactory>(COUNTER_TYPES.CounterFactory);
     return factory(id);
   });
 

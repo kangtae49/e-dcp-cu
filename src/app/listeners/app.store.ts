@@ -1,5 +1,5 @@
 import {inject, injectable} from "inversify";
-import {APP_TYPES} from "@/app/listeners/app.types.ts";
+import {APP_TYPES} from "@/app/listeners/app.constants.ts";
 import {makeAutoObservable} from "mobx";
 import {AppService} from "@/app/listeners/app.service.ts";
 

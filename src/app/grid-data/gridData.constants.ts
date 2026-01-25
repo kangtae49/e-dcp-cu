@@ -1,5 +1,12 @@
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import pathUtils from "@/utils/pathUtils.ts";
+import {JustId} from "@kangtae49/just-layout";
+
+export const GRID_DATA_TYPES = {
+  GridDataService: Symbol.for("GridDataService"),
+  GridDataStore: Symbol.for("GridDataStore"),
+  GridDataStoreCacheMap: Symbol.for("GridDataStoreCacheMap"),
+  GridDataFactory: Symbol.for("GridDataFactory"),
+}
 
 export const GRID_DATA_ID = "GRID_DATA"
 

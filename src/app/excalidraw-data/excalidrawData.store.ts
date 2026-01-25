@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
-import {EXCALIDRAW_DATA_TYPES, ExcalidrawData, ExcalidrawDataMap} from "./excalidrawData.types";
+import type {ExcalidrawData, ExcalidrawDataMap} from "./excalidrawData.types";
+import {EXCALIDRAW_DATA_TYPES} from "./excalidrawData.constants.ts";
 import { ExcalidrawDataService } from "./excalidrawData.service.ts";
 import {makeAutoObservable} from "mobx";
 import {GridDataPlayloadIsLocked} from "@/app/grid-data/gridData.store.ts";

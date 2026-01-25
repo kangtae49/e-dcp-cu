@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import {useCounterStore} from "@/app/counter/useCounterStore.tsx";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
+import {JustId} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

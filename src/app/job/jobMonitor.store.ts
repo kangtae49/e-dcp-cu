@@ -1,7 +1,7 @@
 import {inject, injectable} from "inversify";
 import {makeAutoObservable} from "mobx";
-import {JobStatus} from "@/app/job/jobMonitor.constants.ts";
-import {JOB_MONITOR_TYPES, JobEvent} from "@/app/job/jobMonitor.types.ts";
+import type {JobEvent, JobStatus} from "@/app/job/jobMonitor.types.ts";
+import {JOB_MONITOR_TYPES} from "@/app/job/jobMonitor.constants.ts";
 import {JobMonitorService} from "@/app/job/jobMonitor.service.ts";
 
 export interface JobMonitorSetStatus {

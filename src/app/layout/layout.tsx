@@ -1,4 +1,3 @@
-import {WinInfo} from "@/app/components/just-layout/index.ts";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome";
 import {faCircleQuestion, faCircleInfo, faChartLine, faTableList, faTerminal, faPen} from "@fortawesome/free-solid-svg-icons";
 import SideMenu from "@/app/side-menu/ui/SideMenu.tsx";
@@ -14,13 +13,12 @@ import JustStatusBar from "@/app/status-bar/JustStatusBar.tsx";
 import JustUtilBar from "@/app/util-bar/JustUtilBar.tsx";
 import JustBottomPanel from "@/app/bottom-panel/JustBottomPanel.tsx";
 import JobListView from "@/app/job/ui/JobListView.tsx";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {CounterView} from "@/app/counter/CounterView.tsx";
-import {JustId, JustNode, JustSplitPixels} from "@/app/components/just-layout/justLayout.types.ts";
 import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
 import ExcalidrawDataView from "@/app/excalidraw-data/ExcalidrawDataView.tsx";
 import pathUtils from "@/utils/pathUtils.ts";
+import {JustId, JustNode, JustSplitPixels, JustUtil, WinInfo} from "@kangtae49/just-layout";
 
 
 export const LAYOUT_ID = "LAYOUT_ID"
@@ -98,8 +96,7 @@ export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
 
 export const viewMap: Record<ViewId, WinInfo> = {
   "top-menu": {
-    getTabTitle: () => <>Top Menu</>,
-    getIcon: (_justId, _layoutId) => <div/>,
+    getTabIcon: () => <div />,
     getView: (justId, layoutId) => {
       return (
         <TopMenuBar justId={justId} layoutId={layoutId}/>
@@ -107,8 +104,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "status-bar": {
-    getTabTitle: () => <>Status Bar</>,
-    getIcon: (_justId, _layoutId) => <div/>,
+    getTabIcon: () => <div />,
     getView: (justId, layoutId) => {
       return (
         <JustStatusBar justId={justId} layoutId={layoutId} />
@@ -116,8 +112,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "bottom-panel": {
-    getTabTitle: () => <>Bottom Panel</>,
-    getIcon: (_justId) => <div/>,
+    getTabIcon: () => <div />,
     getView: (justId, layoutId) => {
       return (
         <JustBottomPanel justId={justId} layoutId={layoutId} />
@@ -125,8 +120,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "util-bar": {
-    getTabTitle: () => <>Util Bar</>,
-    getIcon: (_justId, _layoutId) => <div/>,
+    getTabIcon: () => <div />,
     getView: (justId, layoutId) => {
       return (
         <JustUtilBar justId={justId} layoutId={layoutId} />
@@ -134,8 +128,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "tool-bar": {
-    getTabTitle: () => <>Toolbar</>,
-    getIcon: (_justId, _layoutId) => <div/>,
+    getTabIcon: () => <div/>,
     getView: (justId, layoutId) => {
       return (
         <JustToolBar justId={justId} layoutId={layoutId} />
@@ -143,9 +136,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "side-menu": {
-    getTabTitle: () => <>Menu</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faCircleQuestion} />,
-    // showClose: false,
+    getTabIcon: () => <Icon icon={faCircleQuestion} />,
     getView: (justId, layoutId) => {
       return (
         <SideMenu justId={justId} layoutId={layoutId} />
@@ -153,10 +144,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "page01": {
-    getTabTitle: (justId, _layoutId) => <>{justId.title}</>,
-    canDup: true,
-    canFullScreen: true,
-    getIcon: (_justId, _layoutId) => <Jdenticon size="30" value={page01Id.viewId} />,
+    getTabIcon: () => <Jdenticon size="30" value={page01Id.viewId} />,
     getView: (justId, layoutId) => {
       return (
         <Page01View justId={justId} layoutId={layoutId} />
@@ -164,8 +152,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "about": {
-    getTabTitle: () => <>About</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faCircleInfo} />,
+    getTabIcon: () => <Icon icon={faCircleInfo} />,
     getView: (justId, layoutId) => {
       return (
         <AboutView justId={justId} layoutId={layoutId} />
@@ -173,9 +160,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "help": {
-    getTabTitle: () => <>Help</>,
-    canFullScreen: true,
-    getIcon: (_justId, _layoutId) => <Icon icon={faCircleQuestion} />,
+    getTabIcon: () => <Icon icon={faCircleQuestion} />,
     getView: (justId, layoutId) => {
       return (
         <ExcalidrawDataView justId={justId} layoutId={layoutId} />
@@ -183,8 +168,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "chart-view": {
-    getTabTitle: (justId) => <>{justId.title}</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faChartLine} />,
+    getTabIcon: () => <Icon icon={faChartLine} />,
     getView: (justId, layoutId) => {
       return (
         <ChartView justId={justId} layoutId={layoutId} />
@@ -192,8 +176,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "grid-data-view": {
-    getTabTitle: (justId) => <>{justId.title}</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faTableList} />,
+    getTabIcon: () => <Icon icon={faTableList} />,
     getView: (justId, layoutId) => {
       return (
         <GridDataView justId={justId} layoutId={layoutId} />
@@ -201,8 +184,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "job-list-view": {
-    getTabTitle: () => <>Job Monitor</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faTerminal} />,
+    getTabIcon: () => <Icon icon={faTerminal} />,
     getView: (justId, layoutId) => {
       return (
         <JobListView justId={justId} layoutId={layoutId} />
@@ -211,8 +193,8 @@ export const viewMap: Record<ViewId, WinInfo> = {
 
   },
   "job-monitor-view": {
-    getTabTitle: (justId) => <>{JustUtil.getParamString(justId, 'jobId')!}</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faTerminal} />,
+    getTabTitle: ({justId}) => <>{JustUtil.getParamString(justId, 'jobId')!}</>,
+    getTabIcon: () => <Icon icon={faTerminal} />,
     getView: (justId, layoutId) => {
       return (
         <JobMonitorView justId={justId} layoutId={layoutId} />
@@ -220,10 +202,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "excalidraw-view": {
-    getTabTitle: () => <>Excalidraw</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faPen} />,
-    canDup: true,
-    canFullScreen: true,
+    getTabIcon: () => <Icon icon={faPen} />,
     getView: (justId, layoutId) => {
       return (
         <ExcalidrawView justId={justId} layoutId={layoutId} />
@@ -231,9 +210,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "excalidraw-data-view": {
-    getTabTitle: (justId) => <>{justId.title}</>,
-    getIcon: (_justId, _layoutId) => <Icon icon={faPen} />,
-    canFullScreen: true,
+    getTabIcon: () => <Icon icon={faPen} />,
     getView: (justId, layoutId) => {
       return (
         <ExcalidrawDataView justId={justId} layoutId={layoutId} />
@@ -241,9 +218,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "counter-view": {
-    getTabTitle: (justId) => <>{JustUtil.getParamString(justId, 'jobId')!}</>,
-    getIcon: (_justId, _layoutId) => <Jdenticon size="30" value="counter-view" />,
-    canDup: true,
+    getTabIcon: () => <Jdenticon size="30" value="counter-view" />,
     getView: (justId, layoutId) => {
       return (
         <CounterView justId={justId} layoutId={layoutId} />

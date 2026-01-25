@@ -12,8 +12,3 @@ export type GridDataMap = Record<string, GridData>
 
 export type GridDataFactory = (id: string) => GridDataStore;
 
-export const GRID_DATA_TYPES = {
-  GridDataService: Symbol("GridDataService"),
-  GridDataStore: Symbol("GridDataStore"),
-  GridDataFactory: Symbol("GridDataFactory"),
-}

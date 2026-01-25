@@ -1,5 +1,6 @@
 import { injectable, inject } from "inversify";
-import {JobInfo, PAGE_TYPES, TabType} from "./page.types";
+import {JobInfo, TabType} from "./page.types";
+import {PAGE_TYPES} from "./page.constants.ts";
 import { PageService } from "./page.service";
 import {makeAutoObservable} from "mobx";
 import type {Option} from "@/app/components/select/SelectBox.tsx";

@@ -1,6 +1,5 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
-import "reflect-metadata";
 import {contextBridge, ipcRenderer, webUtils } from 'electron'
 import {DragStartItem, Env, WatchEvent, DialogResult, AppInfo} from "@/types.ts";
 import {GridData} from "@/app/grid-data/gridData.types.ts";

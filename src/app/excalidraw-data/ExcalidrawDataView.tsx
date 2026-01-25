@@ -1,16 +1,14 @@
 import "./ExcalidrawDataView.css"
 import "@excalidraw/excalidraw/index.css";
 import {observer} from "mobx-react-lite";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {Excalidraw, MainMenu} from "@excalidraw/excalidraw";
 import {useExcalidrawDataStore} from "./useExcalidrawDataStore.ts";
 import {EXCALIDRAW_DATA_ID} from "./excalidrawData.constants.ts";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useEffect, useRef, useState} from "react";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faExpand} from "@fortawesome/free-solid-svg-icons";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {ExcalidrawImperativeAPI} from "@excalidraw/excalidraw/types";
+import {JustId, JustUtil, useJustLayoutStore} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

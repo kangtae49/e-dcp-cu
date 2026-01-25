@@ -5,9 +5,8 @@ import {
 import classNames from "classnames";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faTerminal} from "@fortawesome/free-solid-svg-icons";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
 import {observer} from "mobx-react-lite";
+import {JustId, useJustLayoutStore} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

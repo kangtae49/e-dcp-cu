@@ -10,7 +10,7 @@ import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
 import {keys} from "mobx";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
+import {useJustLayoutStore} from "@kangtae49/just-layout";
 
 interface Props {
   count: number

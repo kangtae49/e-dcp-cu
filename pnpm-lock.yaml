@@ -20,6 +20,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^3.1.1
         version: 3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+      '@kangtae49/just-layout':
+        specifier: ^0.0.19
+        version: 0.0.19(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.10.8(reflect-metadata@0.2.2))(react@19.2.3))(inversify@7.10.8(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@24.10.4)(@types/react@19.2.7)(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@silevis/reactgrid':
         specifier: ^4.1.17
         version: 4.1.17(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -53,6 +56,9 @@ importers:
       inversify:
         specifier: ^7.10.8
         version: 7.10.8(reflect-metadata@0.2.2)
+      inversify-react:
+        specifier: ^1.2.0
+        version: 1.2.0(inversify@7.10.8(reflect-metadata@0.2.2))(react@19.2.3)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -818,6 +824,18 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@kangtae49/just-layout@0.0.19':
+    resolution: {integrity: sha512-M/v/+jDZJfLNGtik6HUH8VyibtaAL0foU966g7lkww5ljpJMIdkwLUaxzOpW5jpDSdDGcBPHiM06Moz1HcjgCw==}
+    peerDependencies:
+      inversify: ^7.11.0
+      inversify-react: ^1.2.0
+      mobx: ^6.15.0
+      mobx-react-lite: ^4.1.1
+      react: ^19.2.0
+      react-dnd: ^16.0.1
+      react-dnd-html5-backend: ^16.0.1
+      react-dom: ^19.2.0
 
   '@listr2/prompt-adapter-inquirer@2.0.22':
     resolution: {integrity: sha512-hV36ZoY+xKL6pYOt1nPNnkciFkn89KZwqLhAFzJvYysAvL5uBQdiADZx/8bIDXIukzzwG0QlPYolgMzQUtKgpQ==}
@@ -3226,6 +3244,12 @@ packages:
     resolution: {integrity: sha512-6xwYfHbajpoF0xLW+iwLkhwgvLoZDfjYfoFNu8ftMoXINzwuymNLd9u/KmwtdT2GbR+/Cz66otEGEVVUHX9QLQ==}
     engines: {node: '>=10.13.0'}
 
+  inversify-react@1.2.0:
+    resolution: {integrity: sha512-4p0WRWaMpQAU7PBzz+6/OMFW9JPEtN6MzamQkEZ7CJUZEziBnG5afBrtP+QyS1gj/Su3igORkCeru0vUZkUGqw==}
+    peerDependencies:
+      inversify: ^5.0.5 || ^6.0.1
+      react: ^16.3.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
   inversify@7.10.8:
     resolution: {integrity: sha512-NF9t4p1j5BtrJjf1jXRlGCXvixjtdu5UFkmye/3zFrITJbB7KvrkNS1vm8yAm8RW07hst4yxpvXGG3JtrQ365w==}
 
@@ -3528,6 +3552,9 @@ packages:
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
+  lodash@4.17.23:
+    resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
 
   log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
@@ -6097,6 +6124,25 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@kangtae49/just-layout@0.0.19(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.10.8(reflect-metadata@0.2.2))(react@19.2.3))(inversify@7.10.8(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@24.10.4)(@types/react@19.2.7)(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@fortawesome/free-solid-svg-icons': 7.1.0
+      '@fortawesome/react-fontawesome': 3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.3)
+      '@szhsin/react-menu': 4.5.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      classnames: 2.5.1
+      immutability-helper: 3.1.1
+      inversify: 7.10.8(reflect-metadata@0.2.2)
+      inversify-react: 1.2.0(inversify@7.10.8(reflect-metadata@0.2.2))(react@19.2.3)
+      lodash: 4.17.23
+      mobx: 6.15.0
+      mobx-react-lite: 4.1.1(mobx@6.15.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react: 19.2.3
+      react-dnd: 16.0.1(@types/node@24.10.4)(@types/react@19.2.7)(react@19.2.3)
+      react-dnd-html5-backend: 16.0.1
+      react-dom: 19.2.3(react@19.2.3)
+    transitivePeerDependencies:
+      - '@fortawesome/fontawesome-svg-core'
 
   '@listr2/prompt-adapter-inquirer@2.0.22(@inquirer/prompts@6.0.1)':
     dependencies:
@@ -8742,6 +8788,11 @@ snapshots:
 
   interpret@3.1.1: {}
 
+  inversify-react@1.2.0(inversify@7.10.8(reflect-metadata@0.2.2))(react@19.2.3):
+    dependencies:
+      inversify: 7.10.8(reflect-metadata@0.2.2)
+      react: 19.2.3
+
   inversify@7.10.8(reflect-metadata@0.2.2):
     dependencies:
       '@inversifyjs/common': 1.5.2
@@ -9012,6 +9063,8 @@ snapshots:
   lodash.throttle@4.1.1: {}
 
   lodash@4.17.21: {}
+
+  lodash@4.17.23: {}
 
   log-symbols@4.1.0:
     dependencies:

@@ -3,8 +3,8 @@ import useOnload from "../../hooks/useOnload.ts";
 import IconLogo from "../../assets/icon.svg?react"
 import {useState} from "react";
 import {Versions} from "@/types.ts";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {observer} from "mobx-react-lite";
+import {JustId} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

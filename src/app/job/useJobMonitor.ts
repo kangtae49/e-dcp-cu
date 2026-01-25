@@ -1,10 +1,11 @@
 import {useState} from "react";
-import {container} from "@/inversify.config.ts";
-import {JOB_MONITOR_TYPES, JobMonitorFactory} from "@/app/job/jobMonitor.types.ts";
+import {JobMonitorFactory} from "@/app/job/jobMonitor.types.ts";
+import {JOB_MONITOR_TYPES} from "@/app/job/jobMonitor.constants.ts";
+import {useInjection} from "inversify-react";
 
 function useJobMonitor(id: string) {
+  const factory = useInjection<JobMonitorFactory>(JOB_MONITOR_TYPES.JobMonitorFactory);
   const [store] = useState(() => {
-    const factory = container.get<JobMonitorFactory>(JOB_MONITOR_TYPES.JobMonitorFactory);
     return factory(id);
   })
 

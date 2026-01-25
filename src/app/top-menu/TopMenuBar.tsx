@@ -1,10 +1,10 @@
 import './TopMenuBar.css'
 import IconLogo from "../../assets/icon.svg?react"
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import IconClose from "../../assets/close.svg?react"
 import IconMinimize from "../../assets/minimize.svg?react"
 import IconMaximize from "../../assets/maximize.svg?react"
 import {observer} from "mobx-react-lite";
+import {JustId} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

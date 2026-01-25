@@ -4,7 +4,6 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faBars, faGear, faPen} from "@fortawesome/free-solid-svg-icons"
 import {Menu, MenuItem} from "@szhsin/react-menu";
 import Jdenticon from "react-jdenticon";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {
   aboutId, CONTENTS_VIEW, excalidrawViewId, helpId,
   INIT_SIDE_MENU_SIZE,
@@ -12,10 +11,9 @@ import {
   SIDE_MENU_NODE_NAME, ViewId,
   viewMap
 } from "@/app/layout/layout.tsx";
-import {useJustLayoutStore} from "@/app/components/just-layout/useJustLayoutStore.ts";
-import {JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import {GRID_DATA_KEYS} from "@/app/grid-data/gridData.constants.ts";
 import {observer} from "mobx-react-lite";
+import {JustId, JustUtil, useJustLayoutStore} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId
@@ -74,7 +72,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
             GRID_DATA_KEYS.map((justId) =>
               <MenuItem key={JustUtil.toString(justId)} className="just-menu-item" onClick={() => openWin(justId)}>
                 <div className="just-icon">
-                  {viewMap[justId.viewId as ViewId].getIcon(justId, layoutId)}
+                  {viewMap[justId.viewId as ViewId].getTabIcon(justId, layoutId)}
                 </div>
                 <div className="just-title">
                   {justId.title}
@@ -85,7 +83,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
           }
           <MenuItem className="just-menu-item" onClick={() => openWin(helpId)}>
             <div className="just-icon">
-              {viewMap[helpId.viewId as ViewId].getIcon(helpId, layoutId)}
+              {viewMap[helpId.viewId as ViewId].getTabIcon(helpId, layoutId)}
             </div>
             <div className="just-title">
               {helpId.title}
@@ -94,7 +92,7 @@ const JustToolBar = observer(({justId: _justId, layoutId}: Props) => {
           </MenuItem>
           <MenuItem className="just-menu-item" onClick={() => openWin(aboutId)}>
             <div className="just-icon">
-              {viewMap[aboutId.viewId as ViewId].getIcon(aboutId, layoutId)}
+              {viewMap[aboutId.viewId as ViewId].getTabIcon(aboutId, layoutId)}
             </div>
             <div className="just-title">
               {aboutId.title}

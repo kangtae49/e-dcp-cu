@@ -1,7 +1,9 @@
+export const JOB_MONITOR_TYPES = {
+  JobMonitorService: Symbol.for("JobMonitorService"),
+  JobMonitorStore: Symbol.for("JobMonitorStore"),
+  JobMonitorStoreCacheMap: Symbol.for("JobMonitorStoreCacheMap"),
+  JobMonitorFactory: Symbol.for("JobMonitorFactory"),
+}
+
 export const JOB_MONITOR_ID = "JOB-MONITOR"
 
-export type JobStatus = 'RUNNING' | 'DONE' | 'STOPPED';
-
-export type StreamType = 'STDOUT' | 'STDERR';
-
-export type JobAction = 'JOB_STREAM' | 'JOB_STATUS' | 'JOB_ERROR'

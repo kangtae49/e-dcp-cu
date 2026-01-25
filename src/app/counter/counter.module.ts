@@ -1,25 +1,25 @@
 import { ContainerModule, Factory  } from "inversify";
-import { COUNTER_TYPES } from "./counter.types";
+import { COUNTER_TYPES } from "./counter.constants.ts";
 import { CounterService } from "./counter.service";
 import { CounterStore } from "./counter.store";
-import {container, storeCache} from "@/inversify.config.ts";
 
-// const storeCache = new Map<string, CounterStore>();
 
 
 export const counterModule = new ContainerModule(({bind}) => {
   bind(COUNTER_TYPES.CounterService).to(CounterService).inSingletonScope();
-
   bind(COUNTER_TYPES.CounterStore).to(CounterStore).inTransientScope();
 
+  bind<Map<string, CounterStore>>(COUNTER_TYPES.CounterStoreCacheMap).toConstantValue(new Map());
+
   bind<Factory<CounterStore>>(COUNTER_TYPES.CounterFactory)
-    .toFactory((_context) => {
+    .toFactory((context) => {
+      const cacheMap = context.get<Map<string, CounterStore>>(COUNTER_TYPES.CounterStoreCacheMap);
       return (id: string) => {
-        if (!storeCache.has(id)) {
-          const newStore = container.get<CounterStore>(COUNTER_TYPES.CounterStore);
-          storeCache.set(id, newStore);
+        if (!cacheMap.has(id)) {
+          const newStore = context.get<CounterStore>(COUNTER_TYPES.CounterStore);
+          cacheMap.set(id, newStore);
         }
-        return storeCache.get(id)!;
+        return cacheMap.get(id)!;
       }
     })
 });

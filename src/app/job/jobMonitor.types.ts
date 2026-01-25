@@ -1,4 +1,3 @@
-import {JobAction, JobStatus, StreamType} from "@/app/job/jobMonitor.constants.ts";
 import {JobMonitorStore} from "@/app/job/jobMonitor.store.ts";
 
 export type JobData = JobStreamData | JobStatusData | JobErrorData
@@ -26,8 +25,8 @@ export interface JobEvent {
 
 export type JobMonitorFactory = (id: string) => JobMonitorStore;
 
-export const JOB_MONITOR_TYPES = {
-  JobMonitorService: Symbol("JobMonitorService"),
-  JobMonitorStore: Symbol("JobMonitorStore"),
-  JobMonitorFactory: Symbol("JobMonitorFactory"),
-}
+export type JobStatus = 'RUNNING' | 'DONE' | 'STOPPED';
+
+export type StreamType = 'STDOUT' | 'STDERR';
+
+export type JobAction = 'JOB_STREAM' | 'JOB_STATUS' | 'JOB_ERROR'

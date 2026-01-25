@@ -15,17 +15,15 @@ import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
 import {usePageStore} from "@/app/page/usePageStore.ts";
-import {JustUtil} from "@/app/components/just-layout/justUtil.ts";
 import {useDrag, useDrop} from "react-dnd";
 import {NativeTypes} from "react-dnd-html5-backend";
-import {JustDragItem} from "@/app/components/just-layout/ui/JustDraggableTitle.tsx";
 import JustLineChart, {LegendItem} from "@/app/components/chart/JustLineChart.tsx";
 import JustGrid from "@/app/components/grid/JustGrid.tsx";
 import {GRID_DATA_ID} from "@/app/grid-data/gridData.constants.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
-import {JSONValue, JustId} from "@/app/components/just-layout/justLayout.types.ts";
 import pathUtils from "@/utils/pathUtils.ts";
+import {JSONValue, JustDragItem, JustId, JustUtil} from "@kangtae49/just-layout";
 
 interface Props {
   justId: JustId

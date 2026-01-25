@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { COUNTER_TYPES } from "./counter.types";
+import { COUNTER_TYPES } from "./counter.constants.ts";
 import { CounterService } from "./counter.service";
 import {makeAutoObservable} from "mobx";
 

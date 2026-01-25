@@ -39,6 +39,10 @@ import { createRoot } from 'react-dom/client'
 import './index.css';
 import App from './App'
 import { toJS } from 'mobx';
+import {container} from "@/inversify.config.ts";
+import {Provider} from "inversify-react";
+// import {DndProvider} from "react-dnd";
+// import {HTML5Backend} from "react-dnd-html5-backend";
 // (window as any).toJS = toJS;
 
 // import {container} from "@/inversify.config.ts";
@@ -52,6 +56,10 @@ console.log(
 );
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <Provider container={container}>
+      {/*<DndProvider backend={ HTML5Backend }>*/}
+        <App />
+      {/*</DndProvider>*/}
+    </Provider>
   </StrictMode>,
 )

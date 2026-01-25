@@ -1,26 +1,23 @@
 import { ContainerModule, Factory  } from "inversify";
-import { EXCALIDRAW_TYPES } from "./excalidraw.types";
+import { EXCALIDRAW_TYPES } from "./excalidraw.constants.ts";
 import { ExcalidrawService } from "./excalidraw.service.ts";
 import { ExcalidrawStore } from "./excalidraw.store";
-import {container, storeCache} from "@/inversify.config.ts";
-
-// const storeCache = new Map<string, ExcalidrawStore>();
-
 
 
 export const excalidrawModule = new ContainerModule(({bind}) => {
   bind(EXCALIDRAW_TYPES.ExcalidrawService).to(ExcalidrawService).inSingletonScope();
-
   bind(EXCALIDRAW_TYPES.ExcalidrawStore).to(ExcalidrawStore).inTransientScope();
 
+  bind<Map<string, ExcalidrawStore>>(EXCALIDRAW_TYPES.ExcalidrawStoreCacheMap).toConstantValue(new Map());
   bind<Factory<ExcalidrawStore>>(EXCALIDRAW_TYPES.ExcalidrawFactory)
-    .toFactory((_context) => {
+    .toFactory((context) => {
+      const cacheMap = context.get<Map<string, ExcalidrawStore>>(EXCALIDRAW_TYPES.ExcalidrawStoreCacheMap);
       return (id: string) => {
-        if (!storeCache.has(id)) {
-          const newStore = container.get<ExcalidrawStore>(EXCALIDRAW_TYPES.ExcalidrawStore);
-          storeCache.set(id, newStore);
+        if (!cacheMap.has(id)) {
+          const newStore = context.get<ExcalidrawStore>(EXCALIDRAW_TYPES.ExcalidrawStore);
+          cacheMap.set(id, newStore);
         }
-        return storeCache.get(id)!;
+        return cacheMap.get(id)!;
       }
     })
 });
