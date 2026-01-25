@@ -18,7 +18,8 @@ import TopMenuBar from "@/app/top-menu/TopMenuBar.tsx";
 import ExcalidrawView from "@/app/excalidraw/ExcalidrawView.tsx";
 import ExcalidrawDataView from "@/app/excalidraw-data/ExcalidrawDataView.tsx";
 import pathUtils from "@/utils/pathUtils.ts";
-import {JustId, JustNode, JustSplitPixels, JustUtil, WinInfo} from "@kangtae49/just-layout";
+import {JustId, JustNode, JustSplitPixels, JustUtil, TabTitleProps, WinInfo} from "@kangtae49/just-layout";
+import TabTitle from "@/app/layout/TabTitle.tsx";
 
 
 export const LAYOUT_ID = "LAYOUT_ID"
@@ -92,7 +93,11 @@ export const SIDE_MENU_ID_LIST: SideMenuItem[] = [
   // {menuId: {viewId: 'demo-line-chart'}, menuName: "Demo Line Chart"},
 ]
 
-
+const getTabTitle = (props: TabTitleProps) => (
+  <TabTitle
+    {...props}
+  />
+)
 
 export const viewMap: Record<ViewId, WinInfo> = {
   "top-menu": {
@@ -144,6 +149,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
     }
   },
   "page01": {
+    getTabTitle: getTabTitle,
     getTabIcon: () => <Jdenticon size="30" value={page01Id.viewId} />,
     getView: (justId, layoutId) => {
       return (
@@ -193,7 +199,7 @@ export const viewMap: Record<ViewId, WinInfo> = {
 
   },
   "job-monitor-view": {
-    getTabTitle: ({justId}) => <>{JustUtil.getParamString(justId, 'jobId')!}</>,
+    // getTabTitle: ({justId}) => <>{JustUtil.getParamString(justId, 'jobId')!}</>,
     getTabIcon: () => <Icon icon={faTerminal} />,
     getView: (justId, layoutId) => {
       return (

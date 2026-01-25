@@ -26,9 +26,11 @@ function getWinInfo(justId: JustId): WinInfo {
 }
 
 const App = observer(() => {
+  const layoutId = LAYOUT_ID;
+  const layoutFullScreenId = `${layoutId}_FULLSCREEN`
 
-
-  const justLayoutStore = useJustLayoutStore(LAYOUT_ID);
+  const justLayoutStore = useJustLayoutStore(layoutId);
+  const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId)
 
   useEffect(() => {
     const startWatcher = async () => {
@@ -70,14 +72,28 @@ const App = observer(() => {
 
   }, [])
 
-  const closeWin = (justId: JustId) => {
-    console.log('closeWin!!!', justId)
-  }
-  const onClickTitle = (_e: React.MouseEvent, _justId: JustId) => {
-  }
-  const onDoubleClickTitle = (_e: React.MouseEvent, _justId: JustId) => {
-    justLayoutStore.toggleWin({nodeName: SIDE_MENU_NODE_NAME})
-  }
+
+  useEffect(() => {
+    console.log('useEffect justLayoutFullScreenStore.layout', justLayoutFullScreenStore.layout)
+    const isFull = justLayoutFullScreenStore.layout !== null
+    console.log('isFull', isFull)
+    const changeScreen = async (isFull: boolean) => {
+      const isFullScreen = await window.api.isFullScreen()
+      if (isFullScreen !== isFull) {
+        await window.api.setFullScreen(isFull)
+      }
+
+      const isMaximized = await window.api.isMaximized();
+      if (isMaximized !== isFull) {
+        if (isFull) {
+          window.api.maximize()
+        } else {
+          window.api.unmaximize()
+        }
+      }
+    }
+    changeScreen(isFull)
+  }, [justLayoutFullScreenStore.layout])
 
   return (
     <>
