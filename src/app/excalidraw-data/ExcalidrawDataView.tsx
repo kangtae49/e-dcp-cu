@@ -4,7 +4,7 @@ import {observer} from "mobx-react-lite";
 import {Excalidraw, MainMenu} from "@excalidraw/excalidraw";
 import {useExcalidrawDataStore} from "./useExcalidrawDataStore.ts";
 import {EXCALIDRAW_DATA_ID} from "./excalidrawData.constants.ts";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef} from "react";
 import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faExpand} from "@fortawesome/free-solid-svg-icons";
 import {ExcalidrawImperativeAPI} from "@excalidraw/excalidraw/types";
@@ -23,20 +23,8 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
   const dataKey = JustUtil.getParamString(justId, 'file') ?? '';
 
 
-  const [isFullScreen, setIsFullScreen] = useState(false)
-
-
-  const changeFullScreen = async () => {
-    setIsFullScreen(await window.api.isFullScreen())
-  }
-  changeFullScreen()
-
-
-
-
   const fullScreenWin = async () => {
-    const isFullScreen = await window.api.isFullScreen()
-    if(isFullScreen) {
+    if(justLayoutStore.isFullScreenView(layoutId)) {
       justLayoutStore.setLayout(null)
     } else {
       const branch = justLayoutStore.getBranchByJustId({justId})
@@ -64,7 +52,7 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>
-            <Icon icon={faExpand} /> {isFullScreen ? 'F11' : 'Full'}
+            <Icon icon={faExpand} /> {justLayoutStore.isFullScreenView(layoutId) ? 'F11' : 'Full'}
           </MainMenu.Item>
           <MainMenu.DefaultItems.LoadScene />
           <MainMenu.DefaultItems.SaveToActiveFile />

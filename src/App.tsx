@@ -77,7 +77,7 @@ const App = observer(() => {
     console.log('isFull', isFull)
     const changeScreen = async (isFull: boolean) => {
       const isFullScreen = await window.api.isFullScreen()
-      if (isFullScreen !== isFull) {
+      if (isFullScreen !== justLayoutFullScreenStore.isFullScreenView(layoutId)) {
         await window.api.setFullScreen(isFull)
       }
 
