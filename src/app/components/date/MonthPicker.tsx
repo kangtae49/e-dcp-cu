@@ -36,7 +36,7 @@ const MonthPicker = observer(({value, onChange}: Props) => {
         toggleCalendarOnIconClick
         yearDropdownItemNumber={15}
         selected={parse(value ?? format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd", new Date())}
-        onChange={(date) => handleChange(format(date ?? new Date(), "yyyy-MM-dd"))}
+        onChange={(date: Date | null) => handleChange(format(date ?? new Date(), "yyyy-MM-dd"))}
       />
     </div>
   );
