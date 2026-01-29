@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { app, BrowserWindow  } from 'electron';
+import {app, BrowserWindow, protocol} from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import {
@@ -8,6 +8,9 @@ import {
 } from "./api_core";
 import {FileWatcher} from "./file_watcher.ts";
 import { enableLogging } from "mobx-logger";
+import fs from "node:fs";
+import {Readable} from "node:stream";
+import mime from "mime-types";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -87,6 +90,73 @@ app.on('ready', async () => {
       transaction: true,
       compute: true,
     });
+
+    protocol.handle('local-resource', async (request: Request): Promise<Response> => {
+      try {
+        const url = new URL(request.url);
+        const normalizedPath = decodeURIComponent(url.pathname);
+
+        // const normalizedPath = path.normalize(
+        //   process.platform === 'win32' && decodedPath.startsWith('/')
+        //     ? decodedPath.slice(1)
+        //     : decodedPath
+        // )
+
+        const stats = await fs.promises.stat(normalizedPath);
+        const fileSize = stats.size;
+        const contentType = mime.lookup(normalizedPath) || 'application/octet-stream';
+
+        const range = request.headers.get('range');
+
+        if (range) {
+          const parts = range.replace(/bytes=/, "").split("-");
+          const start = parseInt(parts[0], 10);
+          const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+          if (start >= fileSize || end >= fileSize) {
+            return (new Response("Requested range not satisfiable", {
+              status: 416,
+              headers: { 'Content-Range': `bytes */${fileSize}` }
+            })) as Response;
+          }
+
+          const chunkSize = (end - start) + 1;
+          const nodeStream = fs.createReadStream(normalizedPath, { start, end });
+          const webStream = Readable.toWeb(nodeStream) as ReadableStream;
+
+          return (new Response(webStream, {
+            status: 206, // Partial Content
+            headers: {
+              'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+              'Accept-Ranges': 'bytes',
+              'Content-Length': chunkSize.toString(),
+              'Content-Type': contentType,
+            }
+          })) as Response
+        } else {
+          const nodeStream = fs.createReadStream(normalizedPath);
+          const webStream = Readable.toWeb(nodeStream) as ReadableStream;
+
+          return (new Response(webStream, {
+            status: 200,
+            headers: {
+              'Content-Length': fileSize.toString(),
+              'Content-Type': contentType,
+              'Accept-Ranges': 'bytes'
+            }
+          })) as Response
+        }
+        // return (new Response(webStream, {
+        //   status: 200,
+        //   headers: { 'Content-Type': contentType }
+        // })) as Response
+      } catch (error) {
+        console.error('Protocol Error:', error);
+        return (new Response('File Not Found or Access Denied', { status: 404 })) as Response
+      }
+    });
+
+
   }
 
 
