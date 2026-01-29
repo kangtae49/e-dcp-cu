@@ -92,9 +92,17 @@ app.on('ready', async () => {
     });
 
     protocol.handle('local-resource', async (request: Request): Promise<Response> => {
+      // const url = new URL(request.url);
+      // const normalizedPath = decodeURIComponent(url.pathname);
+      //
+      // const fileUrl = pathToFileURL(normalizedPath).toString();
+      //
+      // return net.fetch(fileUrl);
+
       try {
         const url = new URL(request.url);
         const normalizedPath = decodeURIComponent(url.pathname);
+
 
         // const normalizedPath = path.normalize(
         //   process.platform === 'win32' && decodedPath.startsWith('/')
