@@ -1,8 +1,9 @@
 import {useEffect} from "react";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
-import {JobStatusData} from "@/app/job/jobMonitor.types.ts";
+import {JobStatusData, JobStreamData} from "@/app/job/jobMonitor.types.ts";
 import {observer} from "mobx-react-lite";
+import {terminalManager} from "@/app/components/terminal/TerminalManager.ts";
 
 const JobListener = observer((): null => {
 
@@ -16,6 +17,10 @@ const JobListener = observer((): null => {
         jobMonitorStore.setStatus({jobId: jobEvent.jobId, status: dataStatus.status})
       }
       jobMonitorStore.addEvent({jobId: jobEvent.jobId, event: jobEvent})
+      if (jobEvent.action === 'JOB_STREAM') {
+        const data = jobEvent.data as JobStreamData
+        terminalManager.writeToTerminal(jobEvent.jobId, data.message)
+      }
     })
   }, [])
   return null

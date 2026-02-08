@@ -264,10 +264,12 @@ export function startScript(window: BrowserWindow, jobId: string, filePath: stri
     timestamp: Date.now()
   });
 
+  // let remainder = "";
   child.stdout.on('data', (data) => {
     // console.log(data.toString());
-    const decodedMessage = iconv.decode(data, 'euc-kr');
     process.stdout.write(data)
+    const decodedMessage = iconv.decode(data, 'euc-kr');
+    // console.log(decodedMessage)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',
       jobId,
@@ -275,11 +277,28 @@ export function startScript(window: BrowserWindow, jobId: string, filePath: stri
       data: {message: decodedMessage, messageType: 'STDOUT'},
       timestamp: Date.now()
     });
+    // const decodedMessage = iconv.decode(data, 'euc-kr');
+    // const msg = remainder + decodedMessage;
+    // const lines = msg.split('\r\n');
+    // remainder = lines.pop() ?? "";
+
+    // process.stdout.write(data)
+    // lines.forEach((line) => {
+    //   if (line) {
+    //     dispatchJobEvent(window, {
+    //       action: 'JOB_STREAM',
+    //       jobId,
+    //       pid,
+    //       data: {message: line, messageType: 'STDOUT'},
+    //       timestamp: Date.now()
+    //     });
+    //   }
+    // })
   });
 
   child.stderr.on('data', (data) => {
-    const decodedMessage = iconv.decode(data, 'euc-kr');
     // console.log(data.toString());
+    const decodedMessage = iconv.decode(data, 'euc-kr');
     process.stderr.write(data)
     dispatchJobEvent(window, {
       action: 'JOB_STREAM',

@@ -1,0 +1,17 @@
+.job-output {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #0c0c0c;
+    color: #cccccc;
+    font-size: 13px;
+    font-family: "JetBrains Mono", Consolas, "Courier New", monospace;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.job-output-row {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}

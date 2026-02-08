@@ -10,7 +10,6 @@ import MonthPicker from "@/app/components/date/MonthPicker.tsx";
 import React, {Activity, useEffect, useLayoutEffect, useRef} from "react";
 import { format } from "date-fns";
 import classNames from "classnames";
-import Terminal from "@/app/components/terminal/Terminal.tsx";
 import {FileItem} from "@/types";
 import useJobMonitor from "@/app/job/useJobMonitor.ts";
 import useGridDataStore from "@/app/grid-data/useGridDataStore.ts";
@@ -24,6 +23,7 @@ import {JOB_MONITOR_ID} from "@/app/job/jobMonitor.constants.ts";
 import {observer} from "mobx-react-lite";
 import pathUtils from "@/utils/pathUtils.ts";
 import {JSONValue, JustDragItem, JustId, JustUtil} from "@kangtae49/just-layout";
+import JobTerm from "@/app/job/ui/JobTerm.tsx";
 
 interface Props {
   justId: JustId
@@ -438,10 +438,11 @@ const Page01View = observer(({justId}: Props)=> {
           </Activity>
           <Activity mode={pageStore.tab === "LOG" ? "visible" : "hidden"}>
             <div className="content">
-              <Terminal
-                key={pageStore.jobInfo?.jobId ?? ''}
-                jobId={pageStore.jobInfo?.jobId ?? ''}
-              />
+              {/*<Terminal*/}
+              {/*  // key={pageStore.jobInfo?.jobId ?? ''}*/}
+              {/*  jobId={pageStore.jobInfo?.jobId ?? ''}*/}
+              {/*/>*/}
+              {pageStore.jobInfo?.jobId && <JobTerm jobId={pageStore.jobInfo?.jobId} />}
             </div>
           </Activity>
 
