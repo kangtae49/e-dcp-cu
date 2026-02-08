@@ -1,4 +1,4 @@
-import {ITerminalOptions, Terminal} from "@xterm/xterm";
+import {Terminal} from "@xterm/xterm";
 
 interface TerminalInstance {
   term: Terminal

@@ -2,12 +2,7 @@ import { defineConfig } from 'vite';
 import path from 'path';
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from "vite-tsconfig-paths";
-// import react from '@vitejs/plugin-react';
 import react from '@vitejs/plugin-react-swc';
-import type {IncomingMessage, ServerResponse} from "node:http";
-import * as url from "node:url";
-import * as fs from "node:fs";
-import mime from "mime-types";
 
 // https://vitejs.dev/config
 export default defineConfig({
