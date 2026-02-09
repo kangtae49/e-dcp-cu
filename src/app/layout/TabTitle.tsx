@@ -4,6 +4,7 @@ import {faCircleXmark, faClone, faExpand} from "@fortawesome/free-solid-svg-icon
 import {ControlledMenu, MenuItem, MenuState} from "@szhsin/react-menu";
 import {JustBranch, JustId, JustUtil, useJustLayoutStore, WinInfo} from "@kangtae49/just-layout";
 import React from "react";
+import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props extends React.Attributes {
   justId: JustId
@@ -19,7 +20,10 @@ interface Props extends React.Attributes {
 }
 
 const TabTitle = observer(({layoutId, justId, justBranch, winInfo, menuProps, toggleMenu, anchorPoint}: Props) => {
+  const layoutFullScreenId = `${LAYOUT_ID}_FULLSCREEN`
   const justLayoutStore = useJustLayoutStore(layoutId);
+  const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId);
+
   const tabTitleTooltip = justLayoutStore.getTabTitleTooltip(justId)
 
   const clickClose = (justId: JustId) => {
@@ -41,11 +45,13 @@ const TabTitle = observer(({layoutId, justId, justBranch, winInfo, menuProps, to
   }
   const fullScreenWin = (justId: JustId, hideTitle: boolean = false) => {
     justLayoutStore.activeWin({justId})
-    if (justLayoutStore.isFullScreenView(layoutId)) {
-      justLayoutStore.setLayout(null)
+    if (justLayoutFullScreenStore.layout === null) {
+      const justNode = justLayoutStore.getNodeAtBranch({branch: justBranch})
+      justLayoutFullScreenStore.setLayout(justNode)
+      justLayoutFullScreenStore.setHideTitle(hideTitle)
     } else {
-      justLayoutStore.setFullScreenLayoutByBranch(justBranch)
-      justLayoutStore.setFullScreenHideTitle(hideTitle)
+      justLayoutFullScreenStore.setLayout(null)
+      justLayoutFullScreenStore.setHideTitle(false)
     }
   }
 
@@ -95,7 +101,7 @@ const TabTitle = observer(({layoutId, justId, justBranch, winInfo, menuProps, to
             <Icon icon={faExpand} />
           </div>
           <div className="just-title">
-            {justLayoutStore.isFullScreenView(layoutId) ? 'F11' : 'Full'}
+            {justLayoutFullScreenStore.layout !== null ? 'F11' : 'Full'}
           </div>
           <div className="just-icon" />
         </MenuItem>

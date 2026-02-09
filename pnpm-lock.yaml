@@ -21,8 +21,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.4)
       '@kangtae49/just-layout':
-        specifier: ^0.0.23
-        version: 0.0.23(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.11.0(reflect-metadata@0.2.2))(react@19.2.4))(inversify@7.11.0(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@25.1.0)(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: ^0.0.25
+        version: 0.0.25(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.11.0(reflect-metadata@0.2.2))(react@19.2.4))(inversify@7.11.0(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@25.1.0)(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@silevis/reactgrid':
         specifier: ^4.1.17
         version: 4.1.17(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -829,8 +829,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@kangtae49/just-layout@0.0.23':
-    resolution: {integrity: sha512-LQd3CK7NWvTBr/y4MDbrCL5JuGWAVICY0w8k4JoQAd5DXEHkO/VyhB1jfYB17eiE0tNw6cuNLSUK+oncU6YtxA==}
+  '@kangtae49/just-layout@0.0.25':
+    resolution: {integrity: sha512-YuXMzXid2CeYqzsqRoLOnjSjK8uXYcZ5ruYyTQ1NuMHXB20mFmVSnGh21WgTxoarlDcJPDOO6hQ3ieT+kuiU0Q==}
     peerDependencies:
       inversify: ^7.11.0
       inversify-react: ^1.2.0
@@ -6051,7 +6051,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@kangtae49/just-layout@0.0.23(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.11.0(reflect-metadata@0.2.2))(react@19.2.4))(inversify@7.11.0(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@25.1.0)(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@kangtae49/just-layout@0.0.25(@fortawesome/fontawesome-svg-core@7.1.0)(inversify-react@1.2.0(inversify@7.11.0(reflect-metadata@0.2.2))(react@19.2.4))(inversify@7.11.0(reflect-metadata@0.2.2))(mobx-react-lite@4.1.1(mobx@6.15.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(mobx@6.15.0)(react-dnd-html5-backend@16.0.1)(react-dnd@16.0.1(@types/node@25.1.0)(@types/react@19.2.10)(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
     dependencies:
       '@fortawesome/free-solid-svg-icons': 7.1.0
       '@fortawesome/react-fontawesome': 3.1.1(@fortawesome/fontawesome-svg-core@7.1.0)(react@19.2.4)

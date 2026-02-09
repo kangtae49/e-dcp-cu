@@ -9,29 +9,34 @@ import {FontAwesomeIcon as Icon} from "@fortawesome/react-fontawesome"
 import {faExpand} from "@fortawesome/free-solid-svg-icons";
 import {ExcalidrawImperativeAPI} from "@excalidraw/excalidraw/types";
 import {JustId, JustUtil, useJustLayoutStore} from "@kangtae49/just-layout";
+import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
+  const layoutFullScreenId = `${LAYOUT_ID}_FULLSCREEN`
   const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null);
 
   const justLayoutStore = useJustLayoutStore(layoutId);
+  const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId)
   const excalidrawDataStore = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
 
   const dataKey = JustUtil.getParamString(justId, 'file') ?? '';
 
 
   const fullScreenWin = async () => {
-    if(justLayoutStore.isFullScreenView(layoutId)) {
-      justLayoutStore.setLayout(null)
-    } else {
+    if (justLayoutFullScreenStore.layout === null) {
       const branch = justLayoutStore.getBranchByJustId({justId})
       if (branch) {
-        justLayoutStore.setFullScreenLayoutByBranch(branch)
-        justLayoutStore.setFullScreenHideTitle(true)
+        const justNode = justLayoutStore.getNodeAtBranch({branch})
+        justLayoutFullScreenStore.setLayout(justNode)
+        justLayoutFullScreenStore.setHideTitle(false)
       }
+    } else {
+      justLayoutFullScreenStore.setLayout(null)
+      justLayoutFullScreenStore.setHideTitle(false)
     }
   }
 
@@ -52,7 +57,7 @@ const ExcalidrawDataView = observer(({justId, layoutId}: Props) => {
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>
-            <Icon icon={faExpand} /> {justLayoutStore.isFullScreenView(layoutId) ? 'F11' : 'Full'}
+            <Icon icon={faExpand} /> {justLayoutFullScreenStore.layout !== null ? 'F11' : 'Full'}
           </MainMenu.Item>
           <MainMenu.DefaultItems.LoadScene />
           <MainMenu.DefaultItems.SaveToActiveFile />

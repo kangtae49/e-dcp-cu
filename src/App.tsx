@@ -26,9 +26,14 @@ function getWinInfo(justId: JustId): WinInfo {
 
 const App = observer(() => {
   const layoutId = LAYOUT_ID;
-  const layoutFullScreenId = `${layoutId}_FULLSCREEN`
+  const layoutFullScreenId = `${LAYOUT_ID}_FULLSCREEN`
 
+  const justLayoutStore = useJustLayoutStore(layoutId)
   const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId)
+
+  useEffect(() => {
+    justLayoutStore.setLayout(initialLayoutValue)
+  }, [])
 
   useEffect(() => {
     const startWatcher = async () => {
@@ -72,12 +77,58 @@ const App = observer(() => {
 
 
   useEffect(() => {
+    // const removeFullScreen = window.api.onChangeFullScreen((_event, _flag) => {
+    // })
+    // const removeMaximize = window.api.onChangeMaximize((_event, _flag) => {
+    // })
+
+    const handleFullScreenChange = () => {
+    }
+
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        justLayoutFullScreenStore.setLayout(null)
+        justLayoutFullScreenStore.setHideTitle(false)
+      }
+      // else if (e.key === 'F11') {
+      // }
+      if (e.altKey) {
+        if (e.key === 'ArrowRight') {
+          if (justLayoutFullScreenStore.layout !== null) {
+            justLayoutFullScreenStore.activeNextWin()
+          } else {
+            justLayoutStore.activeNextWin()
+          }
+        } else if (e.key === 'ArrowLeft') {
+          if (justLayoutFullScreenStore.layout !== null) {
+            justLayoutFullScreenStore.activePrevWin()
+          } else {
+            justLayoutStore.activePrevWin()
+          }
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+
+    return () => {
+      // removeFullScreen()
+      // removeMaximize()
+      window.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    }
+  }, [])
+
+
+  useEffect(() => {
     console.log('useEffect justLayoutFullScreenStore.layout', justLayoutFullScreenStore.layout)
     const isFull = justLayoutFullScreenStore.layout !== null
     console.log('isFull', isFull)
     const changeScreen = async (isFull: boolean) => {
       const isFullScreen = await window.api.isFullScreen()
-      if (isFullScreen !== justLayoutFullScreenStore.isFullScreenView(layoutId)) {
+      if (isFullScreen !== isFull) {
         await window.api.setFullScreen(isFull)
       }
 
@@ -102,11 +153,18 @@ const App = observer(() => {
       <div className="just-app">
         <div className="just-con">
           <DndProvider backend={ HTML5Backend }>
-          <JustLayoutView
-            layoutId={layoutId}
-            getWinInfo={getWinInfo}
-            initialValue={initialLayoutValue}
-          />
+            {justLayoutFullScreenStore.layout === null &&
+              <JustLayoutView
+                layoutId={layoutId}
+                getWinInfo={getWinInfo}
+              />
+            }
+            {justLayoutFullScreenStore.layout !== null &&
+              <JustLayoutView
+                  layoutId={layoutFullScreenId}
+                  getWinInfo={getWinInfo}
+              />
+            }
           </DndProvider>
         </div>
       </div>

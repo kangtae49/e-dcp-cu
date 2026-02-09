@@ -17,16 +17,21 @@ import {useExcalidrawDataStore} from "@/app/excalidraw-data/useExcalidrawDataSto
 import {EXCALIDRAW_DATA_ID} from "@/app/excalidraw-data/excalidrawData.constants.ts";
 import pathUtils from "@/utils/pathUtils.ts";
 import {JustId, JustUtil, useJustLayoutStore} from "@kangtae49/just-layout";
+import {LAYOUT_ID} from "@/app/layout/layout.tsx";
 
 interface Props {
   justId: JustId
   layoutId: string
 }
 const ExcalidrawView = observer(({justId, layoutId}: Props) => {
+  const layoutFullScreenId = `${LAYOUT_ID}_FULLSCREEN`
+
   const excalidrawRef = useRef<ExcalidrawImperativeAPI>(null);
   const excalidrawDataStore = useExcalidrawDataStore(EXCALIDRAW_DATA_ID)
 
   const justLayoutStore = useJustLayoutStore(layoutId);
+  const justLayoutFullScreenStore = useJustLayoutStore(layoutFullScreenId);
+
   const excalidrawStore = useExcalidrawStore(JustUtil.toString(justId))
   const ref = useRef<HTMLDivElement>(null)
   const [dataKey, setDataKey] = useState<string | null>(JustUtil.getParamString(justId, 'file') ?? null)
@@ -51,16 +56,17 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
     }, null) as AppState
   }
 
-  const fullScreenWin = async () => {
-    // const isFullScreen = await window.api.isFullScreen()
-    if(justLayoutStore.isFullScreenView(layoutId)) {
-      justLayoutStore.setLayout(null)
-    } else {
+  const fullScreenWin = () => {
+    if (justLayoutFullScreenStore.layout === null) {
       const branch = justLayoutStore.getBranchByJustId({justId})
       if (branch) {
-        justLayoutStore.setFullScreenLayoutByBranch(branch)
-        justLayoutStore.setFullScreenHideTitle(true)
+        const justNode = justLayoutStore.getNodeAtBranch({branch})
+        justLayoutFullScreenStore.setLayout(justNode)
+        justLayoutFullScreenStore.setHideTitle(false)
       }
+    } else {
+      justLayoutFullScreenStore.setLayout(null)
+      justLayoutFullScreenStore.setHideTitle(false)
     }
   }
 
@@ -120,7 +126,7 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
     excalidrawRef.current.updateScene(excalidrawDataStore.excalidrawDataMap[dataKey].data)
   }, [dataKey, excalidrawDataStore.excalidrawDataMap[dataKey!], excalidrawRef.current])
 
-
+  console.log('justLayoutFullScreenStore.layout', justLayoutFullScreenStore.layout)
   return (
     <div className="excalidraw-view" ref={ref}>
       <Excalidraw
@@ -138,7 +144,7 @@ const ExcalidrawView = observer(({justId, layoutId}: Props) => {
       >
         <MainMenu>
           <MainMenu.Item onSelect={fullScreenWin}>
-            <Icon icon={faExpand} /> {justLayoutStore.isFullScreenView(layoutId) ? 'F11' : 'Full'}
+            <Icon icon={faExpand} /> {justLayoutFullScreenStore.layout !== null ? 'F11' : 'Full'}
           </MainMenu.Item>
           <MainMenu.DefaultItems.LoadScene />
           <MainMenu.DefaultItems.SaveToActiveFile />
